@@ -1,0 +1,139 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #f4f7fc;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.container {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.card {
+    width: 100%;
+}
+
+.card-header {
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+/* Input Fields */
+.input-box {
+    margin-bottom: 20px;
+}
+
+.input-box label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #555;
+    font-weight: 600;
+}
+
+.input-box input {
+    width: 100%;
+    padding: 12px 20px;
+    border: 2px solid #ddd;
+    border-radius: 12px; /* More rounded corners */
+    background: #f9f9f9;
+    color: #333;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s ease-in-out;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle inner shadow */
+}
+
+.input-box input:focus {
+    border-color: #4CAF50; /* Green border on focus */
+    background-color: #fff;
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.5); /* Glow effect */
+}
+
+.input-box input::placeholder {
+    color: #bbb; /* Lighter placeholder text */
+}
+
+.invalid-feedback {
+    color: #ff4d4d;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #45a049;
+}
+
+.btn-primary {
+    background-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Alignment for the button */
+.input-box .col-md-6.offset-md-4 {
+    display: flex;
+    justify-content: center;
+}
+
+.input-box .col-md-6.offset-md-4 .btn {
+    width: auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    .card-header {
+        font-size: 24px;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}
