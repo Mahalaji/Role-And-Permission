@@ -1,19 +1,14 @@
 <?php
 
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-
-class Blog extends Model
+class news extends Model
 {
     use HasFactory;
-    protected $table = 'blogs';
-
+    protected $table = 'news';
     function categories(){
-        return $this->hasOne('App\Models\Blogcategory','id','category_id');
+        return $this->hasOne('App\Models\newscategory','id','category_id');
     }
- 
 }
-

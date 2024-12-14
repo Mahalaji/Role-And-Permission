@@ -1,22 +1,23 @@
 <?php
 
-// database/migrations/xxxx_xx_xx_xxxxxx_create_blogs_table.php
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBlogsTable extends Migration
+return new class extends Migration
 {
-    public function up()
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
     {
-        Schema::create('blogs', function (Blueprint $table) {
+        Schema::create('news', function (Blueprint $table) {
             $table->id(); 
             $table->string('title'); 
-            $table->string('user_id'); 
             $table->string('name'); 
+            $table->string('email'); 
             $table->string('slug'); 
-            $table->string('image'); 
+            $table->string('news_image'); 
             $table->unsignedBigInteger('category_id'); 
             $table->string('seo_title'); 
             $table->string('meta_keyword'); 
@@ -25,12 +26,15 @@ class CreateBlogsTable extends Migration
             $table->text('description'); 
             $table->timestamps(); 
 
-            $table->foreign('category_id')->references('id')->on('blog_category')->onDelete('cascade'); 
+            $table->foreign('category_id')->references('id')->on('newscategory')->onDelete('cascade'); 
         });
     }
 
-    public function down()
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
     {
-        Schema::dropIfExists('blogs');
+        Schema::dropIfExists('news');
     }
-}
+};

@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Blogcategory extends Model
 {
     use HasFactory;
-    protected $table = 'blogcategory';
-    public $timestamps = false;
+    protected $table = 'blog_category';
+    // public $timestamps = false;
 
   public function blogs()
     {
-        return $this->hasMany('App\Models\Blog', 'blog_title_category', 'id');
+        return $this->hasMany('App\Models\Blog', 'category_id', 'id');
     }
 }

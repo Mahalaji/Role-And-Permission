@@ -12,38 +12,39 @@ use Illuminate\Support\Facades\Auth;
 
 class blogs extends Controller
 {
-    // public function bloglistshow(){
-    //     $Blogs =Blog::with('categories')->get();
-    //     // dd($Blogs);
-    //     return view('blognew',['Blogs'=>$Blogs]);
-    // }
 
-    public function seo_title()
+    public function title()
     {
-        $titles = Blogcategory::select('seo_title','id')->get();
-        return view('blogadd', compact('titles'));
-    }
-        function addblog(Request $request) {
-        $request->validate([
-            'Title' => 'required',
-            'Name' => 'required',
-            'blog_title_category' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'post_Date' => 'required|date',
-            'Description' => 'required',
-        ]);
+        $titles = Blogcategory::select('title','id')->get();
+        return view('blog.create', compact('titles'));
+    }   
     
+        function addblog(Request $request) {
+            $userid = Auth::user();
+        $request->validate([
+            'title' => 'required',
+            'name' => 'required',
+            'category_id' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'description' => 'required',
+            'seo_title' => 'required',
+            'meta_keyword' => 'required',
+            'seo_robat' => 'required',
+            'meta_description' => 'required',
+
+        ]);
         $Blogadd = new Blog();
-        $Blogadd->Title = $request->Title;
-        $Blogadd->Name = $request->Name;
-        $Blogadd->blog_title_category = $request->blog_title_category;
-        $Blogadd->post_Date = $request->post_Date;
-        $cleanDescription = preg_replace('/<\/?p>|<\/?strong>/', '', $request->Description); 
+        $Blogadd->title = $request->title;
+        $Blogadd->name = $request->name;
+        $Blogadd->category_id = $request->category_id;
+        $cleanDescription = preg_replace('/<\/?p>|<\/?strong>/', '', $request->description); 
     $cleanDescription = str_replace(['&nbsp;', '&#39;'], [' ', "'"], $cleanDescription);
-    $Blogadd->Description = $cleanDescription;
-        $Blogadd->Create_Date = now();
-        $Blogadd->Update_Date = now();
-        $Blogadd->recycle =1;
+    $Blogadd->description = $cleanDescription;
+        $Blogadd->seo_title =$request->seo_title;
+        $Blogadd->meta_keyword =$request->meta_keyword;
+        $Blogadd->seo_robat =$request->seo_robat;
+        $Blogadd->meta_description =$request->meta_description;
+        $Blogadd->user_id = $userid->id;
 
 
     
@@ -55,7 +56,7 @@ class blogs extends Controller
             $Blogadd->image = $imagePath;
         }
     
-        $slug = Str::slug($request->Title);
+        $slug = Str::slug($request->title);
         $existingSlugCount = Blog::where('slug', $slug)->count();
         if ($existingSlugCount > 0) {
             $slug = $slug . '-' . time();
@@ -65,7 +66,7 @@ class blogs extends Controller
         $Blogadd->save();
     
         if ($Blogadd) {
-            return redirect('/bloglist')->with('success', 'Blog added successfully!');
+            return redirect('/blog')->with('success', 'Blog added successfully!');
         } else {
             return back()->with('error', 'Failed to add the blog.');
         }
@@ -73,20 +74,20 @@ class blogs extends Controller
     public function getBlogsAjax(Request $request)
     {
         try {
-            $query = Blog::select('id', 'Name', 'Title', 'blog_title_category', 'Description', 'Create_Date', 'Update_Date', 'post_Date')->with('categories');
+            $query = Blog::select('id', 'name', 'title', 'category_id', 'description', 'created_at', 'updated_at')->with('categories');
     
             if ($request->has('start_date') && $request->has('end_date')) {
                 $startDate = $request->start_date;
                 $endDate = $request->end_date;
     
                 if ($startDate && $endDate) {
-                    $query->whereBetween('post_Date', [$startDate, $endDate]);
+                    $query->whereBetween('created_at', [$startDate, $endDate]);
                 }
             }
     
             return DataTables::of($query)
                 ->addColumn('edit', function ($row) {
-                    return '<a href="/edit/' . $row->id . '" class="btn btn-sm btn-primary"style="color:black"><i class="fas fa-edit"></i></a>';
+                    return '<a href="/blog/edit/' . $row->id . '" class="btn btn-sm btn-primary"style="color:black"><i class="fas fa-edit"></i></a>';
                 })
                 ->addColumn('delete', function ($row) {
                     return '<form action="/destory/' . $row->id . '" method="POST" onsubmit="return confirm(\'Are you sure?\');">
@@ -95,15 +96,13 @@ class blogs extends Controller
                             </form>';
                 })
                 ->addColumn('time_ago', function ($row) {
-                    return \Carbon\Carbon::parse($row->Create_Date)->diffForHumans();
+                    return \Carbon\Carbon::parse($row->created_at)->diffForHumans();
                 })
                 ->addColumn('time_update_ago', function ($row) {
-                    return \Carbon\Carbon::parse($row->Update_Date)->diffForHumans();
+                    return \Carbon\Carbon::parse($row->updated_at)->diffForHumans();
                 })
-                ->addColumn('time_post_ago', function ($row) {
-                    return \Carbon\Carbon::parse($row->post_Date)->diffForHumans();
-                })
-                ->rawColumns(['edit', 'delete','time_ago','time_update_ago','time_post_ago'])
+              
+                ->rawColumns(['edit', 'delete','time_ago','time_update_ago'])
                 ->make(true);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()]);
@@ -120,58 +119,64 @@ class blogs extends Controller
             return redirect()->back()->with('error', 'Invalid user data');
         }
     
-        $titles = Blogcategory::select('seo_title','id')->get();
+        $titles = Blogcategory::select('title','id')->get();
 
-        return view('blogedit', compact('blog', 'titles'));
+        return view('blog.edit', compact('blog', 'titles'));
     }
     public function update(Request $request)
 {
     $request->validate([
-        'Title' => 'required',
-        'Name' => 'required',
-        'blog_title_category' => 'required',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        'post_Date' => 'required|date',
-        'Description' => 'required',
+        'title' => 'required',
+        'name' => 'required',
+        'category_id' => 'required',
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'description' => 'required',
+        'seo_title' => 'required',
+        'meta_keyword' => 'required',
+        'seo_robat' => 'required',
+        'meta_description' => 'required',
     ]);
 
-    $Blogadd = Blog::find($request->id);
+    $Blogedit = Blog::find($request->id);
 
-    if (!$Blogadd) {
+    if (!$Blogedit) {
         return redirect()->back()->withErrors(['error' => 'Blog not found']);
     }
 
-    $Blogadd->Title = $request->Title;
-    $Blogadd->Name = $request->Name;
-    $Blogadd->blog_title_category = $request->blog_title_category;
-    $Blogadd->post_Date = $request->post_Date;
-    $cleanDescription = preg_replace('/<\/?p>|<\/?strong>/', '', $request->Description); // Remove <p> and <strong> tags
+    $Blogedit->title = $request->title;
+    $Blogedit->name = $request->name;
+    $Blogedit->category_id = $request->category_id;
+    $cleanDescription = preg_replace('/<\/?p>|<\/?strong>/', '', $request->description); // Remove <p> and <strong> tags
     $cleanDescription = str_replace(['&nbsp;', '&#39;'], [' ', "'"], $cleanDescription); // Replace &nbsp; with a space and &#39; with a single quote
-    $Blogadd->Description = $cleanDescription;
-    
-    $Blogadd->Update_Date = now();
+    $Blogedit->description = $cleanDescription;
+    $Blogedit->seo_title = $request->seo_title;
+    $Blogedit->meta_keyword = $request->meta_keyword;
+    $Blogedit->seo_robat = $request->seo_robat;
+    $Blogedit->meta_description = $request->meta_description;
+    $Blogedit->created_at = $request->created_at;
+    $Blogedit->updated_at = now();
 
     if ($request->hasFile('image')) {
         $image = $request->file('image');
         $imageName = time() . '_' . $image->getClientOriginalName();
         $image->move(public_path('images'), $imageName);
-        $Blogadd->image = 'images/' . $imageName;
+        $Blogedit->image = 'images/' . $imageName;
     }
 
-    if ($Blogadd->Title !== $request->Title) {
-        $slug = Str::slug($request->Title);
+    if ($Blogedit->Title !== $request->title) {
+        $slug = Str::slug($request->title);
         $existingSlugCount = Blog::where('slug', $slug)->where('id', '!=', $request->id)->count();
 
         if ($existingSlugCount > 0) {
             $slug = $slug . '-' . time();
         }
 
-        $Blogadd->slug = $slug;
+        $Blogedit->slug = $slug;
     }
 
-    $Blogadd->save();
+    $Blogedit->save();
 
-    return redirect('/bloglist')->with('success', 'Blog updated successfully');
+    return redirect('/blog')->with('success', 'Blog updated successfully');
 }
 public function destory($id){
     $blogs = Blog::find($id); 
@@ -182,14 +187,14 @@ public function destory($id){
 
     $blogs->delete();
 
-    return redirect('/bloglist')->with('success', 'User deleted successfully');
+    return redirect('/blog')->with('success', 'User deleted successfully');
 }
 public function getBlogsCategoryAjax(Request $request){
     try {
-        $query = Blogcategory::select('id', 'seo_title', 'meta_keyword', 'seo_robat', 'meta_description')->withCount('blogs');
+        $query = Blogcategory::select('id', 'title')->withCount('blogs');
         return DataTables::of($query)
             ->addColumn('edit', function ($row) {
-                return '<a href="/editcategory/' . $row->id . '" class="btn btn-sm btn-primary"style="color:black"><i class="fas fa-edit"></i></a>';
+                return '<a href="/blogcategory/edit/' . $row->id . '" class="btn btn-sm btn-primary"style="color:black"><i class="fas fa-edit"></i></a>';
             })
             ->addColumn('delete', function ($row) {
                 return '<form action="/destorycategory/' . $row->id . '" method="POST" onsubmit="return confirm(\'Are you sure?\');">
@@ -205,22 +210,16 @@ public function getBlogsCategoryAjax(Request $request){
 }
 public function addcategery(Request $request){
     $request->validate([
-        'seo_title' => 'required',
-        'meta_keyword' => 'required',
-        'seo_robat' => 'required',
-        'meta_description' => 'required',
+        'title' => 'required',
     ]);
 
     $categeryadd = new Blogcategory();
-    $categeryadd->seo_title = $request->seo_title;
-    $categeryadd->meta_keyword = $request->meta_keyword;
-    $categeryadd->seo_robat = $request->seo_robat;
-    $categeryadd->meta_description = $request->meta_description;
+    $categeryadd->title = $request->title;
 
     $categeryadd->save();
 
     if ($categeryadd) {
-        return redirect('/blogcategorylist')->with('success', 'Category added successfully!');
+        return redirect('/blogcategory')->with('success', 'Category added successfully!');
     } else {
         return back()->with('error', 'Failed to add the blog.');
     }
@@ -234,7 +233,7 @@ public function destorycategory($id){
 
     $blogcategory->delete();
 
-    return redirect('/blogcategorylist')->with('success', 'User deleted successfully');
+    return redirect('/blogcategory')->with('success', 'User deleted successfully');
 }
 public function editcategory($id){
     $blogcategory = Blogcategory::find($id); 
@@ -247,15 +246,12 @@ public function editcategory($id){
         return redirect()->back()->with('error', 'Invalid user data');
     }
 
-    return view('blogcategeryedit', compact('blogcategory'));
+    return view('blog.category_edit', compact('blogcategory'));
 }
 public function updateCategory(Request $request)
 {
     $request->validate([
-        'seo_title' => 'required',
-        'meta_keyword' => 'required',
-        'seo_robat' => 'required',
-        'meta_description' => 'required',
+        'title' => 'required',
     ]);
 
     $categoryupdate = Blogcategory::find($request->id);
@@ -264,14 +260,11 @@ public function updateCategory(Request $request)
         return redirect()->back()->withErrors(['error' => 'Blog category not found']);
     }
 
-    $categoryupdate->seo_title = $request->seo_title;
-    $categoryupdate->meta_keyword = $request->meta_keyword;
-    $categoryupdate->seo_robat = $request->seo_robat;
-    $categoryupdate->meta_description = $request->meta_description;
+    $categoryupdate->title = $request->title;
 
     $categoryupdate->save();
 
-    return redirect('/blogcategorylist')->with('success', 'Blog category updated successfully');
+    return redirect('/blogcategory')->with('success', 'Blog category updated successfully');
 }
 
 }

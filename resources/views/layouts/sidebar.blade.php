@@ -20,18 +20,17 @@
             <div class="sidebar-header">
             </div>
             <nav class="sidebar-nav">
-                <div id="img"><img src="https://www.absglobaltravel.com/public/images/footer-abs-logo.webp" height="50">
+                <div id="img"><img src="https://www.absglobaltravel.com/public/images/footer-abs-logo.webp" height="50" style="padding-left: 53px;">
                 </div>
                 <ul>
-                    <li><a href="/dashboard" class="active"><i class="fa fa-home"></i>Home</a>
-                    </li>
+                   
                     <li>
                         <button class="dropdown-btn"><i class="fas fa-blog"></i>Blogs
                             <i class="fa fa-caret-down"></i>
                         </button>
                         <div class="dropdown-container">
-                            <a href="/bloglist"><i class="fas fa-blog"></i> Blog List</a>
-                            <a href="/blogcategorylist"><i class="fa fa-list"></i> Category</a>
+                            <a href="/blog"><i class="fas fa-blog"></i> Blog List</a>
+                            <a href="/blogcategory"><i class="fa fa-list"></i> Category</a>
                         </div>
                     </li>
                     <li>
@@ -39,16 +38,16 @@
                             <i class="fa fa-caret-down"></i>
                         </button>
                         <div class="dropdown-container">
-                            <a href="/indexnews"><i class="fas fa-newspaper"></i> News List</a>
-                            <a href="/indexnewscategory"><i class="fa fa-list"></i> Category</a>
+                            <a href="/news"><i class="fas fa-newspaper"></i> News List</a>
+                            <a href="/newscategory"><i class="fa fa-list"></i> Category</a>
                         </div>
                     </li>
 
-                    <li><a href="/indexpages"><i class="fa fa-copy"></i> Pages</a></li>
+                    <li><a href="/pages"><i class="fa fa-copy"></i> Pages</a></li>
                     <li><a href="{{ route('users.index') }}"><i class="fas fa-users"></i>Manage User</a></li>
                     <li><a href="{{ route('roles.index') }}"><i class="fa-brands fa-critical-role"></i>Manage Role</a></li>
                     <li><a href="{{ route('products.index') }}"><i class="fa-solid fa-list"></i>Manage Product</a></li>
-                    <li><a href="/indexcompany"><i class="far fa-address-book"></i> Company Profile</a></li>
+                    <li><a href="/company"><i class="far fa-address-book"></i> Company Profile</a></li>
 
 
                 </ul>

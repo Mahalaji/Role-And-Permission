@@ -17,7 +17,7 @@ body {
 
 .sidebar {
     width: 300px;
-    background-color: midnightblue;
+    background-color: black;
     color: #ecf0f1;
     height: 130vh;
     padding: 20px;
@@ -45,7 +45,7 @@ body {
     padding: 0px 0px;
 }
 .sidebar-nav a {
-    color: #ecf0f1;
+    color: white;
     text-decoration: none;
     display: flex;
     align-items: center;
@@ -271,7 +271,7 @@ body {
   
   /* On mouse-over */
   .sidenav a:hover, .dropdown-btn:hover {
-    color: #f1f1f1;
+    color: white;
   }
   .main {
     /* Same as the width of the sidenav */
@@ -288,7 +288,7 @@ body {
   /* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
   .dropdown-container {
     display: none;
-    background-color: midnightblue;
+    background-color: black;
     padding-left: 8px;
   }
   
@@ -308,7 +308,10 @@ body {
     width: 1180px;
     padding-left: 14px;
 }
-
+#cke_editor{
+    margin-top: 13px;
+    width: 3000px;
+}
 @media (max-width: 768px) {
     .dashboard {
         flex-direction: column;
