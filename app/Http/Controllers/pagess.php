@@ -14,7 +14,11 @@ class pagess extends Controller
     public function getPagesAjax(Request $request)
     {
         try {
+            $user=Auth::user();
             $query = pages::select('id','title', 'description', 'created_at', 'updated_at');
+            if (!($user->hasRole('Admin'))) {
+                $query->where('user_id', $user->id);
+            }
     
             if ($request->has('start_date') && $request->has('end_date')) {
                 $startDate = $request->start_date;

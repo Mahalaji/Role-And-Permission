@@ -76,8 +76,11 @@ class newss extends Controller
     public function getNewsAjax(Request $request)
     {
         try {
+            $user=Auth::user();
             $query = news::select('id', 'name', 'title', 'category_id', 'description', 'created_at', 'updated_at')->with('categories');
-    
+            if (!($user->hasRole('Admin'))) {
+                $query->where('user_id', $user->id);
+            }
             if ($request->has('start_date') && $request->has('end_date')) {
                 $startDate = $request->start_date;
                 $endDate = $request->end_date;

@@ -44,11 +44,14 @@
                     </li>
 
                     <li><a href="/pages"><i class="fa fa-copy"></i> Pages</a></li>
+                    @auth
+                    @if(auth()->user()->hasRole('Admin'))
                     <li><a href="{{ route('users.index') }}"><i class="fas fa-users"></i>Manage User</a></li>
                     <li><a href="{{ route('roles.index') }}"><i class="fa-brands fa-critical-role"></i>Manage Role</a></li>
                     <li><a href="{{ route('products.index') }}"><i class="fa-solid fa-list"></i>Manage Product</a></li>
                     <li><a href="/company"><i class="far fa-address-book"></i> Company Profile</a></li>
-
+                    @endif
+                    @endauth
 
                 </ul>
             </nav>
