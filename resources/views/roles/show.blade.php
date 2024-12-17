@@ -26,6 +26,14 @@
                 @foreach($rolePermissions as $v)
                     <label class="label label-success">{{ $v->name }},</label>
                 @endforeach
+                <!-- <?php
+                        $module = json_decode($module, true);
+                        ?>
+                @foreach ( $module as $modules )
+                <label>
+                    {{$modules['module_name']}}</label>
+                <br />
+                @endforeach -->
             @endif
         </div>
     </div>

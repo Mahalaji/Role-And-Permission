@@ -11,6 +11,8 @@ use App\Http\Controllers\blogs;
 use App\Http\Controllers\newss;
 use App\Http\Controllers\pagess;
 use App\Http\Controllers\companies;
+use App\Http\Controllers\Module;
+
 
 
 
@@ -79,4 +81,23 @@ Route::post('/destorycompany/{id}', [companies::class, 'destorycompany']);
 Route::post('/getCompanyaddress', [companies::class, 'getCompanyaddress']);
 Route::post('/deleteCompanyAddress', [companies::class, 'deleteaddress']);
 Route::post('/saveCompanyAddress', [companies::class, 'saveCompanyAddress']);
+
+Route::view('/module','module.index');
+Route::post('/getModuleAjax', [Module::class, 'getModuleAjax']);
+Route::get('/submodule/add/{id}', [Module::class, 'add_submodule']);
+Route::post('/addsubmodule',[Module::class,'addsubmodule']);
+Route::get('/module/add',[Module::class,'moduleadd']);
+Route::post('/addmodule',[Module::class,'addmodule']);
+Route::get('/module/permission/add/{id}', [Module::class, 'add_permission']);
+Route::post('/addpermission',[Module::class,'addpermission']);
+Route::get('/module/edit/{id}', [Module::class, 'editmodule']);
+Route::post('/editmodule',[Module::class,'updatemodule']);
+Route::post('/destorymodule/{id}', [Module::class, 'destorymodule']);
+
+
+
+
+
+
+
 });

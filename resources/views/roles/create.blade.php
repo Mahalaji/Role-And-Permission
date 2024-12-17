@@ -7,20 +7,21 @@
             <h2>Create New Role</h2>
         </div>
         <div class="pull-right">
-            <a class="btn btn-primary btn-sm mb-2" href="{{ route('roles.index') }}"><i class="fa fa-arrow-left"></i> Back</a>
+            <a class="btn btn-primary btn-sm mb-2" href="{{ route('roles.index') }}"><i class="fa fa-arrow-left"></i>
+                Back</a>
         </div>
     </div>
 </div>
 
 @if (count($errors) > 0)
-    <div class="alert alert-danger">
-        <strong>Whoops!</strong> There were some problems with your input.<br><br>
-        <ul>
+<div class="alert alert-danger">
+    <strong>Whoops!</strong> There were some problems with your input.<br><br>
+    <ul>
         @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
+        <li>{{ $error }}</li>
         @endforeach
-        </ul>
-    </div>
+    </ul>
+</div>
 @endif
 
 <form method="POST" action="{{ route('roles.store') }}">
@@ -35,16 +36,27 @@
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Permission:</strong>
-                <br/>
+                <br />
                 @foreach($permission as $value)
-                    <label><input type="checkbox" name="permission[{{$value->id}}]" value="{{$value->id}}" class="name">
+                <label><input type="checkbox" name="permission[{{$value->id}}]" value="{{$value->id}}" class="name">
                     {{ $value->name }}</label>
-                <br/>
+                <br />
+
+                @endforeach
+                <?php
+                        $module = json_decode($module, true);
+                        ?>
+                @foreach ( $module as $modules )
+                <label><input type="checkbox" name="permission[{{$modules['id']}}]" value="{{$modules['id']}}"
+                        class="name">
+                    {{$modules['module_name']}}</label>
+                <br />
                 @endforeach
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-            <button type="submit" class="btn btn-primary btn-sm mb-3"><i class="fa-solid fa-floppy-disk"></i> Submit</button>
+            <button type="submit" class="btn btn-primary btn-sm mb-3"><i class="fa-solid fa-floppy-disk"></i>
+                Submit</button>
         </div>
     </div>
 </form>

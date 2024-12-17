@@ -272,6 +272,28 @@
   #category_id::-ms-expand {
     display: none;
   }
+  #parent_id {
+    width: 100%;
+    padding: 12px;
+    border-radius: 7px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    box-sizing: border-box;
+    background-color: #fff;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+  
+  #parent_id:focus {
+    outline: none;
+    border-color: #3498db;
+  }
+  
+  /* Optional: Custom arrow for the select dropdown */
+  #parent_id::-ms-expand {
+    display: none;
+  }
  #first{
     display: flex;
     flex-direction: row;

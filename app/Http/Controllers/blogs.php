@@ -9,7 +9,6 @@ use App\Models\Blog;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\str;
 use Illuminate\Support\Facades\Auth;
-
 class blogs extends Controller
 {
 

@@ -25,6 +25,7 @@
                 <ul>
                    
                     <li>
+                  
                         <button class="dropdown-btn"><i class="fas fa-blog"></i>Blogs
                             <i class="fa fa-caret-down"></i>
                         </button>
@@ -46,10 +47,18 @@
                     <li><a href="/pages"><i class="fa fa-copy"></i> Pages</a></li>
                     @auth
                     @if(auth()->user()->hasRole('Admin'))
+                    <li>
+                        <button class="dropdown-btn"><i class="fa-solid fa-gear"></i>Setting
+                            <i class="fa fa-caret-down"></i>
+                        </button>
+                        <div class="dropdown-container">
+                            <a href="/module"><i class="fa-brands fa-pinterest"></i> Module</a>
+                            <a href="{{ route('roles.index') }}"><i class="fa-brands fa-critical-role"></i> Manage Role</a>
+                            <a href="/company"><i class="far fa-address-book"></i> Company Profile</a>
+                        </div>
+                    </li>
                     <li><a href="{{ route('users.index') }}"><i class="fas fa-users"></i>Manage User</a></li>
-                    <li><a href="{{ route('roles.index') }}"><i class="fa-brands fa-critical-role"></i>Manage Role</a></li>
                     <li><a href="{{ route('products.index') }}"><i class="fa-solid fa-list"></i>Manage Product</a></li>
-                    <li><a href="/company"><i class="far fa-address-book"></i> Company Profile</a></li>
                     @endif
                     @endauth
 
