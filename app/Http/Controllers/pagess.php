@@ -16,7 +16,7 @@ class pagess extends Controller
         try {
             $user=Auth::user();
             $query = pages::select('id','title', 'description', 'created_at', 'updated_at');
-            if (!($user->hasRole('Admin'))) {
+            if (!($user->hasRole(['Admin','Page_Team']))) {
                 $query->where('user_id', $user->id);
             }
     

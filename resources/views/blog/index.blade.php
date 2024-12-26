@@ -7,7 +7,7 @@
     <div class="container mt-4">
         <h2>Blogs List</h2>
         <form class="left" method="post">
-            <a href="/home"><i class='fas fa-eye' style='font-size:18px;color:black'></i></a>
+            <a href="/dashboard"><i class='fas fa-eye' style='font-size:18px;color:black'></i></a>
 
             <form class="left" method="post">
                 <a href="{{ asset('/blog/add') }}"

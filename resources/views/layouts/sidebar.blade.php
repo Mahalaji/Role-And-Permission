@@ -25,7 +25,8 @@
                 <ul>
                    
                     <li>
-                  
+                    @auth
+                    @if(auth()->user()->hasRole(['Admin','Blog_Team']))
                         <button class="dropdown-btn"><i class="fas fa-blog"></i>Blogs
                             <i class="fa fa-caret-down"></i>
                         </button>
@@ -34,6 +35,10 @@
                             <a href="/blogcategory"><i class="fa fa-list"></i> Category</a>
                         </div>
                     </li>
+                    @endif
+                    @endauth
+                    @auth
+                    @if(auth()->user()->hasRole(['Admin','News_Team']))
                     <li>
                         <button class="dropdown-btn"><i class="fas fa-newspaper"></i>News
                             <i class="fa fa-caret-down"></i>
@@ -43,8 +48,13 @@
                             <a href="/newscategory"><i class="fa fa-list"></i> Category</a>
                         </div>
                     </li>
-
+                    @endif
+                    @endauth
+                    @auth
+                    @if(auth()->user()->hasRole(['Admin','Page_Team']))
                     <li><a href="/pages"><i class="fa fa-copy"></i> Pages</a></li>
+                    @endif
+                    @endauth
                     @auth
                     @if(auth()->user()->hasRole('Admin'))
                     <li>

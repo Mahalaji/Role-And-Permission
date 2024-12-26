@@ -12,6 +12,10 @@ use App\Http\Controllers\newss;
 use App\Http\Controllers\pagess;
 use App\Http\Controllers\companies;
 use App\Http\Controllers\Module;
+use App\Http\Controllers\frontend\dashboard;
+use App\Http\Controllers\frontend\blogfront;
+use App\Http\Controllers\frontend\newsfront;
+
 
 
 
@@ -88,16 +92,24 @@ Route::get('/submodule/add/{id}', [Module::class, 'add_submodule']);
 Route::post('/addsubmodule',[Module::class,'addsubmodule']);
 Route::get('/module/add',[Module::class,'moduleadd']);
 Route::post('/addmodule',[Module::class,'addmodule']);
-Route::get('/module/permission/add/{id}', [Module::class, 'add_permission']);
-Route::post('/addpermission',[Module::class,'addpermission']);
+// Route::get('/module/permission/add/{id}', [Module::class, 'add_permission']);
+// Route::post('/addpermission',[Module::class,'addpermission']);
 Route::get('/module/edit/{id}', [Module::class, 'editmodule']);
 Route::post('/editmodule',[Module::class,'updatemodule']);
 Route::post('/destorymodule/{id}', [Module::class, 'destorymodule']);
+Route::post('/ShowPermissions',[Module::class,'ShowPermissions'])->name('ShowPermissions');
+Route::post('/storepermission',[Module::class,'savePermissions']);
+Route::post('/deletePermission',[Module::class,'deletePermission'])->name('deletePermission');
 
+// frontend
 
-
-
-
-
-
+Route::get('/dashboard', [dashboard::class, 'dashboard']);
+Route::get('/blogs', [blogfront::class, 'showblog']);
+Route::get('/news', [newsfront::class, 'shownews']);
+Route::get('/Blogs/{article}', [blogfront::class, 'blogsbyslug']);
+Route::get('/News/{article}', [newsfront::class, 'newsbyslug']);
+Route::get('/Blogtitle/{article}', [blogfront::class, 'blogsbytitle']);
+Route::get('/newstitle/{article}', [newsfront::class, 'newsbytitle']);
+Route::get('/ajaxblogs', [blogfront::class, 'loadMoreBlogs'])->name('ajaxblogs');
+Route::get('/ajaxnews', [newsfront::class, 'loadMoreNews'])->name('ajaxnews');
 });

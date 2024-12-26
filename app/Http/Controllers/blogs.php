@@ -77,7 +77,7 @@ class blogs extends Controller
             $user = Auth::user();
             $query = Blog::select('id', 'name', 'title', 'category_id', 'description', 'created_at', 'updated_at')
                 ->with('categories');
-            if (!($user->hasRole('Admin'))) {
+            if (!($user->hasRole(['Admin','Blog_Team']))) {
                 $query->where('user_id', $user->id);
             }
     

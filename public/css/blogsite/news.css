@@ -1,0 +1,364 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f7f7f7;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Header */
+header {
+    background: linear-gradient(45deg, #8e44ad, #3498db);
+    padding: 1rem 5%;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav h1 {
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav ul li {
+    margin-left: 2rem;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+nav a:hover {
+    color: #f39c12;
+    transform: scale(1.1);
+}
+
+/* Main content */
+main {
+    padding: 4rem 4%;
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
+h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 3rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.row{
+   flex-wrap: nowrap !important;
+}
+strong{
+    width: auto !important;
+}
+.col-md-9 {
+    width: 70% !important;
+}
+.col-md-3 {
+    margin-top: 40px;
+    padding: 0 30px;
+}
+
+.col-md-3 h5 strong {
+    display: block;
+    font-size: 1.2rem;
+    color: #2c3e50;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #3498db;
+}
+
+.list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Form-like styling for categories */
+h5.form-like {
+    margin: 0 0 10px 0;
+    padding: 0;
+}
+
+h5.form-like a {
+    display: block;
+    padding: 12px 20px;
+    text-decoration: none;
+    color: #333;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    margin-bottom: 8px; /* Space between links */
+}
+
+h5.form-like a:hover {
+    background-color: #e9ecef;
+    transform: translateX(5px);
+}
+
+h5.form-like .card-title {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #333;
+}
+
+/* Styling for individual links */
+h5.form-like a {
+    font-weight: 500;
+    color: #5c6a74; /* Slightly lighter color */
+    background-color: #f4f6f9; /* Soft background */
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+h5.form-like a:hover {
+    background-color: #e1e4e8;
+    transform: translateX(5px);
+}
+
+h5.form-like .card-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #34495e;
+}
+
+
+.post-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2.5rem;
+    justify-items: center;
+    margin-top: 3rem;
+}
+
+/* Article Cards */
+article {
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+article:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+}
+
+.post-image {
+    height: 250px;
+    background-size: cover;
+    background-position: center;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    transition: transform 0.3s ease;
+}
+
+.post-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.post-image:hover img {
+    transform: scale(1.1);
+}
+
+.post-content {
+    padding: 1.5rem;
+    text-align: center;
+    background-color: white;
+}
+
+.post-content h3 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #34495e;
+    margin-bottom: 1rem;
+    transition: color 0.3s ease;
+}
+
+.post-content h3:hover {
+    color: #3498db;
+}
+
+.post-content p {
+    color: #7f8c8d;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+.read-more {
+    display: inline-block;
+    background-color: #3498db;
+    color: #fff;
+    padding: 0.8rem 1.5rem;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.read-more:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+footer {
+    background-color: #34495e;
+    color: #fff;
+    text-align: center;
+    padding: 2rem;
+    margin-top: 4rem;
+    font-size: 1rem;
+    letter-spacing: 1px;
+}
+
+/* Featured Post Section */
+#featured-post .featured {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+}
+
+#featured-post .post-image {
+    min-height: 350px;
+    border-radius: 16px;
+    transition: transform 0.5s ease;
+}
+
+#featured-post .post-image:hover {
+    transform: scale(1.05);
+}
+
+#featured-post h2 {
+    font-size: 2.5rem;
+    color: #2c3e50;
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 2rem;
+}
+.featured {
+    height: 320px;
+    width: 450px;
+  }
+  a{
+    text-decoration: none;
+  }
+  #loadMore {
+    width: 200px;
+    color: #fff;
+    display: block;
+    text-align: center;
+    margin: 20px auto;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    background-color: blue;
+    transition: .3s;
+  }
+  #loadMore:hover {
+    color: blue;
+    background-color: #fff;
+    border: 1px solid blue;
+    text-decoration: none;
+  }
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    #loadMore {
+        width: 100%; /* Ensure the button spans the entire width on mobile */
+    }
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav h1 {
+        margin-bottom: 1rem;
+    }
+
+    nav ul {
+        margin-top: 1rem;
+        flex-direction: column;
+    }
+
+    nav ul li {
+        margin-left: 0;
+        margin-bottom: 1rem;
+    }
+
+    .post-grid {
+        grid-template-columns: 1fr;
+    }
+
+    footer {
+        font-size: 0.9rem;
+    }
+
+    .post-content h3 {
+        font-size: 1.4rem;
+    }
+
+    .read-more {
+        padding: 0.6rem 1.2rem;
+    }
+
+}
+
+/* Hover effects for images */
+.post-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.post-image:hover img {
+    transform: scale(1.05);
+}
+
+/* Scroll animations for elements */
+.fade-in {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
