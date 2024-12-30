@@ -30,12 +30,12 @@
     <tr>
         <td>{{ ++$i }}</td>
         <td>{{ $role->name }}</td>
-        <td>
+        <td style="padding: -0;">
             <a class="btn btn-info btn-sm" href="{{ route('roles.show',$role->id) }}"><i class="fa-solid fa-list"></i> Show</a>
             @can('role-edit')
                 <a class="btn btn-primary btn-sm" href="{{ route('roles.edit',$role->id) }}"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
             @endcan
-
+            <a class="btn btn-info btn-sm" href="{{route('access',$role->id)}}">Access</a>
             @can('role-delete')
             <form method="POST" action="{{ route('roles.destroy', $role->id) }}" style="display:inline">
                 @csrf

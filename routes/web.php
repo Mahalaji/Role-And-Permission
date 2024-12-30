@@ -12,6 +12,7 @@ use App\Http\Controllers\newss;
 use App\Http\Controllers\pagess;
 use App\Http\Controllers\companies;
 use App\Http\Controllers\Module;
+use App\Http\Controllers\menu;
 use App\Http\Controllers\frontend\dashboard;
 use App\Http\Controllers\frontend\blogfront;
 use App\Http\Controllers\frontend\newsfront;
@@ -34,6 +35,10 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('users', UserController::class);
     Route::resource('products', ProductController::class);
 
+    Route::get('/access/{article}',[RoleController::class,'access'])->name('access');
+    Route::post('/roles/{roleId}/update-access', [RoleController::class, 'updateAccess'])->name('roles.updateAccess');
+
+
 
 
 Route::view('/blog','blog.index');
@@ -53,7 +58,7 @@ Route::post('/updatecategery',[blogs::class,'updateCategory']);
 
 Route::get('/news/add', [newss::class, 'title']);
 Route::post('/createnews',[newss::class,'createnews']);
-Route::view('/news','news.index');
+Route::view('/newss','news.index');
 Route::post('/getNewsAjax', [newss::class, 'getNewsAjax']);
 Route::get('/news/edit/{id}', [newss::class, 'editnews']);
 Route::post('/updatenews',[newss::class,'updatenews']);
@@ -100,6 +105,11 @@ Route::post('/destorymodule/{id}', [Module::class, 'destorymodule']);
 Route::post('/ShowPermissions',[Module::class,'ShowPermissions'])->name('ShowPermissions');
 Route::post('/storepermission',[Module::class,'savePermissions']);
 Route::post('/deletePermission',[Module::class,'deletePermission'])->name('deletePermission');
+
+//menu
+Route::view('/menu','menu.index');
+Route::post('/getMenuAjax', [menu::class, 'getMenuAjax']);
+
 
 // frontend
 

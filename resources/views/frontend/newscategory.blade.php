@@ -10,11 +10,11 @@
                     @foreach($related_title_news as $news)
                     <article class="featured">
                         <div class="post-image">
-                <img src="{{ asset($news->Image) }}" class="card-img-top" >
+                <img src="{{ asset($news->news_image) }}" class="card-img-top" >
                         </div>
                         <div class="post-content">
                             <a href="{{ url('/News/' . $news->slug) }}" class="text-decoration-none text-dark">
-                            <h3>{{ $news->Title }}</h3>    
+                            <h3>{{ $news->title }}</h3>    
                           </a> 
                         </div>
                     </article>

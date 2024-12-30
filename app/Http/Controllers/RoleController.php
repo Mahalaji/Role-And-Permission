@@ -10,6 +10,8 @@ use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use App\Models\modules;
+
     
 class RoleController extends Controller
 {
@@ -24,6 +26,7 @@ class RoleController extends Controller
          $this->middleware('permission:role-create', ['only' => ['create','store']]);
          $this->middleware('permission:role-edit', ['only' => ['edit','update']]);
          $this->middleware('permission:role-delete', ['only' => ['destroy']]);
+
     }
     
     /**
@@ -102,7 +105,7 @@ class RoleController extends Controller
         $rolePermissions = DB::table("role_has_permissions")->where("role_has_permissions.role_id",$id)
             ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
             ->all();
-    
+    // dd($permission);
         return view('roles.edit',compact('role','permission','rolePermissions'));
     }
     
@@ -117,19 +120,14 @@ class RoleController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-            'permission' => 'required',
         ]);
     
         $role = Role::find($id);
         $role->name = $request->input('name');
         $role->save();
 
-        $permissionsID = array_map(
-            function($value) { return (int)$value; },
-            $request->input('permission')
-        );
+       
     
-        $role->syncPermissions($permissionsID);
     
         return redirect()->route('roles.index')
                         ->with('success','Role updated successfully');
@@ -146,4 +144,47 @@ class RoleController extends Controller
         return redirect()->route('roles.index')
                         ->with('success','Role deleted successfully');
     }
+    public function updateAccess(Request $request, $roleId)
+    {
+        $permissionIds = $request->input('permissions', []);
+    
+        DB::beginTransaction();
+    
+        try {
+            DB::table('role_has_permissions')->where('role_id', $roleId)->delete();
+    
+            foreach ($permissionIds as $permissionId) {
+                DB::table('role_has_permissions')->insert([
+                    'role_id' => $roleId,
+                    'permission_id' => $permissionId
+                ]);
+            }
+    
+            DB::commit();
+    
+            return redirect()->route('roles.index')->with('success', 'Access updated successfully for the role!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+    
+            return redirect()->route('roles.index')->with('error', 'Failed to update access. Please try again.');
+        }
+    }
+
+    public function access($roleId)
+{
+    $rolePermissions = DB::table('role_has_permissions')
+        ->where('role_id', $roleId)
+        ->pluck('permission_id')
+        ->toArray();
+
+    $modules = modules::with([
+        'permission',
+        'childmodule.permission' 
+    ])->where('parent_id', 0)->get()->toArray();
+
+    return view('roles.access', compact('modules', 'rolePermissions', 'roleId'));
+}
+
+    
+    
 }

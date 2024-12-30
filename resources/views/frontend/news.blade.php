@@ -11,11 +11,11 @@
 
                     <article class="featured">
                         <div class="post-image">
-                        <img src="{{ asset($news->Image) }}" class="card-img-top" >
+                        <img src="{{ asset($news->news_image) }}" class="card-img-top" >
                         </div>
                         <div class="post-content">
                             <a href="{{ url('/News/' . $news->slug) }}" class="text-decoration-none text-dark">
-                                <h3>{{$news->Title}}</h3>
+                                <h3>{{$news->title}}</h3>
                             </a>
                         </div>
                     </article>
@@ -29,8 +29,8 @@
                 <h5 class="form-like">
                     <ul class="list">
                     @foreach ($categories as $row)
-                <a href="{{ url('/newstitle/' . $row->seo_title) }}" class="text-decoration-none text-dark">
-                    <h5 class="card-title">{{$row->seo_title}}</h5>
+                <a href="{{ url('/newstitle/' . $row->title) }}" class="text-decoration-none text-dark">
+                    <h5 class="card-title">{{$row->title}}</h5>
                 </a>
                 </li>
                 @endforeach

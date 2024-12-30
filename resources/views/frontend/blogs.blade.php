@@ -16,7 +16,7 @@
                 </div>
                 <div class="post-content">
                 <a href="{{ url('/Blogs/' . $row->slug) }}" class="text-decoration-none text-dark">
-                        <h3>{{$row->Title}}</h3>
+                        <h3>{{$row->title}}</h3>
                     </a>
                 </div>
             </article>
@@ -30,8 +30,8 @@
         <h5 class="form-like">
             <ul class="list">
                 @foreach ($categories as $row)
-                <a href="{{ url('/Blogtitle/' . $row->seo_title) }}" class="text-decoration-none text-dark">
-                    <h5 class="card-title">{{$row->seo_title}}</h5>
+                <a href="{{ url('/Blogtitle/' . $row->title) }}" class="text-decoration-none text-dark">
+                    <h5 class="card-title">{{$row->title}}</h5>
                 </a>
                 </li>
                 @endforeach

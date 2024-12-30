@@ -16,13 +16,13 @@ class newsfront extends Controller
     }
     public function newsbyslug($slug){
         $news= news::with('categories')->whereLike('slug', $slug)->first();
-        $related_news = news::where('news_title_category', $news->categories->id)->get();
+        $related_news = news::where('category_id', $news->categories->id)->get();
         
         return view('Frontend.particularnews',['news' => $news,'related_news'=>$related_news]);
     }
     public function newsbytitle($newscat)
     {
-        $category = newscategory::with('news')->where('seo_title', $newscat)->first();
+        $category = newscategory::with('news')->where('title', $newscat)->first();
     
         if (!$category) {
             abort(404, 'Category not found');
@@ -44,9 +44,9 @@ class newsfront extends Controller
  
     $data = $news->map(function ($news) {
         return [
-            'Title' => $news->Title,
+            'Title' => $news->title,
             'slug' => $news->slug,
-            'Image' => asset($news->Image),  
+            'Image' => asset($news->news_image),  
         ];
     });
     return response()->json([

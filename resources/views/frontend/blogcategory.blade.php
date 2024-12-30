@@ -14,7 +14,7 @@
                         </div>
                         <div class="post-content">
                             <a href="{{ url('/Blogs/' . $blog->slug) }}" class="text-decoration-none text-dark">
-                            <h3>{{ $blog->Title }}</h3>    
+                            <h3>{{ $blog->title }}</h3>    
                           </a> 
                         </div>
                     </article>

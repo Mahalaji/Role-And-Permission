@@ -12,11 +12,11 @@
 
                     </div>
                     <div class="post-content">
-                        <h3><strong> Title: </strong>{{ $blog['Title'] }}</h3>
+                        <h3><strong> Title: </strong>{{ $blog['title'] }}</h3>
                         <!-- <h3><strong> Author Name: </strong>{{ $blog['Name'] }}</h3> -->
-                        <p>{{ $blog['Description'] }}</p>
-                        <p class="para"> <strong> Post Date: </strong>{{ $blog['post_Date'] }}</p>
-                        <p class="para"> <strong> Update Date:</strong>{{ $blog['Update_Date'] }}</p>
+                        <p>{{ $blog['description'] }}</p>
+                        <p class="para"> <strong> Create Date: </strong>{{ $blog['created_at'] }}</p>
+                        <p class="para"> <strong> Update Date:</strong>{{ $blog['updated_at'] }}</p>
                     </div>
                 </article>
             </div>
@@ -29,7 +29,7 @@
             @foreach ($related_blogs as $row)
               <a href="{{ url('/Blogs/' . $row->slug) }}" class="text-decoration-none text-dark">
               <li class="li-container"> <img src="{{ asset($row->image) }}" class="card-img-top" >                   
-                <h5 class="card-title">{{ $row['Title'] }}</h5>
+                <h5 class="card-title">{{ $row['title'] }}</h5>
                 </a>
               </li>
               @endforeach

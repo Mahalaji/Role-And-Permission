@@ -8,13 +8,13 @@
                <div class="post-grid">
                    <article class="featured">
                    <div class="post-image">
-                   <img src="{{ asset($news->Image) }}" class="card-img-top" >
+                   <img src="{{ asset($news->news_image) }}" class="card-img-top" >
                     </div>
                     <div class="post-content">
                         <h3><strong> Title: </strong>{{ $news['Title'] }}</h3>
-                        <p>{{ $news['Description'] }}</p>
-                        <p class="para"> <strong>Post Date: </strong>{{ $news['Date'] }}</p>
-                        <p class="para"> <strong>Update Date: </strong>{{ $news['Update_Date'] }}</p>
+                        <p>{{ $news['description'] }}</p>
+                        <p class="para"> <strong>create Date: </strong>{{ $news['created_at'] }}</p>
+                        <p class="para"> <strong>Update Date: </strong>{{ $news['updated_at'] }}</p>
                     </div>
                    </article>
                </div>
@@ -25,8 +25,8 @@
              <ul class="list">
                @foreach ($related_news as $news)
                <a href="{{ url('/News/' . $news->slug) }}" class="text-decoration-none text-dark">
-                 <li class="li-container"><img src="{{ asset($news->Image) }}" class="card-img-top" >
-                   <h5 class="card-title">{{ $news['Title'] }}</h5>
+                 <li class="li-container"><img src="{{ asset($news->news_image) }}" class="card-img-top" >
+                   <h5 class="card-title">{{ $news['title'] }}</h5>
                    </a>
                  </li>
                  @endforeach

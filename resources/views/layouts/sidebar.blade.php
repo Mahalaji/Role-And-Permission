@@ -44,7 +44,7 @@
                             <i class="fa fa-caret-down"></i>
                         </button>
                         <div class="dropdown-container">
-                            <a href="/news"><i class="fas fa-newspaper"></i> News List</a>
+                            <a href="/newss"><i class="fas fa-newspaper"></i> News List</a>
                             <a href="/newscategory"><i class="fa fa-list"></i> Category</a>
                         </div>
                     </li>
@@ -65,6 +65,8 @@
                             <a href="/module"><i class="fa-brands fa-pinterest"></i> Module</a>
                             <a href="{{ route('roles.index') }}"><i class="fa-brands fa-critical-role"></i> Manage Role</a>
                             <a href="/company"><i class="far fa-address-book"></i> Company Profile</a>
+                            <a href="/menu"><i class="fa-solid fa-bars"></i> Menu</a>
+
                         </div>
                     </li>
                     <li><a href="{{ route('users.index') }}"><i class="fas fa-users"></i>Manage User</a></li>

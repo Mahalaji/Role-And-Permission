@@ -68,7 +68,7 @@ class newss extends Controller
         $newsadd->save();
     
         if ($newsadd) {
-            return redirect('/news')->with('success', 'News added successfully!');
+            return redirect('/newss')->with('success', 'News added successfully!');
         } else {
             return back()->with('error', 'Failed to add the news.');
         }
@@ -186,7 +186,7 @@ class newss extends Controller
     
         $newsedit->save();
     
-        return redirect('/news')->with('success', 'News updated successfully');
+        return redirect('/newss')->with('success', 'News updated successfully');
     }
     public function destorynews($id){
         $news = news::find($id); 
@@ -197,7 +197,7 @@ class newss extends Controller
     
         $news->delete();
     
-        return redirect('/news')->with('success', 'News deleted successfully');
+        return redirect('/newss')->with('success', 'News deleted successfully');
     }
     public function getNewsCategoryAjax(Request $request){
         try {

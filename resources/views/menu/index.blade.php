@@ -5,14 +5,8 @@
 @section('content')
 <div class="info" style="background: white;">
     <div class="container mt-4">
-        <h2>News List</h2>
-        <form class="left" method="post">
-            <a href="/dashboard"><i class='fas fa-eye' style='font-size:18px;color:black'></i></a>
-
-            <form class="left" method="post">
-                <a href="{{ asset('/news/add') }}"
-                    style="padding: 10px; background: azure; text-decoration: none; color: black; border-radius: 5px; font-size: 14px; border: 1px solid black;">Add-News</a>
-            </form>
+        <h2>Menu List</h2>
+      
             <meta name="csrf-token" content="{{ csrf_token() }}">
             <div class="filter-container">
                 <h4>Filter</h4>
@@ -25,16 +19,13 @@
                 </div>
             </div>
 
-            <table id="NewsTable" class="table table-bordered table-striped" style="width: 1070px;">
+            <table id="menuTable" class="table table-bordered table-striped" style="width: 1070px;">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Name</th>
-                        <th>Title</th>
-                        <th>Category Id</th>
-                        <th>Description</th>
-                        <th>Create Date</th>
-                        <th>Update Date</th>
+                        <th>Category</th>
+                        <th>Permission</th>
+                        <th>Add Menu</th>
                         <th>Edit</th>
                         <th>Delete</th>
                     </tr>
@@ -57,11 +48,11 @@ $(document).ready(function() {
         }
     });
 
-    const table = $('#NewsTable').DataTable({
+    const table = $('#menuTable').DataTable({
         processing: true,
         serverSide: true,
         ajax: {
-            url: '/getNewsAjax',
+            url: '/getMenuAjax',
             type: 'POST',
             data: function(d) {
 
@@ -75,35 +66,18 @@ $(document).ready(function() {
                 name: 'id'
             },
             {
-                data: 'name',
-                name: 'name'
+                data: 'category',
+                name: 'category'
             },
             {
-                data: 'title',
-                name: 'title'
+                data: 'permission',
+                name: 'permission'
             },
             {
-                data: 'categories.title',
-                name: 'categories.title'
+                data: 'addmenu',
+                name: 'addmenu'
             },
-            {
-                data: 'description',
-                name: 'description'
-            },
-            {
-                data: 'created_at',
-                name: 'created_at',
-                render: function(data, type, row) {
-                    return row.time_ago || data;
-                }
-            },
-            {
-                data: 'updated_at',
-                name: 'updated_at',
-                render: function(data, type, row) {
-                    return row.time_update_ago || data;
-                }
-            },
+            
 
             {
                 data: 'edit',
