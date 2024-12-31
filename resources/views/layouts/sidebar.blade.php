@@ -11,7 +11,26 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+    <style>
+    /* Hide submenus by default */
+    .menu-sub {
+        display: none;
+        list-style: none;
+        padding-left: 20px;
+    }
 
+    /* Show submenu when parent item is open */
+    .menu-item.open>.menu-sub {
+        display: block;
+    }
+
+    /* Optionally style the active items */
+    .menu-item.active>.menu-link {
+        font-weight: bold;
+        color: #007bff;
+        /* Example active link color */
+    }
+    </style>
 </head>
 
 <body>
@@ -20,77 +39,68 @@
             <div class="sidebar-header">
             </div>
             <nav class="sidebar-nav">
-                <div id="img"><img src="https://www.absglobaltravel.com/public/images/footer-abs-logo.webp" height="50" style="padding-left: 53px;">
+                <div id="img"><img src="https://www.absglobaltravel.com/public/images/footer-abs-logo.webp" height="50"
+                        style="padding-left: 53px;">
                 </div>
-                <ul>
-                   
-                    <li>
-                    @auth
-                    @if(auth()->user()->hasRole(['Admin','Blog_Team']))
-                        <button class="dropdown-btn"><i class="fas fa-blog"></i>Blogs
-                            <i class="fa fa-caret-down"></i>
-                        </button>
-                        <div class="dropdown-container">
-                            <a href="/blog"><i class="fas fa-blog"></i> Blog List</a>
-                            <a href="/blogcategory"><i class="fa fa-list"></i> Category</a>
-                        </div>
+                <ul class="menu">
+                    @foreach($menu->json_output as $item)
+                    <li
+                        class="menu-item {{ request()->routeIs($item['href']) || (isset($item['children']) && collect($item['children'])->pluck('href')->contains(request()->route()->getName())) ? 'open active' : '' }}">
+                        <a href="{{ $item['href'] ? route($item['href']) : 'javascript:void(0);' }}"
+                            class="menu-link menu-toggle">
+                            <i class="menu-icon {{ $item['icon'] ?? 'fas fa-circle' }}"></i>
+                            <div data-i18n="{{ $item['title'] ?? '' }}">{{ $item['text'] }}</div>
+                            @if(!empty($item['children']))
+                            <i class="menu-toggle-icon fas fa-caret-down" style="padding-left: 100px;"></i> <!-- Dropdown Icon -->
+                            @endif
+                        </a>
+                        @if(!empty($item['children']))
+                        <ul class="menu-sub"
+                            style="display: {{ request()->routeIs($item['href']) || (isset($item['children']) && collect($item['children'])->pluck('href')->contains(request()->route()->getName())) ? 'block' : 'none' }};">
+                            @foreach($item['children'] as $child)
+                            <li class="menu-item {{ request()->routeIs($child['href']) ? 'active' : '' }}">
+                                <a href="{{ $child['href'] ? route($child['href']) : 'javascript:void(0);' }}"
+                                    class="menu-link">
+                                    <i class="menu-icon {{ $child['icon'] ?? 'fas fa-circle' }}"></i>
+                                    <div data-i18n="{{ $child['title'] ?? '' }}">{{ $child['text'] }}</div>
+                                </a>
+                                @if(!empty($child['children']))
+                                <ul class="menu-sub">
+                                    @foreach($child['children'] as $subChild)
+                                    <li class="menu-item {{ request()->routeIs($subChild['href']) ? 'active' : '' }}">
+                                        <a href="{{ $subChild['href'] ? route($subChild['href']) : 'javascript:void(0);' }}"
+                                            class="menu-link">
+                                            <i class="menu-icon {{ $subChild['icon'] ?? 'fas fa-circle' }}"></i>
+                                            <div data-i18n="{{ $subChild['title'] ?? '' }}">{{ $subChild['text'] }}
+                                            </div>
+                                        </a>
+                                    </li>
+                                    @endforeach
+                                </ul>
+                                @endif
+                            </li>
+                            @endforeach
+                        </ul>
+                        @endif
                     </li>
-                    @endif
-                    @endauth
-                    @auth
-                    @if(auth()->user()->hasRole(['Admin','News_Team']))
-                    <li>
-                        <button class="dropdown-btn"><i class="fas fa-newspaper"></i>News
-                            <i class="fa fa-caret-down"></i>
-                        </button>
-                        <div class="dropdown-container">
-                            <a href="/newss"><i class="fas fa-newspaper"></i> News List</a>
-                            <a href="/newscategory"><i class="fa fa-list"></i> Category</a>
-                        </div>
-                    </li>
-                    @endif
-                    @endauth
-                    @auth
-                    @if(auth()->user()->hasRole(['Admin','Page_Team']))
-                    <li><a href="/pages"><i class="fa fa-copy"></i> Pages</a></li>
-                    @endif
-                    @endauth
-                    @auth
-                    @if(auth()->user()->hasRole('Admin'))
-                    <li>
-                        <button class="dropdown-btn"><i class="fa-solid fa-gear"></i>Setting
-                            <i class="fa fa-caret-down"></i>
-                        </button>
-                        <div class="dropdown-container">
-                            <a href="/module"><i class="fa-brands fa-pinterest"></i> Module</a>
-                            <a href="{{ route('roles.index') }}"><i class="fa-brands fa-critical-role"></i> Manage Role</a>
-                            <a href="/company"><i class="far fa-address-book"></i> Company Profile</a>
-                            <a href="/menu"><i class="fa-solid fa-bars"></i> Menu</a>
-
-                        </div>
-                    </li>
-                    <li><a href="{{ route('users.index') }}"><i class="fas fa-users"></i>Manage User</a></li>
-                    <li><a href="{{ route('products.index') }}"><i class="fa-solid fa-list"></i>Manage Product</a></li>
-                    @endif
-                    @endauth
-
+                    @endforeach
                 </ul>
+
+
             </nav>
         </aside>
 
         <script>
-        var dropdown = document.getElementsByClassName("dropdown-btn");
-        var i;
+        // Toggle the dropdown visibility when clicking on a parent menu item
+        document.querySelectorAll('.menu-toggle').forEach(function(button) {
+            button.addEventListener('click', function(e) {
+                const parentMenuItem = this.closest('.menu-item');
+                const submenu = parentMenuItem.querySelector('.menu-sub');
 
-        for (i = 0; i < dropdown.length; i++) {
-            dropdown[i].addEventListener("click", function() {
-                this.classList.toggle("active");
-                var dropdownContent = this.nextElementSibling;
-                if (dropdownContent.style.display === "block") {
-                    dropdownContent.style.display = "none";
-                } else {
-                    dropdownContent.style.display = "block";
+                if (submenu) {
+                    submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+                    parentMenuItem.classList.toggle('open');
                 }
             });
-        }
+        });
         </script>

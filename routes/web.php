@@ -41,14 +41,14 @@ Route::group(['middleware' => ['auth']], function() {
 
 
 
-Route::view('/blog','blog.index');
+Route::view('/blog','blog.index')->name('blog');
 Route::post('/getBlogsAjax', [blogs::class, 'getBlogsAjax']);
 Route::get('/blog/add', [blogs::class, 'title']);
 Route::post('/addblog',[blogs::class,'addblog']);
 Route::get('/blog/edit/{id}', [blogs::class, 'edit']);
 Route::post('/update',[blogs::class,'update']);
 Route::post('/destory/{id}', [blogs::class, 'destory']);
-Route::view('/blogcategory','blog.category_index');
+Route::view('/blogcategory','blog.category_index')->name('blogcategory');
 Route::post('/getBlogsCategoryAjax', [blogs::class, 'getBlogsCategoryAjax']);
 Route::view('/blogcategory/add','blog.category_create');
 Route::post('/addcategery',[blogs::class,'addcategery']);
@@ -58,12 +58,12 @@ Route::post('/updatecategery',[blogs::class,'updateCategory']);
 
 Route::get('/news/add', [newss::class, 'title']);
 Route::post('/createnews',[newss::class,'createnews']);
-Route::view('/newss','news.index');
+Route::view('/newss','news.index')->name('newss');
 Route::post('/getNewsAjax', [newss::class, 'getNewsAjax']);
 Route::get('/news/edit/{id}', [newss::class, 'editnews']);
 Route::post('/updatenews',[newss::class,'updatenews']);
 Route::post('/destorynews/{id}', [newss::class, 'destorynews']);
-Route::view('/newscategory','news.category_index');
+Route::view('/newscategory','news.category_index')->name('newscategory');
 Route::post('/getNewsCategoryAjax', [newss::class, 'getNewsCategoryAjax']);
 Route::view('/newscategory/add','news.category_create');
 Route::post('/createnewscategory',[newss::class,'createnewscategory']);
@@ -72,7 +72,7 @@ Route::post('/updatenewscategery',[newss::class,'updatenewscategery']);
 Route::post('/destorynewscategory/{id}', [newss::class, 'destorynewscategory']);
 
 
-Route::view('/pages','pages.index');
+Route::view('/pages','pages.index')->name('pages');
 Route::post('/getPagesAjax', [pagess::class, 'getPagesAjax']);
 Route::get('/editpages/{id}', [pagess::class, 'editpages']);
 Route::post('/updatepages',[pagess::class,'updatepages']);
@@ -80,7 +80,7 @@ Route::view('/page/add','pages.create');
 Route::post('/createpages',[pagess::class,'createpages']);
 Route::post('/destorypages/{id}', [pagess::class, 'destorypages']);
 
-Route::view('/company','company.index');
+Route::view('/company','company.index')->name('company');
 Route::post('/getCompanyAjax', [companies::class, 'getCompanyAjax']);
 Route::view('/company/add','company.create');
 Route::post('/createcompany',[companies::class,'createcompany']);
@@ -91,7 +91,7 @@ Route::post('/getCompanyaddress', [companies::class, 'getCompanyaddress']);
 Route::post('/deleteCompanyAddress', [companies::class, 'deleteaddress']);
 Route::post('/saveCompanyAddress', [companies::class, 'saveCompanyAddress']);
 
-Route::view('/module','module.index');
+Route::view('/module','module.index')->name('module');
 Route::post('/getModuleAjax', [Module::class, 'getModuleAjax']);
 Route::get('/submodule/add/{id}', [Module::class, 'add_submodule']);
 Route::post('/addsubmodule',[Module::class,'addsubmodule']);
@@ -107,8 +107,16 @@ Route::post('/storepermission',[Module::class,'savePermissions']);
 Route::post('/deletePermission',[Module::class,'deletePermission'])->name('deletePermission');
 
 //menu
-Route::view('/menu','menu.index');
+Route::view('/menu','menu.index')->name('menu');
 Route::post('/getMenuAjax', [menu::class, 'getMenuAjax']);
+Route::get('/menu/add/{id}', [menu::class, 'Addmenubar']);
+Route::post('/updatejsondata',[menu::class,'updatejsondata']);
+Route::view('/menu/add','menu.create1')->name('create1');
+Route::post('/addmenu',[menu::class,'addmenu']);
+Route::get('/menu/edit/{id}', [menu::class, 'editmenu']);
+Route::post('/editmenu',[menu::class,'updatemenu']);
+Route::post('/destorymenu/{id}', [menu::class, 'destorymenu']);
+
 
 
 // frontend

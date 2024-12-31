@@ -1,32 +1,40 @@
 @extends('layouts.app')
 @section('content')
 <style>
-.content {
-    display: flex;
-    justify-content: center;
-    align-content: center;
-}
+    .content {
+        display: flex;
+        justify-content: center;
+        align-content: center;
+    }
 
-.design {
-    background-color: #c2c2c2;
-    width: 40vw;
-    padding: 30px;
-    border-radius: 10px;
-    height: fit-content;
-    margin: 20px;
-}
+    .design {
+        background-color: #c2c2c2;
+        width: 50vw;
+        padding: 30px;
+        border-radius: 10px;
+        height: fit-content;
+        margin-left: 200px;
+    }
 
-form {
-    margin-left: 20px;
-}
+    form {
+        margin-left: 20px;
+    }
 
-.rows {
-    text-align: center;
-}
-.sidebar{
-    height: 430vh
-}
+    .rows {
+        text-align: center;
+    }
+
+    .sidebar {
+        height: fit-content; /* Allows the sidebar to adjust based on content */
+        min-height: 370vh; /* Ensures the sidebar takes at least the full viewport height */
+    }
+
+    /* Additional CSS to show/hide modules based on search */
+    .hidden {
+        display: none;
+    }
 </style>
+
 <div class="design">
     <div class="rows">
         <div class="col-lg-12 margin-tb">
@@ -40,14 +48,20 @@ form {
         </div>
     </div>
 
+    <!-- Search bar and button to trigger search -->
+    <div style="margin-bottom: 20px;">
+        <input type="text" id="searchInput" class="form-control" placeholder="Search for modules or permissions..." style="display: inline-block; width: 80%;">
+        <button id="searchButton" class="btn btn-primary" style="    margin-top: -5px;display: inline-block;width: 13%;">Search</button>
+    </div>
+
     <form method="POST" action="{{ route('roles.updateAccess', ['roleId' => $roleId]) }}">
         @csrf
         <ul>
             <div class="row">
                 @foreach($modules as $module)
-                <div class="col-lg-12">
+                <div class="col-lg-12 module" id="module-{{ $module['module_name'] }}">
                     <div class="form-group mb-3">
-                        <div style="padding-left:5px;">
+                        <div style="margin-top: 70px;">
                             <label>
                                 <input type="checkbox" class="category-checkbox"
                                     data-category="{{ $module['module_name'] }}">
@@ -61,7 +75,7 @@ form {
                                 </div>
                                 <div class="form-group p-2" style="margin-left:8px;border-left:1px solid gray;">
                                     @foreach($module['permission'] as $permission)
-                                    <div>
+                                    <div class="permission">
                                         <label>
                                             <input type="checkbox" name="permissions[]" class="permission-checkbox"
                                                 data-category="{{ $module['module_name'] }}"
@@ -81,22 +95,22 @@ form {
                                     @if(isset($module['childmodule']) && is_array($module['childmodule']))
                                     <div class="form-group p-2" style="margin-left:8px;border-left:1px solid gray;">
                                         @foreach($module['childmodule'] as $childmod)
-                                        <div>
+                                        <div class="module">
                                             <label>
                                                 <input type="checkbox" class="category-checkbox"
                                                     data-category="{{ $childmod['module_name'] }}">
                                                 <strong>{{ $childmod['module_name'] }}</strong>
                                             </label>
                                             <div>
-                                        <input type="checkbox" class="menu-checkbox"
-                                            data-category="{{ $childmod['module_name'] }}" value="show menu"> Show
-                                        permission
-                                    </div>
+                                                <input type="checkbox" class="menu-checkbox"
+                                                    data-category="{{ $childmod['module_name'] }}" value="show menu"> Show
+                                                permission
+                                            </div>
                                             <div class="form-group p-2"
                                                 style="margin-left:8px;border-left:1px solid gray;">
                                                 @if(is_array($childmod['permission']) || is_object($childmod['permission']))
                                                     @foreach($childmod['permission'] as $permission)
-                                                    <div>
+                                                    <div class="permission">
                                                         <label>
                                                             <input type="checkbox" name="permissions[]"
                                                                 class="permission-checkbox"
@@ -119,8 +133,9 @@ form {
                             </div>
                         </div>
                     </div>
-                    @endforeach
                 </div>
+                @endforeach
+            </div>
         </ul>
 
         <div class="col-xs-12 col-sm-12 col-md-12 text-center">
@@ -136,6 +151,52 @@ form {
 @section('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Search functionality when Search button is clicked
+    document.getElementById('searchButton').addEventListener('click', function() {
+        var searchQuery = document.getElementById('searchInput').value.toLowerCase(); // Get the search query
+        var modules = document.querySelectorAll('.module'); // Get all modules
+
+        // Loop through each module and check if it matches the search query
+        modules.forEach(function(module) {
+            var moduleText = module.textContent.toLowerCase(); // Get module text
+            var childModules = module.querySelectorAll('.module'); // Get child modules
+            var permissions = module.querySelectorAll('.permission'); // Get permissions in this module
+
+            // Check if the module itself or any of its child modules/permissions matches the search query
+            var isMatch = moduleText.includes(searchQuery);
+
+            // Loop through child modules and check if they match the search query
+            childModules.forEach(function(childModule) {
+                var childModuleText = childModule.textContent.toLowerCase(); // Get child module text
+                if (childModuleText.includes(searchQuery)) {
+                    childModule.style.display = 'block'; // Show the child module if it matches
+                    isMatch = true; // Mark as match if a child module matches
+                } else {
+                    childModule.style.display = 'none'; // Hide the child module if it doesn't match
+                }
+            });
+
+            // Loop through permissions within the module and hide/show them based on search query
+            permissions.forEach(function(permission) {
+                var permissionText = permission.textContent.toLowerCase(); // Get permission text
+                if (permissionText.includes(searchQuery)) {
+                    permission.style.display = 'block'; // Show permission if it matches
+                    isMatch = true; // Mark as match if a permission matches
+                } else {
+                    permission.style.display = 'none'; // Hide permission if it doesn't match
+                }
+            });
+
+            // Show or hide the parent module based on whether any part of it (including children and permissions) matched
+            if (isMatch) {
+                module.style.display = 'block'; // Show the parent module if it or its children/permissions match
+            } else {
+                module.style.display = 'none'; // Hide the parent module if nothing inside it matches
+            }
+        });
+    });
+
+    // Existing checkbox functionality for category checkboxes
     document.querySelectorAll('.category-checkbox').forEach(categoryCheckbox => {
         categoryCheckbox.addEventListener('change', function() {
             const category = this.getAttribute('data-category');
@@ -149,6 +210,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // Existing checkbox functionality for menu checkboxes
     document.querySelectorAll('.menu-checkbox').forEach(menuCheckbox => {
         menuCheckbox.addEventListener('change', function() {
             const category = this.getAttribute('data-category');
@@ -166,5 +228,4 @@ document.addEventListener('DOMContentLoaded', function() {
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 @endsection

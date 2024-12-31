@@ -24,6 +24,8 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+
 </head>
 <body>
 @include('layouts.sidebar')
@@ -87,6 +89,26 @@
         @yield('content')
     </main>
     </div>
+    <!-- <script src="<?php echo asset('js/jquery.js');?>"></script>
+    <script src="<?php echo asset('js/bootstrap.js');?>"></script>
+    <script src="<?php echo asset('js/menu.js');?>"></script>
+    <script src="<?php echo asset('js/popper.js');?>"></script>
+    <script src="<?php echo asset('js/perfect-scrollbar.js');?>"></script>
+    <script src="<?php echo asset('js/apexcharts.js');?>"></script>
+    <script src="<?php echo asset('js/perfect-scrollbar.js');?>"></script>
+    <script src="<?php echo asset('js/config.js');?>"></script>
+    <script src="<?php echo asset('js/menu.js');?>"></script>
+    <script src="<?php echo asset('js/dashboards-analytics.js');?>"></script>
+    <script src="<?php echo asset('js/helpers.js');?>"></script>
+    <script src="<?php echo asset('js/main.js');?>"></script>
+
+
+    <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+
+    <script src="<?php echo asset('bootstrap-iconpicker/js/iconset/fontawesome5-3-1.min.js'); ?>"></script>
+    <script src="<?php echo asset('bootstrap-iconpicker/js/bootstrap-iconpicker.min.js');?>"></script>
+    <script src="<?php echo asset('bootstrap-iconpicker/js/jquery-menu-editor.min.js');?>"></script> -->
     @yield('scripts')
  
 </body>

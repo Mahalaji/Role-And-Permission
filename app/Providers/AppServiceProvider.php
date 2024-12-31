@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\modules;
+use App\Models\menus;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -22,9 +23,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $menuData = menus::where('id', 1)->first();
         $module = modules::get();
-      
-        View::share( 'module',$module);
+        if ($menuData) {
+            $menuData->json_output = json_decode($menuData->json_output, true);
+        }
+        // \Log::debug('Menu Data: ', ['menu' => $menuData]);
+        View::share(['menu'=> $menuData,'module'=>$module]);
     }
     
 }
