@@ -13,6 +13,8 @@ use App\Http\Controllers\pagess;
 use App\Http\Controllers\companies;
 use App\Http\Controllers\Module;
 use App\Http\Controllers\menu;
+use App\Http\Controllers\domain;
+use App\Http\Controllers\language;
 use App\Http\Controllers\frontend\dashboard;
 use App\Http\Controllers\frontend\blogfront;
 use App\Http\Controllers\frontend\newsfront;
@@ -40,7 +42,7 @@ Route::group(['middleware' => ['auth']], function() {
 
 
 
-
+//blog
 Route::view('/blog','blog.index')->name('blog');
 Route::post('/getBlogsAjax', [blogs::class, 'getBlogsAjax']);
 Route::get('/blog/add', [blogs::class, 'title']);
@@ -56,6 +58,7 @@ Route::post('/destorycategory/{id}', [blogs::class, 'destorycategory']);
 Route::get('/blogcategory/edit/{id}', [blogs::class, 'editcategory']);
 Route::post('/updatecategery',[blogs::class,'updateCategory']);
 
+//news
 Route::get('/news/add', [newss::class, 'title']);
 Route::post('/createnews',[newss::class,'createnews']);
 Route::view('/newss','news.index')->name('newss');
@@ -71,7 +74,7 @@ Route::get('/newscategory/edit/{id}', [newss::class, 'editnewscategory']);
 Route::post('/updatenewscategery',[newss::class,'updatenewscategery']);
 Route::post('/destorynewscategory/{id}', [newss::class, 'destorynewscategory']);
 
-
+//pages
 Route::view('/pages','pages.index')->name('pages');
 Route::post('/getPagesAjax', [pagess::class, 'getPagesAjax']);
 Route::get('/editpages/{id}', [pagess::class, 'editpages']);
@@ -80,6 +83,7 @@ Route::view('/page/add','pages.create');
 Route::post('/createpages',[pagess::class,'createpages']);
 Route::post('/destorypages/{id}', [pagess::class, 'destorypages']);
 
+//company
 Route::view('/company','company.index')->name('company');
 Route::post('/getCompanyAjax', [companies::class, 'getCompanyAjax']);
 Route::view('/company/add','company.create');
@@ -91,6 +95,7 @@ Route::post('/getCompanyaddress', [companies::class, 'getCompanyaddress']);
 Route::post('/deleteCompanyAddress', [companies::class, 'deleteaddress']);
 Route::post('/saveCompanyAddress', [companies::class, 'saveCompanyAddress']);
 
+//module
 Route::view('/module','module.index')->name('module');
 Route::post('/getModuleAjax', [Module::class, 'getModuleAjax']);
 Route::get('/submodule/add/{id}', [Module::class, 'add_submodule']);
@@ -117,7 +122,23 @@ Route::get('/menu/edit/{id}', [menu::class, 'editmenu']);
 Route::post('/editmenu',[menu::class,'updatemenu']);
 Route::post('/destorymenu/{id}', [menu::class, 'destorymenu']);
 
+//domain
+Route::view('/domain','domain.index')->name('domain');
+Route::post('/getDomainAjax', [domain::class, 'getDomainAjax']);
+Route::view('/domain/add','domain.create');
+Route::post('/adddomain',[domain::class,'adddomain']);
+Route::get('/domain/edit/{id}', [domain::class, 'editdomain']);
+Route::post('/updatedomain',[domain::class,'updatedomain']);
+Route::post('/destorydomain/{id}', [domain::class, 'destorydomain']);
 
+//language
+Route::view('/language','language.index')->name('language');
+Route::post('/getLanguageAjax', [language::class, 'getLanguageAjax']);
+Route::view('/language/add','language.create');
+Route::post('/addlanguage',[language::class,'addlanguage']);
+Route::get('/language/edit/{id}', [language::class, 'editlanguage']);
+Route::post('/updatelanguage',[language::class,'updatelanguage']);
+Route::post('/destorylanguage/{id}', [language::class, 'destorylanguage']);
 
 // frontend
 

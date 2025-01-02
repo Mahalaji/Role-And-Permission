@@ -309,6 +309,61 @@
     flex-direction: row;
     column-gap: 25px;
   } 
+  #fourth{
+    display: flex;
+    flex-direction: row;
+    column-gap: 25px;
+  } 
+#cke_mailheader{
+  margin-top: 60px;
+}
+#cke_mailfooter{
+  margin-top: 60px;
+}
+#language {
+  width: 100%;
+  padding: 12px;
+  border-radius: 7px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  box-sizing: border-box;
+  background-color: #fff;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+#language:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+/* Optional: Custom arrow for the select dropdown */
+#language::-ms-expand {
+  display: none;
+}
+#domain {
+  width: 100%;
+  padding: 12px;
+  border-radius: 7px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  box-sizing: border-box;
+  background-color: #fff;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+#domain:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+/* Optional: Custom arrow for the select dropdown */
+#domain::-ms-expand {
+  display: none;
+}
   @media (max-width: 768px) {
     .dashboard {
         flex-direction: column;

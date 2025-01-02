@@ -1,17 +1,15 @@
 <link rel="stylesheet" href="{{ asset('css/blog.css') }}">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 @extends('layouts.app')
-@section('title', 'Blogs')
 @section('content')
 <div class="info" style="background: white;">
     <div class="container mt-4">
-        <h2>Blogs List</h2>
-        <form class="left" method="post">
-            <a href="/dashboard"><i class='fas fa-eye' style='font-size:18px;color:black'></i></a>
+        <h2>language List</h2>
+      
 
             <form class="left" method="post">
-                <a href="{{ asset('/blog/add') }}"
-                    style="padding: 10px; background: azure; text-decoration: none; color: black; border-radius: 5px; font-size: 14px; border: 1px solid black;">Add-Blog</a>
+                <a href="{{ asset('/language/add') }}"
+                    style="padding: 10px; background: azure; text-decoration: none; color: black; border-radius: 5px; font-size: 14px; border: 1px solid black;">Add-Language</a>
             </form>
             <meta name="csrf-token" content="{{ csrf_token() }}">
             <div class="filter-container">
@@ -25,15 +23,12 @@
                 </div>
             </div>
 
-            <table id="BlogsTable" class="table table-bordered table-striped" style="width: 1067px;">
+            <table id="LanguageTable" class="table table-bordered table-striped" style="width: 1070px;">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Name</th>
-                        <th>Title</th>
-                        <th>Category Id</th>
-                        <th>Domain</th>
-                        <th>Language</th>
+                        <th>Language Name</th>
+                        <th>Language Code</th>
                         <th>Create Date</th>
                         <th>Update Date</th>
                         <th>Edit</th>
@@ -46,6 +41,7 @@
 </div>
 @endsection
 @section('scripts')
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
@@ -57,11 +53,11 @@ $(document).ready(function() {
         }
     });
 
-    const table = $('#BlogsTable').DataTable({
+    const table = $('#LanguageTable').DataTable({
         processing: true,
         serverSide: true,
         ajax: {
-            url: '/getBlogsAjax',
+            url: '/getLanguageAjax',
             type: 'POST',
             data: function(d) {
 
@@ -75,24 +71,12 @@ $(document).ready(function() {
                 name: 'id'
             },
             {
-                data: 'name',
-                name: 'name'
+                data: 'languagename',
+                name: 'languagename'
             },
             {
-                data: 'title',
-                name: 'title'
-            },
-            {
-                data: 'categories.title',
-                name: 'categories.title'
-            },
-            {
-                data: 'domain',
-                name: 'domain'
-            },
-            {
-                data: 'language',
-                name: 'language'
+                data: 'languagecode',
+                name: 'languagecode'
             },
             {
                 data: 'created_at',
@@ -108,6 +92,7 @@ $(document).ready(function() {
                     return row.time_update_ago || data;
                 }
             },
+
             {
                 data: 'edit',
                 orderable: false,

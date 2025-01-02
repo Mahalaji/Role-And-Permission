@@ -67,6 +67,28 @@
         </div>
         <p>@error('category_id'){{$message}}@enderror</p>
         <div class="input-group">
+            <label>Language</label>
+            <select id="language" name="language">
+                <option value="">Select Language</option>
+                @foreach($language as $languages)
+                <option value="{{ $languages->languagename }}">{{ $languages->languagename }}
+                </option>
+                @endforeach
+            </select>
+        </div>
+        <p>@error('language'){{$message}}@enderror</p>
+        <div class="input-group">
+            <label>Domain</label>
+            <select id="domain" name="domain">
+                <option value="">Select Domain</option>
+                @foreach($domain as $domains)
+                <option value="{{ $domains->domainname }}">{{ $domains->domainname }}
+                </option>
+                @endforeach
+            </select>
+        </div>
+        <p>@error('domain'){{$message}}@enderror</p>
+        <div class="input-group">
             <label>Upload Image:</label><br>
             <img src="{{ asset( $blog->image) }}" alt="" height="100" width="100">
             <input type="file" name="image" id="image" />

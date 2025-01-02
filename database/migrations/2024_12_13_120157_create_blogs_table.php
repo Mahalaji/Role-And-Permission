@@ -23,6 +23,8 @@ class CreateBlogsTable extends Migration
             $table->string('seo_robat'); 
             $table->text('meta_description'); 
             $table->text('description'); 
+            $table->string('domain'); 
+            $table->string('language'); 
             $table->timestamps(); 
 
             $table->foreign('category_id')->references('id')->on('blog_category')->onDelete('cascade'); 
