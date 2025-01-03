@@ -24,6 +24,8 @@ return new class extends Migration
             $table->string('seo_robat'); 
             $table->text('meta_description'); 
             $table->text('description'); 
+            $table->string('domain_id'); 
+            $table->string('language_id'); 
             $table->timestamps(); 
 
             $table->foreign('category_id')->references('id')->on('newscategory')->onDelete('cascade'); 

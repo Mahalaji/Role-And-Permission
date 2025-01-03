@@ -9,14 +9,17 @@ use Illuminate\Support\str;
 use Illuminate\Support\Facades\Auth;
 use App\Models\news;
 use App\Models\newscategory;
-
+use App\Models\domains;
+use App\Models\languages;
 
 class newss extends Controller
 {
     public function title()
     {
         $titles = newscategory::select('title','id')->get();
-        return view('news.create', compact('titles'));
+        $domain = domains::select('domainname','id')->get();
+        $language = languages::select('languagename','id')->get();
+        return view('news.create', compact('titles','domain','language'));
     }
     function createnews(Request $request) {
         $userid = Auth::user();
@@ -32,6 +35,8 @@ class newss extends Controller
             'meta_keyword' => 'required',
             'seo_robat' => 'required',
             'meta_description' => 'required',
+            'language' => 'required',
+            'domain' => 'required',
         ]);
     
         $newsadd = new news();
@@ -47,7 +52,8 @@ class newss extends Controller
         $newsadd->seo_robat =$request->seo_robat;
         $newsadd->meta_description =$request->meta_description;
         $newsadd->user_id = $userid->id;
-
+        $newsadd->language_id = $request->language;
+        $newsadd->domain_id = $request->domain;
 
     
         if ($request->hasFile('news_image')) {
@@ -77,7 +83,7 @@ class newss extends Controller
     {
         try {
             $user=Auth::user();
-            $query = news::select('id', 'name', 'title', 'category_id', 'description', 'created_at', 'updated_at')->with('categories');
+            $query = news::select('id', 'name', 'title', 'category_id', 'domain_id','language_id', 'created_at', 'updated_at')->with('categories','domain','language');
             if (!($user->hasRole(['Admin','News_Team']))) {
                 $query->where('user_id', $user->id);
             }
@@ -126,8 +132,9 @@ class newss extends Controller
         }
     
         $titles = newscategory::select('title','id')->get();
-
-        return view('news.edit', compact('news', 'titles'));
+        $domain = domains::select('domainname','id')->get();
+        $language = languages::select('languagename','id')->get();
+        return view('news.edit', compact('news', 'titles','domain','language'));
     }
     public function updatenews(Request $request)
     {
@@ -142,6 +149,8 @@ class newss extends Controller
             'meta_keyword' => 'required',
             'seo_robat' => 'required',
             'meta_description' => 'required',
+            'language' => 'required',
+            'domain' => 'required',
         ]);
     
         $newsedit = news::find($request->id);
@@ -163,7 +172,8 @@ class newss extends Controller
         $newsedit->seo_robat =$request->seo_robat;
         $newsedit->meta_description =$request->meta_description;
         $newsedit->created_at =$request->created_at;
-
+        $newsedit->language_id =$request->language;
+        $newsedit->domain_id =$request->domain;
     
         if ($request->hasFile('news_image')) {
             $Image = $request->file('news_image');

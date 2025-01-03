@@ -15,6 +15,8 @@ use App\Http\Controllers\Module;
 use App\Http\Controllers\menu;
 use App\Http\Controllers\domain;
 use App\Http\Controllers\language;
+use App\Http\Controllers\department;
+use App\Http\Controllers\designation;
 use App\Http\Controllers\frontend\dashboard;
 use App\Http\Controllers\frontend\blogfront;
 use App\Http\Controllers\frontend\newsfront;
@@ -140,6 +142,23 @@ Route::get('/language/edit/{id}', [language::class, 'editlanguage']);
 Route::post('/updatelanguage',[language::class,'updatelanguage']);
 Route::post('/destorylanguage/{id}', [language::class, 'destorylanguage']);
 
+//department
+Route::view('/department','department.index')->name('department');
+Route::post('/getDepartmentAjax', [department::class, 'getDepartmentAjax']);
+Route::view('/department/add','department.create');
+Route::post('/adddepartment',[department::class,'adddepartment']);
+Route::get('/department/edit/{id}', [department::class, 'editdepartment']);
+Route::post('/updateDepartment',[department::class,'updateDepartment']);
+Route::post('/destorydepartment/{id}', [department::class, 'destorydepartment']);
+
+//designation
+Route::view('/designation','designation.index')->name('designation');
+Route::post('/getDesignationAjax', [designation::class, 'getDesignationAjax']);
+Route::get('/designation/add', [designation::class, 'designationadd']);
+Route::post('/adddepartment',[designation::class,'adddepartment']);
+Route::get('/department/edit/{id}', [designation::class, 'editdepartment']);
+Route::post('/updateDepartment',[designation::class,'updateDepartment']);
+Route::post('/destorydepartment/{id}', [designation::class, 'destorydepartment']);
 // frontend
 
 Route::get('/dashboard', [dashboard::class, 'dashboard']);

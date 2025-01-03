@@ -62,7 +62,7 @@
             <select id="language" name="language">
                 <option value="">Select Language</option>
                 @foreach($language as $languages)
-                <option value="{{ $languages->languagename }}">{{ $languages->languagename }}
+                <option value="{{ $languages->id }}">{{ $languages->languagename }}
                 </option>
                 @endforeach
             </select>
@@ -73,7 +73,7 @@
             <select id="domain" name="domain">
                 <option value="">Select Domain</option>
                 @foreach($domain as $domains)
-                <option value="{{ $domains->domainname }}">{{ $domains->domainname }}
+                <option value="{{ $domains->id }}">{{ $domains->domainname }}
                 </option>
                 @endforeach
             </select>

@@ -11,4 +11,10 @@ class news extends Model
     function categories(){
         return $this->hasOne('App\Models\newscategory','id','category_id');
     }
+    function domain(){
+        return $this->hasOne('App\Models\domains','id','domain_id');
+    }
+    function language(){
+        return $this->hasOne('App\Models\languages','id','language_id');
+    }
 }

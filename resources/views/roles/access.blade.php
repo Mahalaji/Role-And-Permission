@@ -25,13 +25,18 @@
     }
 
     .sidebar {
-        height: fit-content; /* Allows the sidebar to adjust based on content */
-        min-height: 370vh; /* Ensures the sidebar takes at least the full viewport height */
+        height: fit-content; 
+        min-height: 120vh; 
     }
 
-    /* Additional CSS to show/hide modules based on search */
     .hidden {
         display: none;
+    }
+
+    .row {
+        max-height: 70vh; 
+        overflow-y: auto; 
+        padding: 10px; 
     }
 </style>
 
@@ -48,10 +53,9 @@
         </div>
     </div>
 
-    <!-- Search bar and button to trigger search -->
     <div style="margin-bottom: 20px;">
         <input type="text" id="searchInput" class="form-control" placeholder="Search for modules or permissions..." style="display: inline-block; width: 80%;">
-        <button id="searchButton" class="btn btn-primary" style="    margin-top: -5px;display: inline-block;width: 13%;">Search</button>
+        <button id="searchButton" class="btn btn-primary" style="margin-top: -5px;display: inline-block;width: 13%;">Search</button>
     </div>
 
     <form method="POST" action="{{ route('roles.updateAccess', ['roleId' => $roleId]) }}">
@@ -61,7 +65,7 @@
                 @foreach($modules as $module)
                 <div class="col-lg-12 module" id="module-{{ $module['module_name'] }}">
                     <div class="form-group mb-3">
-                        <div style="margin-top: 70px;">
+                        <div style="margin-top: 5px;">
                             <label>
                                 <input type="checkbox" class="category-checkbox"
                                     data-category="{{ $module['module_name'] }}">
@@ -151,12 +155,10 @@
 @section('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Search functionality when Search button is clicked
     document.getElementById('searchButton').addEventListener('click', function() {
-        var searchQuery = document.getElementById('searchInput').value.toLowerCase(); // Get the search query
-        var modules = document.querySelectorAll('.module'); // Get all modules
+        var searchQuery = document.getElementById('searchInput').value.toLowerCase(); 
+        var modules = document.querySelectorAll('.module'); 
 
-        // Loop through each module and check if it matches the search query
         modules.forEach(function(module) {
             var moduleText = module.textContent.toLowerCase(); // Get module text
             var childModules = module.querySelectorAll('.module'); // Get child modules
@@ -187,16 +189,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
 
-            // Show or hide the parent module based on whether any part of it (including children and permissions) matched
             if (isMatch) {
-                module.style.display = 'block'; // Show the parent module if it or its children/permissions match
+                module.style.display = 'block'; 
             } else {
-                module.style.display = 'none'; // Hide the parent module if nothing inside it matches
+                module.style.display = 'none'; 
             }
         });
     });
 
-    // Existing checkbox functionality for category checkboxes
     document.querySelectorAll('.category-checkbox').forEach(categoryCheckbox => {
         categoryCheckbox.addEventListener('change', function() {
             const category = this.getAttribute('data-category');
@@ -210,7 +210,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Existing checkbox functionality for menu checkboxes
     document.querySelectorAll('.menu-checkbox').forEach(menuCheckbox => {
         menuCheckbox.addEventListener('change', function() {
             const category = this.getAttribute('data-category');
@@ -226,6 +225,5 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/js/all.min.js"></script>
 @endsection

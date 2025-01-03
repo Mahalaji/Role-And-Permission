@@ -69,6 +69,28 @@
             </div>
             <p>@error('category_id'){{$message}}@enderror</p>
             <div class="input-group">
+            <label>Language</label>
+            <select id="language" name="language">
+                <option value="">Select Language</option>
+                @foreach($language as $languages)
+                <option value="{{ $languages->id }}">{{ $languages->languagename }}
+                </option>
+                @endforeach
+            </select>
+        </div>
+        <p>@error('language'){{$message}}@enderror</p>
+        <div class="input-group">
+            <label>Domain</label>
+            <select id="domain" name="domain">
+                <option value="">Select Domain</option>
+                @foreach($domain as $domains)
+                <option value="{{ $domains->id }}">{{ $domains->domainname }}
+                </option>
+                @endforeach
+            </select>
+        </div>
+        <p>@error('domain'){{$message}}@enderror</p>
+            <div class="input-group">
                 <label>Email</label>
                 <input type="text" id="email" name="email" value="{{ old('email', $news->email) }}">
             </div>

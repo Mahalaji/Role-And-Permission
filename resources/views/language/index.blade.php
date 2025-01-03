@@ -4,7 +4,7 @@
 @section('content')
 <div class="info" style="background: white;">
     <div class="container mt-4">
-        <h2>language List</h2>
+        <h2>Language List</h2>
       
 
             <form class="left" method="post">

@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\Blogcategory;
 use App\Models\domains;
 use App\Models\languages;
-
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\Blog;
 use Illuminate\Support\Facades\DB;
@@ -18,8 +17,8 @@ class blogs extends Controller
     public function title()
     {
         $titles = Blogcategory::select('title','id')->get();
-        $domain = domains::select('domainname')->get();
-        $language = languages::select('languagename')->get();
+        $domain = domains::select('domainname','id')->get();
+        $language = languages::select('languagename','id')->get();
 
         return view('blog.create', compact('titles','domain','language'));
     }   
@@ -52,8 +51,8 @@ class blogs extends Controller
         $Blogadd->seo_robat =$request->seo_robat;
         $Blogadd->meta_description =$request->meta_description;
         $Blogadd->user_id = $userid->id;
-        $Blogadd->language = $request->language;
-        $Blogadd->domain = $request->domain;
+        $Blogadd->language_id = $request->language;
+        $Blogadd->domain_id = $request->domain;
 
     
         if ($request->hasFile('image')) {
@@ -84,8 +83,9 @@ class blogs extends Controller
 
         try {
             $user = Auth::user();
-            $query = Blog::select('id', 'name', 'title', 'category_id', 'domain','language', 'created_at', 'updated_at')
-                ->with('categories');
+            $query = Blog::select('id', 'name', 'title', 'category_id', 'domain_id','language_id', 'created_at', 'updated_at')
+                ->with('categories','domain','language');
+                // dd($query);
             if (!($user->hasRole(['Admin','Blog_Team']))) {
                 $query->where('user_id', $user->id);
             }
@@ -134,8 +134,8 @@ class blogs extends Controller
         }
     
         $titles = Blogcategory::select('title','id')->get();
-        $domain = domains::select('domainname')->get();
-        $language = languages::select('languagename')->get();
+        $domain = domains::select('domainname','id')->get();
+        $language = languages::select('languagename','id')->get();
         return view('blog.edit', compact('blog', 'titles','domain','language'));
     }
     public function update(Request $request)
@@ -162,8 +162,8 @@ class blogs extends Controller
 
     $Blogedit->title = $request->title;
     $Blogedit->name = $request->name;
-    $Blogedit->language = $request->language;
-    $Blogedit->domain = $request->domain;
+    $Blogedit->language_id = $request->language;
+    $Blogedit->domain_id = $request->domain;
     $Blogedit->category_id = $request->category_id;
     $cleanDescription = preg_replace('/<\/?p>|<\/?strong>/', '', $request->description); // Remove <p> and <strong> tags
     $cleanDescription = str_replace(['&nbsp;', '&#39;'], [' ', "'"], $cleanDescription); // Replace &nbsp; with a space and &#39; with a single quote

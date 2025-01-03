@@ -315,10 +315,12 @@
     column-gap: 25px;
   } 
 #cke_mailheader{
-  margin-top: 60px;
+  margin-top: 15px;
+  width: 1000px;
 }
 #cke_mailfooter{
-  margin-top: 60px;
+  margin-top: 15px;
+  width: 1000px;
 }
 #language {
   width: 100%;
@@ -362,6 +364,28 @@
 
 /* Optional: Custom arrow for the select dropdown */
 #domain::-ms-expand {
+  display: none;
+}
+#department_id {
+  width: 100%;
+  padding: 12px;
+  border-radius: 7px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  box-sizing: border-box;
+  background-color: #fff;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+#department_id:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+/* Optional: Custom arrow for the select dropdown */
+#department_id::-ms-expand {
   display: none;
 }
   @media (max-width: 768px) {

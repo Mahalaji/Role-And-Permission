@@ -12,23 +12,22 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
     <style>
-    /* Hide submenus by default */
     .menu-sub {
         display: none;
         list-style: none;
         padding-left: 20px;
     }
 
-    /* Show submenu when parent item is open */
     .menu-item.open>.menu-sub {
         display: block;
     }
 
-    /* Optionally style the active items */
     .menu-item.active>.menu-link {
         font-weight: bold;
-        color: #007bff;
-        /* Example active link color */
+        color: gray;
+    }
+    a:hover{
+        color: gray !important;
     }
     </style>
 </head>

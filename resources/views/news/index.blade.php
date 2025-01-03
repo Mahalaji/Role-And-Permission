@@ -32,7 +32,8 @@
                         <th>Name</th>
                         <th>Title</th>
                         <th>Category Id</th>
-                        <th>Description</th>
+                        <th>Domain</th>
+                        <th>Language</th>
                         <th>Create Date</th>
                         <th>Update Date</th>
                         <th>Edit</th>
@@ -87,8 +88,12 @@ $(document).ready(function() {
                 name: 'categories.title'
             },
             {
-                data: 'description',
-                name: 'description'
+                data: 'domain.domainname',
+                name: 'domain.domainname'
+            },
+            {
+                data: 'language.languagename',
+                name: 'language.languagename'
             },
             {
                 data: 'created_at',
