@@ -11,7 +11,7 @@ class designation extends Controller
     public function getDesignationAjax(Request $request)
     {
         try {
-            $query = designations::select('id', 'designationname','created_at', 'updated_at');
+            $query = designations::select('id', 'designationname','department_id','created_at', 'updated_at')->with('department');
 
             if ($request->has('start_date') && $request->has('end_date')) {
                 $startDate = $request->start_date;
@@ -26,10 +26,10 @@ class designation extends Controller
         
             return DataTables::of($query)
                 ->addColumn('edit', function ($row) {
-                    return '<a href="/department/edit/' . $row->id . '" class="btn btn-sm btn-primary"style="color:black"><i class="fas fa-edit"></i></a>';
+                    return '<a href="/designation/edit/' . $row->id . '" class="btn btn-sm btn-primary"style="color:black"><i class="fas fa-edit"></i></a>';
                 })
                 ->addColumn('delete', function ($row) {
-                    return '<form action="/destorydepartment/' . $row->id . '" method="POST" onsubmit="return confirm(\'Are you sure?\');">
+                    return '<form action="/destorydesignation/' . $row->id . '" method="POST" onsubmit="return confirm(\'Are you sure?\');">
                                 ' . csrf_field() . '
                                 <button type="submit" class="btn btn-sm btn-danger" style="border: none; outline: none;"><i class="fas fa-trash"></i></button>
                             </form>';
@@ -51,4 +51,71 @@ class designation extends Controller
         $departments = departments::select('departmentname','id')->get();
         return view('designation.create', compact('departments'));
     } 
+    function adddesignation(Request $request) {
+
+        $request->validate([
+            'designationname' => 'required',
+            'department_id' => 'required',
+
+        ]);
+    
+        $designationadd = new designations();
+        $designationadd->designationname = $request->designationname;
+        $designationadd->department_id = $request->department_id;
+       
+        $designationadd->save();
+    
+        if ($designationadd) {
+            return redirect('/designation')->with('success', 'designation added successfully!');
+        } else {
+            return back()->with('error', 'Failed to add the designation.');
+        }
+    }
+    public function editdesignation($id){
+        $designation = designations::find($id); 
+    
+        if (!$designation) {
+            return redirect()->back()->with('error', 'designation not found');
+        }
+ 
+        if (!is_object($designation)) {
+            return redirect()->back()->with('error', 'Invalid designation data');
+        }
+        $departments = departments::select('departmentname','id')->get();
+ 
+        return view('designation.edit', compact('designation','departments'));
+    }
+    public function updateDesignation(Request $request)
+    {
+        $request->validate([
+            'designationname' => 'required',
+            'department_id' => 'required',
+        ]);
+    
+        $designationedit = designations::find($request->id);
+    
+        if (!$designationedit) {
+            return redirect()->back()->withErrors(['error' => 'designation not found']);
+        }
+    
+        $designationedit->designationname = $request->designationname;
+        $designationedit->department_id = $request->department_id;
+        $designationedit->updated_at = now();
+        $designationedit->created_at =$request->created_at;
+    
+        $designationedit->save();
+    
+        return redirect('/designation')->with('success', 'designation updated successfully');
+    }
+    public function destorydesignation($id){
+        $designation = designations::find($id); 
+    
+        if (!$designation) {
+            return redirect()->back()->withErrors(['error' => 'designation not found']);
+        }
+    
+        $designation->delete();
+    
+        return redirect('/designation')->with('success', 'designation deleted successfully');
+    }
 }

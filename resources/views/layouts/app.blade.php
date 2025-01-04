@@ -31,7 +31,7 @@
 @include('layouts.sidebar')
 
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm"style="margin-left: -110px;margin-right: -96px;padding-left: 219px;">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                      

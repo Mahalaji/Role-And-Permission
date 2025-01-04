@@ -19,12 +19,14 @@ body {
     width: 300px;
     background-color: black;
     color: #ecf0f1;
-    height: 170vh;
+    min-height: 120vh; 
+    height: fit-content; 
     padding: 20px;
     display: flex;
     flex-direction: column;
     transition: width 0.3s ease;
 }
+
 
 .sidebar-header h1 {
     font-size: 40px;
@@ -311,6 +313,9 @@ body {
 #cke_editor{
     margin-top: 13px;
     width: 3000px;
+}
+#app{
+    margin-left: 110px;
 }
 @media (max-width: 768px) {
     .dashboard {

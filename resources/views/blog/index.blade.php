@@ -25,7 +25,7 @@
                 </div>
             </div>
 
-            <table id="BlogsTable" class="table table-bordered table-striped" style="width: 1067px;">
+            <table id="BlogsTable" class="table table-bordered table-striped" style="width: 1100px;">
                 <thead>
                     <tr>
                         <th>ID</th>

@@ -24,7 +24,7 @@
                 </div>
             </div>
 
-            <table id="DomainTable" class="table table-bordered table-striped" style="width: 1070px;">
+            <table id="DomainTable" class="table table-bordered table-striped" style="width: 1100px;">
                 <thead>
                     <tr>
                         <th>ID</th>

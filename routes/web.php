@@ -36,7 +36,7 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
   
 Route::group(['middleware' => ['auth']], function() {
     Route::resource('roles', RoleController::class);
-    Route::resource('users', UserController::class);
+    Route::resource('users', UserController::class)->middleware('role:Admin');
     Route::resource('products', ProductController::class);
 
     Route::get('/access/{article}',[RoleController::class,'access'])->name('access');
@@ -45,14 +45,14 @@ Route::group(['middleware' => ['auth']], function() {
 
 
 //blog
-Route::view('/blog','blog.index')->name('blog');
+Route::view('/blog','blog.index')->name('blog')->middleware('role:Admin|Blog_Team');
 Route::post('/getBlogsAjax', [blogs::class, 'getBlogsAjax']);
 Route::get('/blog/add', [blogs::class, 'title']);
 Route::post('/addblog',[blogs::class,'addblog']);
 Route::get('/blog/edit/{id}', [blogs::class, 'edit']);
 Route::post('/update',[blogs::class,'update']);
 Route::post('/destory/{id}', [blogs::class, 'destory']);
-Route::view('/blogcategory','blog.category_index')->name('blogcategory');
+Route::view('/blogcategory','blog.category_index')->name('blogcategory')->middleware('role:Admin|Blog_Team');
 Route::post('/getBlogsCategoryAjax', [blogs::class, 'getBlogsCategoryAjax']);
 Route::view('/blogcategory/add','blog.category_create');
 Route::post('/addcategery',[blogs::class,'addcategery']);
@@ -63,12 +63,12 @@ Route::post('/updatecategery',[blogs::class,'updateCategory']);
 //news
 Route::get('/news/add', [newss::class, 'title']);
 Route::post('/createnews',[newss::class,'createnews']);
-Route::view('/newss','news.index')->name('newss');
+Route::view('/newss','news.index')->name('newss')->middleware('role:Admin|News_Team');
 Route::post('/getNewsAjax', [newss::class, 'getNewsAjax']);
 Route::get('/news/edit/{id}', [newss::class, 'editnews']);
 Route::post('/updatenews',[newss::class,'updatenews']);
 Route::post('/destorynews/{id}', [newss::class, 'destorynews']);
-Route::view('/newscategory','news.category_index')->name('newscategory');
+Route::view('/newscategory','news.category_index')->name('newscategory')->middleware('role:Admin|News_Team');
 Route::post('/getNewsCategoryAjax', [newss::class, 'getNewsCategoryAjax']);
 Route::view('/newscategory/add','news.category_create');
 Route::post('/createnewscategory',[newss::class,'createnewscategory']);
@@ -77,7 +77,7 @@ Route::post('/updatenewscategery',[newss::class,'updatenewscategery']);
 Route::post('/destorynewscategory/{id}', [newss::class, 'destorynewscategory']);
 
 //pages
-Route::view('/pages','pages.index')->name('pages');
+Route::view('/pages','pages.index')->name('pages')->middleware('role:Admin|Page_Team');
 Route::post('/getPagesAjax', [pagess::class, 'getPagesAjax']);
 Route::get('/editpages/{id}', [pagess::class, 'editpages']);
 Route::post('/updatepages',[pagess::class,'updatepages']);
@@ -86,7 +86,7 @@ Route::post('/createpages',[pagess::class,'createpages']);
 Route::post('/destorypages/{id}', [pagess::class, 'destorypages']);
 
 //company
-Route::view('/company','company.index')->name('company');
+Route::view('/company','company.index')->name('company')->middleware('role:Admin');
 Route::post('/getCompanyAjax', [companies::class, 'getCompanyAjax']);
 Route::view('/company/add','company.create');
 Route::post('/createcompany',[companies::class,'createcompany']);
@@ -98,7 +98,7 @@ Route::post('/deleteCompanyAddress', [companies::class, 'deleteaddress']);
 Route::post('/saveCompanyAddress', [companies::class, 'saveCompanyAddress']);
 
 //module
-Route::view('/module','module.index')->name('module');
+Route::view('/module','module.index')->name('module')->middleware('role:Admin');
 Route::post('/getModuleAjax', [Module::class, 'getModuleAjax']);
 Route::get('/submodule/add/{id}', [Module::class, 'add_submodule']);
 Route::post('/addsubmodule',[Module::class,'addsubmodule']);
@@ -109,23 +109,23 @@ Route::post('/addmodule',[Module::class,'addmodule']);
 Route::get('/module/edit/{id}', [Module::class, 'editmodule']);
 Route::post('/editmodule',[Module::class,'updatemodule']);
 Route::post('/destorymodule/{id}', [Module::class, 'destorymodule']);
-Route::post('/ShowPermissions',[Module::class,'ShowPermissions'])->name('ShowPermissions');
+Route::post('/ShowPermissions',[Module::class,'ShowPermissions'])->name('ShowPermissions')->middleware('role:Admin');
 Route::post('/storepermission',[Module::class,'savePermissions']);
-Route::post('/deletePermission',[Module::class,'deletePermission'])->name('deletePermission');
+Route::post('/deletePermission',[Module::class,'deletePermission'])->name('deletePermission')->middleware('role:Admin');
 
 //menu
-Route::view('/menu','menu.index')->name('menu');
+Route::view('/menu','menu.index')->name('menu')->middleware('role:Admin');
 Route::post('/getMenuAjax', [menu::class, 'getMenuAjax']);
 Route::get('/menu/add/{id}', [menu::class, 'Addmenubar']);
 Route::post('/updatejsondata',[menu::class,'updatejsondata']);
-Route::view('/menu/add','menu.create1')->name('create1');
+Route::view('/menu/add','menu.create1')->name('create1')->middleware('role:Admin');
 Route::post('/addmenu',[menu::class,'addmenu']);
 Route::get('/menu/edit/{id}', [menu::class, 'editmenu']);
 Route::post('/editmenu',[menu::class,'updatemenu']);
 Route::post('/destorymenu/{id}', [menu::class, 'destorymenu']);
 
 //domain
-Route::view('/domain','domain.index')->name('domain');
+Route::view('/domain','domain.index')->name('domain')->middleware('role:Admin');
 Route::post('/getDomainAjax', [domain::class, 'getDomainAjax']);
 Route::view('/domain/add','domain.create');
 Route::post('/adddomain',[domain::class,'adddomain']);
@@ -134,7 +134,7 @@ Route::post('/updatedomain',[domain::class,'updatedomain']);
 Route::post('/destorydomain/{id}', [domain::class, 'destorydomain']);
 
 //language
-Route::view('/language','language.index')->name('language');
+Route::view('/language','language.index')->name('language')->middleware('role:Admin');
 Route::post('/getLanguageAjax', [language::class, 'getLanguageAjax']);
 Route::view('/language/add','language.create');
 Route::post('/addlanguage',[language::class,'addlanguage']);
@@ -143,7 +143,7 @@ Route::post('/updatelanguage',[language::class,'updatelanguage']);
 Route::post('/destorylanguage/{id}', [language::class, 'destorylanguage']);
 
 //department
-Route::view('/department','department.index')->name('department');
+Route::view('/department','department.index')->name('department')->middleware('role:Admin');
 Route::post('/getDepartmentAjax', [department::class, 'getDepartmentAjax']);
 Route::view('/department/add','department.create');
 Route::post('/adddepartment',[department::class,'adddepartment']);
@@ -152,13 +152,14 @@ Route::post('/updateDepartment',[department::class,'updateDepartment']);
 Route::post('/destorydepartment/{id}', [department::class, 'destorydepartment']);
 
 //designation
-Route::view('/designation','designation.index')->name('designation');
+Route::view('/designation','designation.index')->name('designation')->middleware('role:Admin');
 Route::post('/getDesignationAjax', [designation::class, 'getDesignationAjax']);
 Route::get('/designation/add', [designation::class, 'designationadd']);
-Route::post('/adddepartment',[designation::class,'adddepartment']);
-Route::get('/department/edit/{id}', [designation::class, 'editdepartment']);
-Route::post('/updateDepartment',[designation::class,'updateDepartment']);
-Route::post('/destorydepartment/{id}', [designation::class, 'destorydepartment']);
+Route::post('/adddesignation',[designation::class,'adddesignation']);
+Route::get('/designation/edit/{id}', [designation::class, 'editdesignation']);
+Route::post('/updateDesignation',[designation::class,'updateDesignation']);
+Route::post('/destorydesignation/{id}', [designation::class, 'destorydesignation']);
+
 // frontend
 
 Route::get('/dashboard', [dashboard::class, 'dashboard']);

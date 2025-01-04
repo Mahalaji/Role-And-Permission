@@ -13,7 +13,7 @@
             </a>
         </form>
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <table id="CompanyTable" class="table table-bordered table-striped" style="width: 1070px;">
+        <table id="CompanyTable" class="table table-bordered table-striped" style="width: 1100px;">
             <thead>
                 <tr>
                     <th>ID</th>

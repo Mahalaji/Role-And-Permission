@@ -23,11 +23,12 @@
                 </div>
             </div>
 
-            <table id="DesignationTable" class="table table-bordered table-striped" style="width: 1070px;">
+            <table id="DesignationTable" class="table table-bordered table-striped" style="width: 1100px;">
                 <thead>
                     <tr>
                         <th>ID</th>
                         <th>Designation Name</th>
+                        <th>Department Name</th>
                         <th>Create Date</th>
                         <th>Update Date</th>
                         <th>Edit</th>
@@ -72,6 +73,10 @@ $(document).ready(function() {
             {
                 data: 'designationname',
                 name: 'designationname'
+            },
+            {
+                data: 'department.departmentname',
+                name: 'department.departmentname'
             },
             {
                 data: 'created_at',
