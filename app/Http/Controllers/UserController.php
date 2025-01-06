@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Arr;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use App\Models\departments;
+use App\Models\designations;
+
     
 class UserController extends Controller
 {
@@ -21,8 +24,7 @@ class UserController extends Controller
      */
     public function index(Request $request): View
     {
-        $data = User::latest()->paginate(5);
-  
+        $data = User::latest()->with('designation','department')->paginate(5);
         return view('users.index',compact('data'))
             ->with('i', ($request->input('page', 1) - 1) * 5);
     }
@@ -35,8 +37,11 @@ class UserController extends Controller
     public function create(): View
     {
         $roles = Role::pluck('name','name')->all();
+        $departments = departments::select('departmentname','id')->get();
+        $designation = designations::select('designationname','id')->get();
 
-        return view('users.create',compact('roles'));
+
+        return view('users.create',compact('roles','departments','designation'));
     }
     
     /**
@@ -51,10 +56,15 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|same:confirm-password',
-            'roles' => 'required'
+            'roles' => 'required',
+            'department_id' => 'required',
+            'designation_id' => 'required'
+
+
         ]);
     
         $input = $request->all();
+        // dd($input);
         $input['password'] = Hash::make($input['password']);
     
         $user = User::create($input);
@@ -88,8 +98,10 @@ class UserController extends Controller
         $user = User::find($id);
         $roles = Role::pluck('name','name')->all();
         $userRole = $user->roles->pluck('name','name')->all();
-    
-        return view('users.edit',compact('user','roles','userRole'));
+        $departments = departments::select('departmentname','id')->get();
+        $designation = designations::select('designationname','id')->get();
+
+        return view('users.edit',compact('user','roles','userRole','departments','designation'));
     }
     
     /**

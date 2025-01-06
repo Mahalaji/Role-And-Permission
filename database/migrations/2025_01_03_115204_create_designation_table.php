@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('designation', function (Blueprint $table) {
             $table->id();
             $table->string('designationname'); 
+            $table->string('level'); 
             $table->unsignedBigInteger('department_id'); 
             $table->timestamps();
             $table->foreign('department_id')->references('id')->on('department')->onDelete('cascade');

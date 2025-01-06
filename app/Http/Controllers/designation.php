@@ -11,7 +11,7 @@ class designation extends Controller
     public function getDesignationAjax(Request $request)
     {
         try {
-            $query = designations::select('id', 'designationname','department_id','created_at', 'updated_at')->with('department');
+            $query = designations::select('id', 'designationname','department_id','level','created_at', 'updated_at')->with('department');
 
             if ($request->has('start_date') && $request->has('end_date')) {
                 $startDate = $request->start_date;
@@ -56,12 +56,13 @@ class designation extends Controller
         $request->validate([
             'designationname' => 'required',
             'department_id' => 'required',
-
+            'level' => 'required',
         ]);
     
         $designationadd = new designations();
         $designationadd->designationname = $request->designationname;
         $designationadd->department_id = $request->department_id;
+        $designationadd->level = $request->level;
        
         $designationadd->save();
     
@@ -90,6 +91,7 @@ class designation extends Controller
         $request->validate([
             'designationname' => 'required',
             'department_id' => 'required',
+            'level' => 'required',
         ]);
     
         $designationedit = designations::find($request->id);
@@ -100,6 +102,7 @@ class designation extends Controller
     
         $designationedit->designationname = $request->designationname;
         $designationedit->department_id = $request->department_id;
+        $designationedit->level = $request->level;
         $designationedit->updated_at = now();
         $designationedit->created_at =$request->created_at;
     

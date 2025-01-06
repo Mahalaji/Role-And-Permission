@@ -3,7 +3,7 @@
 @section('content')
 <main id="main" class="main"></main>
 <h1 class="header">Designation Add</h1>
-<form class="simple" method="post" action="/adddesignation" >
+<form class="simple" method="post" action="/adddesignation">
     <div class="form1">
         @csrf
         <div class="input-group">
@@ -22,6 +22,19 @@
             </select>
         </div>
         <p>@error('department_id'){{$message}}@enderror</p>
+
+        <div class="input-group">
+            <label>Level</label>
+            <select name="level" id="level">
+                <option value="">Select Level</option>
+                <option value="level 1">Level 1</option>
+                <option value="level 2">Level 2</option>
+                <option value="level 3">Level 3</option>
+                <option value="level 4">Level 4</option>
+                <option value="level 5">Level 5</option>
+            </select>
+        </div>
+        <p>@error('level'){{$message}}@enderror</p>
 
         <div class="submit">
             <button type="submit" class="btn" name="update">Add Designation</button>

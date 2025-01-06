@@ -20,6 +20,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'department_id',
+        'designation_id'
     ];
 
     /**
@@ -43,5 +45,13 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function designation()
+    {
+        return $this->belongsTo('App\Models\designations', 'designation_id', 'id');
+    }
+    public function department()
+    {
+        return $this->belongsTo('App\Models\departments', 'department_id', 'id');
     }
 }

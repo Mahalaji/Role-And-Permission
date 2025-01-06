@@ -315,11 +315,12 @@ body {
     width: 3000px;
 }
 #app{
-    margin-left: 110px;
+    margin-left: 24px;
 }
 @media (max-width: 768px) {
     .dashboard {
-        flex-direction: column;
+        /* flex-direction: column; */
+        width: auto;
     }
 
     .sidebar {
@@ -327,15 +328,15 @@ body {
         padding: 10px;
     }
 
-    .sidebar-nav {
+    /* .sidebar-nav {
         display: flex;
         justify-content: space-between;
         margin-top: 50px;
-    }
+    } */
 
-    .sidebar-nav ul {
+    /* .sidebar-nav ul {
         display: flex;
-    }
+    } */
 
     .sidebar-nav li {
         margin-right: 10px;

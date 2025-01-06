@@ -22,6 +22,19 @@
             </select>
         </div>
         <p>@error('department_id'){{$message}}@enderror</p>
+        <div class="input-group">
+            <label>Level</label>
+            <select name="level" id="level">
+                <option value="">Select Level</option>
+                <option value="level 1">Level 1</option>
+                <option value="level 2">Level 2</option>
+                <option value="level 3">Level 3</option>
+                <option value="level 4">Level 4</option>
+                <option value="level 5">Level 5</option>
+            </select>
+        </div>
+        <p>@error('level'){{$message}}@enderror</p>
+        
         <input type="hidden" id="id" name="id" value="{{old('id',$designation->id)}}" readonly>
         <input type="hidden" id="created_at" name="created_at" value="{{ old('created_at', $designation->created_at) }}" readonly>
         <div class="submit">

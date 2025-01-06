@@ -29,6 +29,7 @@
                         <th>ID</th>
                         <th>Designation Name</th>
                         <th>Department Name</th>
+                        <th>Level</th>
                         <th>Create Date</th>
                         <th>Update Date</th>
                         <th>Edit</th>
@@ -77,6 +78,10 @@ $(document).ready(function() {
             {
                 data: 'department.departmentname',
                 name: 'department.departmentname'
+            },
+            {
+                data: 'level',
+                name: 'level'
             },
             {
                 data: 'created_at',
