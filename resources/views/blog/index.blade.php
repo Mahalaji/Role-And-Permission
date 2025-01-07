@@ -34,8 +34,9 @@
                         <th>Category Id</th>
                         <th>Domain</th>
                         <th>Language</th>
+                        <th id="status">Status</th>
                         <th>Create Date</th>
-                        <th>Update Date</th>
+                        <!-- <th>Update Date</th> -->
                         <th>Edit</th>
                         <th>Delete</th>
                     </tr>
@@ -64,66 +65,55 @@ $(document).ready(function() {
             url: '/getBlogsAjax',
             type: 'POST',
             data: function(d) {
-
                 d.start_date = $('#startDate').val();
                 d.end_date = $('#endDate').val();
             }
         },
         pageLength: 5,
-        columns: [{
-                data: 'id',
-                name: 'id'
-            },
-            {
-                data: 'name',
-                name: 'name'
-            },
-            {
-                data: 'title',
-                name: 'title'
-            },
-            {
-                data: 'categories.title',
-                name: 'categories.title'
-            },
-            {
-                data: 'domain.domainname',
-                name: 'domain.domainname'
-            },
-            {
-                data: 'language.languagename',
-                name: 'language.languagename'
-            },
-            {
-                data: 'created_at',
-                name: 'created_at',
-                render: function(data, type, row) {
-                    return row.time_ago || data;
-                }
-            },
-            {
-                data: 'updated_at',
-                name: 'updated_at',
-                render: function(data, type, row) {
-                    return row.time_update_ago || data;
-                }
-            },
-            {
-                data: 'edit',
-                orderable: false,
-                searchable: false
-            },
-            {
-                data: 'delete',
-                orderable: false,
-                searchable: false
-            },
+        columns: [
+            { data: 'id', name: 'id' },
+            { data: 'name', name: 'name' },
+            { data: 'title', name: 'title' },
+            { data: 'categories.title', name: 'categories.title' },
+            { data: 'domain.domainname', name: 'domain.domainname' },
+            { data: 'language.languagename', name: 'language.languagename' },
+            { data: 'status_dropdown', name: 'status_dropdown', orderable: false, searchable: false },
+            { data: 'created_at', name: 'created_at', render: function(data, type, row) {
+                return row.time_ago || data;
+            }},
+            // { data: 'updated_at', name: 'updated_at', render: function(data, type, row) {
+            //     return row.time_update_ago || data;
+            // }},
+            { data: 'edit', orderable: false, searchable: false },
+            { data: 'delete', orderable: false, searchable: false },
         ],
     });
 
     $('#filterButton').on('click', function() {
         table.ajax.reload();
     });
+
+    $('#BlogsTable').on('change', '.status-dropdown', function() {
+        const blogId = $(this).data('id');
+        const newStatusId = $(this).val();
+
+        $.ajax({
+            url: '/updateBlogStatus',
+            type: 'POST',
+            data: {
+                blog_id: blogId,
+                status_id: newStatusId
+            },
+            success: function(response) {
+                table.ajax.reload(null, false);
+                alert(response.message);
+            },
+            error: function(xhr) {
+                alert('Failed to update status.');
+            }
+        });
+    });
 });
+
 </script>
 @endsection

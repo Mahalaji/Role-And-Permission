@@ -8,6 +8,7 @@ use App\Models\domains;
 use App\Models\languages;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\Blog;
+use App\Models\statuss;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\str;
 use Illuminate\Support\Facades\Auth;
@@ -79,49 +80,73 @@ class blogs extends Controller
         }
     }
     public function getBlogsAjax(Request $request)
-    { 
+{
+    try {
+        $user = Auth::user();
+        $query = Blog::select('id', 'name', 'title', 'category_id', 'domain_id', 'language_id', 'status_id', 'created_at')
+            ->with('categories', 'domain', 'language', 'status');
 
-        try {
-            $user = Auth::user();
-            $query = Blog::select('id', 'name', 'title', 'category_id', 'domain_id','language_id', 'created_at', 'updated_at')
-                ->with('categories','domain','language');
-                // dd($query);
-            if (!($user->hasRole(['Admin','Blog_Team']))) {
-                $query->where('user_id', $user->id);
-            }
-    
-            if ($request->has('start_date') && $request->has('end_date')) {
-                $startDate = $request->start_date;
-                $endDate = $request->end_date;
-    
-                if ($startDate && $endDate) {
-                    $query->whereBetween('created_at', [$startDate, $endDate]);
-                }
-            }
-    
-            return DataTables::of($query)
-                ->addColumn('edit', function ($row) {
-                    return '<a href="/blog/edit/' . $row->id . '" class="btn btn-sm btn-primary"style="color:black"><i class="fas fa-edit"></i></a>';
-                })
-                ->addColumn('delete', function ($row) {
-                    return '<form action="/destory/' . $row->id . '" method="POST" onsubmit="return confirm(\'Are you sure?\');">
-                                ' . csrf_field() . '
-                                <button type="submit" class="btn btn-sm btn-danger" style="border: none; outline: none;"><i class="fas fa-trash"></i></button>
-                            </form>';
-                })
-                ->addColumn('time_ago', function ($row) {
-                    return \Carbon\Carbon::parse($row->created_at)->diffForHumans();
-                })
-                ->addColumn('time_update_ago', function ($row) {
-                    return \Carbon\Carbon::parse($row->updated_at)->diffForHumans();
-                })
-              
-                ->rawColumns(['edit', 'delete','time_ago','time_update_ago'])
-                ->make(true);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()]);
+        if (!($user->hasRole(['Admin', 'Blog_Team']))) {
+            $query->where('user_id', $user->id);
         }
+
+        if ($request->has('start_date') && $request->has('end_date')) {
+            $startDate = $request->start_date;
+            $endDate = $request->end_date;
+
+            if ($startDate && $endDate) {
+                $query->whereBetween('created_at', [$startDate, $endDate]);
+            }
+        }
+
+        $statuses = statuss::all()->pluck('status', 'id');
+
+        return DataTables::of($query)
+            ->addColumn('edit', function ($row) {
+                return '<a href="/blog/edit/' . $row->id . '" class="btn btn-sm btn-primary" style="color:black"><i class="fas fa-edit"></i></a>';
+            })
+            ->addColumn('delete', function ($row) {
+                return '<form action="/destory/' . $row->id . '" method="POST" onsubmit="return confirm(\'Are you sure?\');">
+                            ' . csrf_field() . '
+                            <button type="submit" class="btn btn-sm btn-danger" style="border: none; outline: none;"><i class="fas fa-trash"></i></button>
+                        </form>';
+            })
+            ->addColumn('time_ago', function ($row) {
+                return \Carbon\Carbon::parse($row->created_at)->diffForHumans();
+            })
+            ->addColumn('time_update_ago', function ($row) {
+                return \Carbon\Carbon::parse($row->updated_at)->diffForHumans();
+            })
+            ->addColumn('status_dropdown', function ($row) use ($statuses) {
+                $user = Auth::user();
+                if ($user->hasRole(['Admin'])) {
+                $options = '';
+                foreach ($statuses as $id => $status) {
+                    $selected = $row->status_id == $id ? 'selected' : '';
+                    $options .= "<option value='$id' $selected>$status</option>";
+                }
+                return "<select class='form-control status-dropdown' data-id='$row->id'>$options</select>";
+            }
+            return $statuses[$row->status_id] ?? 'Unknown';
+            })
+            ->rawColumns(['edit', 'delete', 'time_ago', 'time_update_ago', 'status_dropdown'])
+            ->make(true);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()]);
     }
+}
+public function updateBlogStatus(Request $request)
+{
+    try {
+        $blog = Blog::findOrFail($request->blog_id);
+        $blog->status_id = $request->status_id;
+        $blog->save();
+
+        return response()->json(['message' => 'Status updated successfully.']);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
+}
     public function edit($id){
         $blog = Blog::find($id); 
     
@@ -174,6 +199,8 @@ class blogs extends Controller
     $Blogedit->meta_description = $request->meta_description;
     $Blogedit->created_at = $request->created_at;
     $Blogedit->updated_at = now();
+    $Blogedit->status_id = 5;
+
 
     if ($request->hasFile('image')) {
         $image = $request->file('image');

@@ -34,8 +34,9 @@
                         <th>Category Id</th>
                         <th>Domain</th>
                         <th>Language</th>
+                        <th id="status">Status</th>
                         <th>Create Date</th>
-                        <th>Update Date</th>
+                        <!-- <th>Update Date</th> -->
                         <th>Edit</th>
                         <th>Delete</th>
                     </tr>
@@ -96,19 +97,25 @@ $(document).ready(function() {
                 name: 'language.languagename'
             },
             {
+                data: 'status_dropdown',
+                name:'status_dropdown',
+                orderable: false,
+                searchable: false
+            },
+            {
                 data: 'created_at',
                 name: 'created_at',
                 render: function(data, type, row) {
                     return row.time_ago || data;
                 }
             },
-            {
-                data: 'updated_at',
-                name: 'updated_at',
-                render: function(data, type, row) {
-                    return row.time_update_ago || data;
-                }
-            },
+            // {
+            //     data: 'updated_at',
+            //     name: 'updated_at',
+            //     render: function(data, type, row) {
+            //         return row.time_update_ago || data;
+            //     }
+            // },
 
             {
                 data: 'edit',
@@ -125,6 +132,26 @@ $(document).ready(function() {
 
     $('#filterButton').on('click', function() {
         table.ajax.reload();
+    });
+    $('#NewsTable').on('change', '.status-dropdown', function() {
+        const newsId = $(this).data('id');
+        const newStatusId = $(this).val();
+
+        $.ajax({
+            url: '/updateNewsStatus',
+            type: 'POST',
+            data: {
+                news_id: newsId,
+                status_id: newStatusId
+            },
+            success: function(response) {
+                table.ajax.reload(null, false);
+                alert(response.message);
+            },
+            error: function(xhr) {
+                alert('Failed to update status.');
+            }
+        });
     });
 });
 </script>

@@ -17,4 +17,7 @@ class news extends Model
     function language(){
         return $this->hasOne('App\Models\languages','id','language_id');
     }
+    function status(){
+        return $this->hasOne('App\Models\statuss','id','status_id');
+    }
 }

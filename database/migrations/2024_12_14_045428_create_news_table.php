@@ -26,6 +26,7 @@ return new class extends Migration
             $table->text('description'); 
             $table->string('domain_id'); 
             $table->string('language_id'); 
+            $table->string('status_id')->default(5); 
             $table->timestamps(); 
 
             $table->foreign('category_id')->references('id')->on('newscategory')->onDelete('cascade'); 

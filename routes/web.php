@@ -47,6 +47,7 @@ Route::group(['middleware' => ['auth']], function() {
 //blog
 Route::view('/blog','blog.index')->name('blog')->middleware('role:Admin|Blog_Team');
 Route::post('/getBlogsAjax', [blogs::class, 'getBlogsAjax']);
+Route::post('/updateBlogStatus',[blogs::class,'updateBlogStatus']);
 Route::get('/blog/add', [blogs::class, 'title']);
 Route::post('/addblog',[blogs::class,'addblog']);
 Route::get('/blog/edit/{id}', [blogs::class, 'edit']);
@@ -65,6 +66,7 @@ Route::get('/news/add', [newss::class, 'title']);
 Route::post('/createnews',[newss::class,'createnews']);
 Route::view('/newss','news.index')->name('newss')->middleware('role:Admin|News_Team');
 Route::post('/getNewsAjax', [newss::class, 'getNewsAjax']);
+Route::post('/updateNewsStatus',[newss::class,'updateNewsStatus']);
 Route::get('/news/edit/{id}', [newss::class, 'editnews']);
 Route::post('/updatenews',[newss::class,'updatenews']);
 Route::post('/destorynews/{id}', [newss::class, 'destorynews']);
