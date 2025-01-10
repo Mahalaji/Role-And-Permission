@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="{{ asset('css/create.css') }}">
 @extends('layouts.app')
 @section('content')
-<main id="main" class="main"></main>
+<main id="main" class="main">
 <h1 class="header">Edit Category</h1>
 <form class="simple" method="post" action="/updatecategery" >
 <div class="form1">

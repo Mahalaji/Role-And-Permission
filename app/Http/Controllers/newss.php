@@ -89,7 +89,7 @@ class newss extends Controller
     {
         try {
             $user = Auth::user();
-            $query = news::select('id', 'name', 'title', 'category_id', 'domain_id', 'language_id', 'status_id', 'created_at')->with('categories', 'domain', 'language', 'status');
+            $query = news::select('id', 'title', 'category_id', 'domain_id', 'language_id', 'status_id', 'created_at')->with('categories', 'domain', 'language', 'status');
             if (!($user->hasRole(['Admin', 'News_Team']))) {
                 $query->where('user_id', $user->id);
             }
@@ -101,21 +101,51 @@ class newss extends Controller
                     $query->whereBetween('created_at', [$startDate, $endDate]);
                 }
             }
-            $statuss = statuss::all()->pluck('status', 'id');
+            $statuses = statuss::all()->pluck('status', 'id');
+
+            $designationStatusMapping = [
+                4 => 2,
+                3 => 3,
+                2 => 4,
+                1 => 5,
+            ];
 
             return DataTables::of($query)
-                ->addColumn('status_dropdown', function ($row) use ($statuss) {
-                    $user = Auth::user();
-                    if ($user->hasRole(['Admin'])) {
-                        $option = '';
-                        foreach ($statuss as $id => $status) {
-                            $selected = $row->status_id == $id ? 'selected' : '';
-                            $option .= "<option value='$id' $selected>$status</option>";
+            ->addColumn('status_dropdown', function ($row) use ($statuses, $user, $designationStatusMapping) {
+                $designationId = $user->designation_id;
+                $id = $row->status_id;
+                if ($designationId <= 4) {
+                    if ($designationId < $id || $user->hasRole(['Admin'])) {
+                        $options = '';
+
+                        if ($user->hasRole(['Admin'])) {
+                            foreach ($statuses as $id => $status) {
+                                $selected = $row->status_id == $id ? 'selected' : '';
+                                $options .= "<option value='$id' $selected>$status</option>";
+                            }
+                            return "<select class='form-control status-dropdown' data-id='$row->id'>$options</select>";
+                        } else {
+                            if (isset($designationStatusMapping[$designationId])) {
+                                $visibleCount = $designationStatusMapping[$designationId];
+                                $visibleStatuses = $statuses->slice(-$visibleCount)->all();
+
+                                foreach ($visibleStatuses as $id => $status) {
+                                    $selected = $row->status_id == $id ? 'selected' : '';
+                                    $options .= "<option value='$id' $selected>$status</option>";
+                                }
+
+                                return "<select class='form-control status-dropdown' data-id='$row->id'>$options</select>";
+                            } else {
+                                return $statuses[$row->status_id] ?? 'Unknown';
+                            }
                         }
-                        return "<select class='form-control status-dropdown' data-id='$row->id'>$option</select>";
+                    } else {
+                        return "verify by senior";
                     }
-                    return $statuss[$row->status_id] ?? 'Unknown';
-                })
+                }else{
+                    return $statuses[$row->status_id] ?? 'Unknown';
+                }
+            })
                 ->addColumn('edit', function ($row) {
                     return '<a href="/news/edit/' . $row->id . '" class="btn btn-sm btn-primary"style="color:black"><i class="fas fa-edit"></i></a>';
                 })

@@ -26,5 +26,9 @@ class Blog extends Model
     function status(){
         return $this->hasOne('App\Models\statuss','id','status_id');
     }
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User', 'user_id','id');
+    }
 }
 

@@ -29,7 +29,7 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Name</th>
+                        <!-- <th>Name</th> -->
                         <th>Title</th>
                         <th>Category Id</th>
                         <th>Domain</th>
@@ -72,7 +72,7 @@ $(document).ready(function() {
         pageLength: 5,
         columns: [
             { data: 'id', name: 'id' },
-            { data: 'name', name: 'name' },
+            // { data: 'name', name: 'name' },
             { data: 'title', name: 'title' },
             { data: 'categories.title', name: 'categories.title' },
             { data: 'domain.domainname', name: 'domain.domainname' },

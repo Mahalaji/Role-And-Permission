@@ -29,7 +29,7 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Name</th>
+                        <!-- <th>Name</th> -->
                         <th>Title</th>
                         <th>Category Id</th>
                         <th>Domain</th>
@@ -76,10 +76,10 @@ $(document).ready(function() {
                 data: 'id',
                 name: 'id'
             },
-            {
-                data: 'name',
-                name: 'name'
-            },
+            // {
+            //     data: 'name',
+            //     name: 'name'
+            // },
             {
                 data: 'title',
                 name: 'title'

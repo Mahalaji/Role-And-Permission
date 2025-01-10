@@ -15,19 +15,6 @@ body {
     height: 100vh;
 }
 
-.sidebar {
-    width: 300px;
-    background-color: black;
-    color: #ecf0f1;
-    min-height: 140vh; 
-    height: fit-content; 
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    transition: width 0.3s ease;
-}
-
-
 .sidebar-header h1 {
     font-size: 40px;
     margin-bottom: 30px;
@@ -276,9 +263,10 @@ body {
     color: white;
   }
   .main {
-    /* Same as the width of the sidenav */
-    font-size: 20px; /* Increased text to enable scrolling */
-    padding: 0px 10px;
+    transition: margin-left .3s;
+    padding-left: 42px !important;
+    margin-left: 112px !important;
+    margin-right: 153px !important;
   }
   
   /* Add an active class to the active dropdown button */
@@ -309,14 +297,20 @@ body {
     margin-top: 50px;
     width: 1180px;
     padding-left: 14px;
+    margin-left: 20%;
 }
 #cke_editor{
     margin-top: 13px;
     width: 3000px;
 }
-#app{
+#app {
+    transition: margin-left 0.3s ease;
+    background-color: white;
     margin-left: 24px;
+    max-height: 100vh; /* Adjust as needed (100vh makes it the height of the viewport) */
+    overflow-y: auto; /* Enable vertical scrolling */
 }
+
 @media (max-width: 768px) {
     .dashboard {
         /* flex-direction: column; */
