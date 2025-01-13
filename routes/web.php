@@ -45,7 +45,7 @@ Route::group(['middleware' => ['auth']], function() {
 
 
 //blog
-Route::view('/blog','blog.index')->name('blog')->middleware('role:Admin|Blog_Team');
+Route::get('/blog',[blogs::class, 'blogshow'])->name('blog')->middleware('role:Admin|Blog_Team');
 Route::post('/getBlogsAjax', [blogs::class, 'getBlogsAjax']);
 Route::post('/updateBlogStatus',[blogs::class,'updateBlogStatus']);
 Route::get('/blog/add', [blogs::class, 'title']);

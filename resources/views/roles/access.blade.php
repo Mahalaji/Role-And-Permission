@@ -8,7 +8,7 @@
     }
 
     .design {
-        background-color: #c2c2c2;
+        background-color:whitesmoke;
         width: 50vw;
         padding: 30px;
         border-radius: 10px;
@@ -47,8 +47,7 @@
                 <h2>Manage Access</h2>
             </div>
             <div class="pull-right">
-                <a class="btn btn-primary btn-sm mb-2" href="{{ route('roles.index') }}"><i
-                        class="fa fa-arrow-left"></i> Back</a>
+                <a class="btn btn-primary btn-sm mb-2" href="{{ route('roles.index') }}"  style="margin-left: 87%;margin-top: -17%;"><i class="fa fa-arrow-left"></i> Back</a>
             </div>
         </div>
     </div>

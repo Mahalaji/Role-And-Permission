@@ -6,12 +6,9 @@
 <div class="info" style="background: white;">
     <div class="container mt-4">
         <h2>News List</h2>
-        <form class="left" method="post">
-            <a href="/dashboard"><i class='fas fa-eye' style='font-size:18px;color:black'></i></a>
 
             <form class="left" method="post">
-                <a href="{{ asset('/news/add') }}"
-                    style="padding: 10px; background: azure; text-decoration: none; color: black; border-radius: 5px; font-size: 14px; border: 1px solid black;">Add-News</a>
+                <a href="{{ asset('/news/add') }}">Add-News</a>
             </form>
             <meta name="csrf-token" content="{{ csrf_token() }}">
             <div class="filter-container">

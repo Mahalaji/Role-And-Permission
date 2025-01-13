@@ -1,53 +1,180 @@
-table {
+body {
+    background-color: var(--filter-bg);
+}
+
+/* Light Mode (Default) */
+:root {
+    --table-bg: white;
+    --table-text: black;
+    --table-border: #ddd;
+    --table-hover-bg: #f1f1f1;
+    --table-even-row-bg: #f9f9f9;
+    --header-bg: grey;
+    --header-text: white;
+    --filter-bg: #fff;
+    --filter-shadow: rgba(0, 0, 0, 0.1);
+    --filter-border: #ccc;
+    --filter-input-bg: #f9f9f9;
+    --filter-btn-bg: azure;
+    --filter-btn-hover: grey;
+    --filter-text: black;
+}
+
+/* Dark Mode */
+.dark {
+    --table-bg: #1e1e1e;
+    --table-text: #f0f0f0;
+    --table-border: #333;
+    --table-hover-bg: #333;
+    --table-even-row-bg: #292929;
+    --header-bg: #444;
+    --header-text: #f0f0f0;
+    --filter-bg: #2a2a2a;
+    --filter-shadow: rgba(255, 255, 255, 0.1);
+    --filter-border: #555;
+    --filter-input-bg: #333;
+    --filter-btn-bg: #444;
+    --filter-btn-hover: #666;
+    --filter-text: #f0f0f0;
+}
+
+#BlogsTable {
+    width: 100% !important;
     border-collapse: collapse;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    background: white;
+    background-color: var(--table-bg);
+    /* Dark background */
+    color: var(--table-bg);
+    /* Light text color */
+    border: 2px solid var(--table-border);
     border-radius: 5px;
 }
 
-th,
-td {
-    padding: 15px;
+/* Table Header */
+#BlogsTable thead th {
+    background-color: var(--table-bg);
+    /* Header background */
+    color: var(--table-text);
+    /* Header text color */
+    padding: 12px;
     text-align: left;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 2px solid var(--table-border);
+    /* Header bottom border */
+    font-weight: bold;
+    border: 2px solid var(--table-border);
+
 }
 
-th {
-    background-color:grey;
-    color: white;
+/* Table Body Rows */
+#BlogsTable tbody tr {
+    border-bottom: 1px solid var(--table-border);
+    /* Row separator */
 }
 
-tr:hover {
-    background-color: #f1f1f1;
+#BlogsTable tbody tr:nth-child(odd) {
+    background-color: #1e1e1e;
+    /* Odd row background */
 }
 
-tr:nth-child(even) {
-    background-color: #f9f9f9;
+#BlogsTable tbody tr:nth-child(even) {
+    background-color: #2a2a2a;
+    /* Even row background */
 }
-h2{
+
+/* Row Hover */
+#BlogsTable tbody tr:hover {
+    background-color: #374151;
+    /* Row hover background */
+    color: #ffffff;
+    /* Row hover text color */
+}
+
+/* Table Cells */
+#BlogsTable tbody td {
+    padding: 12px;
+    text-align: left;
+    background-color: var(--table-bg);
+    color: var(--table-text);
+    border: 2px solid var(--table-border);
+
+}
+
+/* Status Column */
+#BlogsTable th#status,
+#BlogsTable td#status {
+    text-align: center;
+    font-weight: bold;
+    color: var(--table-text);
+    /* Highlight color for status */
+}
+
+/* Edit and Delete Buttons */
+#BlogsTable tbody td:last-child,
+#BlogsTable tbody td:nth-last-child(2) {
+    text-align: center;
+}
+
+#BlogsTable tbody td a {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #4caf50;
+    /* Green for Edit */
+    color: var(--table-bg);
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+}
+
+#BlogsTable tbody td a.delete {
+    background-color: #e74c3c;
+    /* Red for Delete */
+}
+
+#BlogsTable tbody td a:hover {
+    background-color: #45a049;
+    /* Darker green for Edit hover */
+}
+
+#BlogsTable tbody td a.delete:hover {
+    background-color: #c0392b;
+}
+
+h2 {
     padding-bottom: 30px;
     font-size: 40px;
     margin-top: 60px;
-   
 }
-.left{
-    padding-bottom: 23px;
+
+.left {
+    margin-bottom: 10px;
+    margin-left: 92%;
     text-align: end;
+    padding: 6px;
+    background: azure; 
+    color: black !important; 
+    text-decoration: none !important;
+    border-radius: 5px;
+    font-size: 14px;
+    border: 1px solid var(--table-text);
+    display: inline-block; 
+    cursor: pointer; 
 }
-#BlogsTable_filter{
+
+#BlogsTable_filter {
     padding-bottom: 10px;
 }
+
 .filter-container {
-    background-color: #fff;
+    background-color: var(--filter-bg);
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px var(--filter-shadow);
     margin-bottom: 14px;
 }
 
 .filter-container h4 {
     font-size: 20px;
-    color: black;
+    color: var(--filter-text);
     margin-bottom: 15px;
 }
 
@@ -60,49 +187,52 @@ h2{
 
 .filter label {
     font-size: 16px;
-    color: #333;
+    color: var(--filter-text);
 }
 
 .filter input[type="date"] {
     padding: 8px;
     font-size: 14px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--filter-border);
     border-radius: 5px;
-    background-color: #f9f9f9;
+    background-color: var(--filter-input-bg);
     width: 150px;
     transition: border-color 0.3s ease;
+    color: var(--filter-text);
 }
 
 .filter input[type="date"]:focus {
-    border-color: black;
+    border-color: var(--header-bg);
     outline: none;
 }
 
 .filter button {
     padding: 8px 16px;
-    background-color: azure;
-    color: black;
+    background-color: var(--filter-btn-bg);
+    color: var(--filter-text);
     font-size: 16px;
     border: none;
-    background: azure;
-     border-radius: 5px;
-    border: 1px solid black;
+    border-radius: 5px;
+    border: 1px solid var(--filter-border);
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .filter button:hover {
-    background-color: grey;
-}
-.dataTables_filter{
-    padding-bottom: 10px;
-    margin-top: 10px;
-    
+    background-color: var(--filter-btn-hover);
 }
 
-.info{
+.dataTables_filter {
+    padding-bottom: 10px;
+    margin-top: 10px;
+}
+
+.info {
     width: 100%;
-  }
-  #status{
+    background-color: var(--background) !important;
+
+}
+
+#status {
     width: 100% !important;
-  }
+}

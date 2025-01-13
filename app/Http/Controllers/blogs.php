@@ -14,7 +14,9 @@ use Illuminate\Support\str;
 use Illuminate\Support\Facades\Auth;
 class blogs extends Controller
 {
-
+   public function blogshow(){
+    return view('blog.index');
+   }
     public function title()
     {
         $titles = Blogcategory::select('title', 'id')->get();

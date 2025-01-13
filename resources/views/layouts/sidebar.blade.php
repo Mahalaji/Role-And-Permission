@@ -6,169 +6,209 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #4a90e2;
-            --bg-color: white;
-            --text-color: #333;
-            --sidebar-bg: #ffffff;
-            --sidebar-hover: #e6f0ff;
-        }
+    --primary-color: #4a90e2;
+    --bg-color: white;
+    --text-color: #333;
+    --sidebar-bg: #ffffff;
+    --sidebar-hover: #e6f0ff;
+}
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-        }
+.dark {
+    --primary-color: #90caf9; /* Lighter blue for dark mode */
+    --bg-color: #121212; /* Dark background */
+    --text-color: #ffffff; /* Light text color */
+    --sidebar-bg: #1e1e1e; /* Dark sidebar background */
+    --sidebar-hover: #333333; /* Slightly lighter hover effect */
+}
 
-        .sidebar {
-            height: 100vh;
-            /* Set height to viewport height */
-            width: 300px;
-            position: fixed;
-            z-index: 1;
-            top: 0;
-            left: 0;
-            background-color: var(--sidebar-bg);
-            overflow-y: auto;
-            /* Enable scrolling for overflowing content */
-            transition: 0.3s;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            white-space: nowrap;
-        }
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
 
-        /* Hide scrollbar for modern browsers */
-        .sidebar::-webkit-scrollbar {
-            width: 0;
-            /* Remove scrollbar width */
-            height: 0;
-            /* Remove scrollbar height for horizontal scroll */
-        }
+.sidebar {
+    height: 100vh;
+    width: 300px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: var(--sidebar-bg);
+    overflow-y: auto;
+    transition: 0.3s;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+}
 
-        .sidebar {
-            scrollbar-width: none;
-            /* Firefox: Hide scrollbar */
-            -ms-overflow-style: none;
-            /* IE 10+ */
-        }
+/* Hide scrollbar for modern browsers */
+.sidebar::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
 
+.sidebar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
 
+.sidebar-header {
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e0e0e0;
+}
 
+.sidebar-header h3 {
+    margin: 0;
+    font-size: 1.2em;
+    color: var(--primary-color);
+}
 
-        .sidebar-header {
-            padding: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid #e0e0e0;
-        }
+.toggle-btn {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 20px;
+    cursor: pointer;
+    transition: 0.2s;
+}
 
-        .sidebar-header h3 {
-            margin: 0;
-            font-size: 1.2em;
-            color: var(--primary-color);
-        }
+.toggle-btn:hover {
+    color: var(--primary-color);
+}
 
-        .toggle-btn {
-            background: none;
-            border: none;
-            color: var(--text-color);
-            font-size: 20px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
+.sidebar a {
+    padding: 15px 25px;
+    text-decoration: none;
+    font-size: 16px;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    transition: 0.2s;
+}
 
-        .toggle-btn:hover {
-            color: var(--primary-color);
-        }
+.sidebar a:hover {
+    background-color: var(--sidebar-hover);
+    color: var(--primary-color);
+}
 
-        .sidebar a {
-            padding: 15px 25px;
-            text-decoration: none;
-            font-size: 16px;
-            color: var(--text-color);
-            display: flex;
-            align-items: center;
-            transition: 0.2s;
-        }
+.sidebar a i {
+    min-width: 30px;
+    font-size: 20px;
+}
 
-        .sidebar a:hover {
-            background-color: var(--sidebar-hover);
-            color: var(--primary-color);
-        }
+#main {
+    transition: margin-left .3s;
+    padding: 20px;
+    margin-left: 300px;
+}
 
-        .sidebar a i {
-            min-width: 30px;
-            font-size: 20px;
-        }
+.sidebar.closed {
+    width: 65px;
+}
 
-        #main {
-            transition: margin-left .3s;
-            padding: 20px;
-            margin-left: 250px;
-        }
+.sidebar.closed .sidebar-header h3 {
+    display: none;
+}
 
-        .sidebar.closed {
-            width: 65px;
-        }
+.sidebar.closed a span {
+    display: none;
+}
 
-        .sidebar.closed .sidebar-header h3 {
-            display: none;
-        }
+.sidebar.closed~#main {
+    margin-left: 70px;
+}
 
-        .sidebar.closed a span {
-            display: none;
-        }
+.menu,
+.menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
 
-        .sidebar.closed~#main {
-            margin-left: 70px;
-        }
+.menu-toggle-icon {
+    margin-left: auto;
+    font-size: 16px;
+}
 
-        .menu,
-        .menu ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
+#btn {
+    cursor: pointer;
+}
 
-        .menu-toggle-icon {
-            margin-left: auto;
-            font-size: 16px;
-        }
+@media screen and (max-width: 768px) {
+    .sidebar {
+        width: 70px;
+    }
 
-        @media screen and (max-width: 768px) {
-            .sidebar {
-                width: 70px;
-            }
+    .sidebar .sidebar-header h3 {
+        display: none;
+    }
 
-            .sidebar .sidebar-header h3 {
-                display: none;
-            }
+    .sidebar a span {
+        display: none;
+    }
 
-            .sidebar a span {
-                display: none;
-            }
+    #main {
+        margin-left: 70px;
+    }
 
-            #main {
-                margin-left: 70px;
-            }
+    .sidebar.open {
+        width: 300px;
+    }
 
-            .sidebar.open {
-                width: 250px;
-            }
+    .sidebar.open .sidebar-header h3 {
+        display: block;
+    }
 
-            .sidebar.open .sidebar-header h3 {
-                display: block;
-            }
+    .sidebar.open a span {
+        display: inline;
+    }
 
-            .sidebar.open a span {
-                display: inline;
-            }
+    .sidebar.open~#main {
+        margin-left: 300px;
+    }
+}
 
-            .sidebar.open~#main {
-                margin-left: 250px;
-            }
-        }
+/* Dark Mode Styles */
+.dark body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.dark .sidebar {
+    background-color: var(--sidebar-bg);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+.dark .sidebar a {
+    color: var(--text-color);
+}
+
+.dark .sidebar a:hover {
+    background-color: var(--sidebar-hover);
+    color: var(--primary-color);
+}
+
+.dark .sidebar-header h3 {
+    color: var(--primary-color);
+}
+
+.dark .toggle-btn {
+    color: var(--text-color);
+}
+
+.dark .toggle-btn:hover {
+    color: var(--primary-color);
+}
+
+.dark .menu-toggle-icon {
+    color: var(--text-color);
+}
+
     </style>
 </head>
 
@@ -176,6 +216,7 @@
     <div id="mySidebar" class="sidebar">
         <div class="sidebar-header">
             <h3>Menu</h3>
+
             <button class="toggle-btn" onclick="toggleNav()">
                 <i class="fas fa-bars"></i>
             </button>
@@ -235,6 +276,7 @@
             }
         }
     </script>
+
     <script>
         // Toggle the dropdown visibility when clicking on a parent menu item
         document.querySelectorAll('.menu-toggle').forEach(function (button) {
@@ -261,7 +303,7 @@
                 if (width == '300px') {
 
                     $('.menu').css('padding-left', '0');
-                    $('.menu-toggle').css('padding', '15px 10px');
+                    $('.menu-toggle').css('padding', '15px 16px');
                     $('.menu-toggle-icon').prev('div').css('display', 'none');
                     $('.menu-item:last').find('div').css('display', 'none')
                     $('.active').find('.menu-sub').css('display', 'none')
