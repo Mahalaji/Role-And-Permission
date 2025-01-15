@@ -8,8 +8,7 @@
       
 
             <form class="left" method="post">
-                <a href="{{ asset('/department/add') }}"
-                    style="padding: 10px; background: azure; text-decoration: none; color: black; border-radius: 5px; font-size: 14px; border: 1px solid black;">Add-Department</a>
+                <a href="{{ asset('/department/add') }}">Add-Department</a>
             </form>
             <meta name="csrf-token" content="{{ csrf_token() }}">
             <div class="filter-container">
@@ -23,7 +22,7 @@
                 </div>
             </div>
 
-            <table id="DepartmentTable" class="table table-bordered table-striped" style="width: 1100px;">
+            <table id="Table" class="table table-bordered table-striped" style="width: 1100px;">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -52,7 +51,7 @@ $(document).ready(function() {
         }
     });
 
-    const table = $('#DepartmentTable').DataTable({
+    const table = $('#Table').DataTable({
         processing: true,
         serverSide: true,
         ajax: {

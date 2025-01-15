@@ -7,14 +7,13 @@
     <div class="container mt-4">
         <h2>News Category List</h2>
         <form class="left" method="post">
-            <a href="{{ asset('/newscategory/add') }}"
-                style="padding: 10px; background: azure; text-decoration: none; color: black; border-radius: 5px; font-size: 14px; border: 1px solid black;">Add-Category</a>
+            <a href="{{ asset('/newscategory/add') }}">Add-Category</a>
         </form>
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <table id="NewsCategoryTable" class="table table-bordered table-striped" style="width: 1070px;">
+        <table id="Table" class="table table-bordered table-striped" style="width: 1070px;">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>S.No.</th>
                     <th>seo title</th>
                     <th>Edit</th>
                     <th>Delete</th>
@@ -30,27 +29,25 @@
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
 <script>
-$(document).ready(function() {
+    $(document).ready(function () {
 
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
 
 
-    $('#NewsCategoryTable').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: {
-            url: '/getNewsCategoryAjax',
-            type: 'POST',
-        },
-        pageLength: 5,
-        columns: [{
-                data: 'id',
-                name: 'id'
+        $('#Table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: '/getNewsCategoryAjax',
+                type: 'POST',
             },
+            pageLength: 5,
+            columns: [{ data: 's.no', name: 's.no' },
+
             {
                 data: 'title',
                 name: 'title'
@@ -65,8 +62,8 @@ $(document).ready(function() {
                 orderable: false,
                 searchable: false
             },
-        ],
+            ],
+        });
     });
-});
 </script>
 @endsection

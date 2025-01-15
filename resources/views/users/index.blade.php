@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<link rel="stylesheet" href="{{ asset('css/blog.css') }}">
 
 @section('content')
 <div class="row">
@@ -18,7 +19,8 @@
     </div>
 @endsession
 
-<table class="table table-bordered">
+<table id="Table" class="table table-bordered">
+<thead>
    <tr>
        <th>No</th>
        <th>Name</th>
@@ -28,6 +30,7 @@
        <th>Roles</th>
        <th width="280px">Action</th>
    </tr>
+</thead>
    @foreach ($data as $key => $user)
     <tr>
         <td>{{ ++$i }}</td>

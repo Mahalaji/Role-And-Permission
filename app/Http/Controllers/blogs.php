@@ -116,6 +116,10 @@ class blogs extends Controller
                 ->addColumn('edit', function ($row) {
                     return '<a href="/blog/edit/' . $row->id . '" class="btn btn-sm btn-primary" style="color:black"><i class="fas fa-edit"></i></a>';
                 })
+                ->addColumn('s.no', function ($row) {
+                    static $serialNumber = 1; 
+                    return $serialNumber++; 
+                })
                 ->addColumn('delete', function ($row) {
                     return '<form action="/destory/' . $row->id . '" method="POST" onsubmit="return confirm(\'Are you sure?\');">
                                 ' . csrf_field() . '
@@ -167,7 +171,7 @@ class blogs extends Controller
                     }
                 })
 
-                ->rawColumns(['edit', 'delete', 'time_ago', 'time_update_ago', 'status_dropdown'])
+                ->rawColumns(['edit', 'delete', 'time_ago', 'time_update_ago', 'status_dropdown','s.no'])
                 ->make(true);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()]);
@@ -282,6 +286,10 @@ class blogs extends Controller
         try {
             $query = Blogcategory::select('id', 'title')->withCount('blogs');
             return DataTables::of($query)
+            ->addColumn('s.no', function ($row) {
+                static $serialNumber = 1; 
+                return $serialNumber++; 
+            })
                 ->addColumn('edit', function ($row) {
                     return '<a href="/blogcategory/edit/' . $row->id . '" class="btn btn-sm btn-primary"style="color:black"><i class="fas fa-edit"></i></a>';
                 })
@@ -291,7 +299,7 @@ class blogs extends Controller
                             <button type="submit" class="btn btn-sm btn-danger"style="border: none; outline: none;"><i class="fas fa-trash"></i></button>
                         </form>';
                 })
-                ->rawColumns(['edit', 'delete'])
+                ->rawColumns(['edit', 'delete','s.no'])
                 ->make(true);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()]);

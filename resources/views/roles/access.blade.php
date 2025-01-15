@@ -1,6 +1,14 @@
 @extends('layouts.app')
 @section('content')
 <style>
+
+    :root{
+        --bg:whitesmoke;
+    }
+    .dark{
+        --bg:#333;
+
+    }
     .content {
         display: flex;
         justify-content: center;
@@ -8,7 +16,7 @@
     }
 
     .design {
-        background-color:whitesmoke;
+        background-color:var(--bg);
         width: 50vw;
         padding: 30px;
         border-radius: 10px;
@@ -24,20 +32,16 @@
         text-align: center;
     }
 
-    .sidebar {
-        height: fit-content; 
-        min-height: 120vh; 
-    }
 
     .hidden {
         display: none;
     }
 
-    .row {
+    /* .row {
         max-height: 70vh; 
         overflow-y: auto; 
         padding: 10px; 
-    }
+    } */
 </style>
 
 <div class="design">
@@ -224,5 +228,4 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/js/all.min.js"></script>
 @endsection

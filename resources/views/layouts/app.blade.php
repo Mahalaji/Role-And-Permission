@@ -26,6 +26,7 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    
 
 
 </head>
@@ -35,7 +36,7 @@
 
     <div id="app">
         <nav id="navbar" class="navbar navbar-expand-md navbar-light bg-white shadow-sm"
-            style="margin-left:275px;padding-left: 219px;">
+            style="margin-left: 13%;padding-left: 60%;">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
 
@@ -45,7 +46,7 @@
                     aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <h3>Front-></h3><a href="/dashboard"><i class='fas fa-eye' style='padding-bottom: 9px;font-size: 35px;'></i></a>
+                
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
@@ -119,45 +120,33 @@
     <script src="<?php echo asset('bootstrap-iconpicker/js/jquery-menu-editor.min.js');?>"></script> -->
     @yield('scripts')
     <script>
-       
-        
-       var btn = document.getElementById("btn");
-var icon = document.getElementById("icon");
+    var btn = document.getElementById("btn");
+    var icon = document.getElementById("icon");
+    btn.onclick = function () {
+        document.body.classList.toggle("dark");
+        if (icon.classList.contains('fa-moon')) {
+            icon.classList.replace('fa-moon', 'fa-sun');
+            sessionStorage.setItem("theme", "dark");
+        } else {
+            icon.classList.replace('fa-sun', 'fa-moon');
+            sessionStorage.setItem("theme", "light");
 
-let sessiondatatheme = sessionStorage.getItem("theme");
-console.log(sessiondatatheme);
+        }
+    };
 
-// If the theme is already set in sessionStorage, simulate the button click to apply the theme.
-if (sessiondatatheme !== null) {
-    btn.click(); // This will trigger the theme toggle on page load if theme is set
-} else {
-    sessionStorage.setItem("theme", "notset"); // If no theme is set, initialize it as "notset"
-}
+    // Apply saved theme on page load
+    window.onload = function() {
+        if (sessionStorage.getItem("theme") === "dark") {
+            document.body.classList.add("dark");
+            icon.classList.replace('fa-moon', 'fa-sun');
 
-// Re-fetch the theme from sessionStorage
-sessiondatatheme = sessionStorage.getItem("theme");
-alert(sessiondatatheme); // Alert the theme status
+        } else {
+            document.body.classList.remove("dark");
+            icon.classList.replace('fa-sun', 'fa-moon');
+        }
+    };
+</script>
 
-// Button click handler
-btn.onclick = function () {
-    console.log('Button clicked');
-    document.body.classList.toggle("dark");
-
-    if (icon.classList.contains('fa-moon')) {
-        icon.classList.replace('fa-moon', 'fa-sun');
-        sessionStorage.setItem("theme", "light");
-        alert("Theme changed to light");
-    } else {
-        icon.classList.replace('fa-sun', 'fa-moon');
-        sessionStorage.setItem("theme", "dark");
-        alert("Theme changed to dark");
-    }
-};
- 
-
-    </script>
 </body>
-
-</html>
 
 </html>

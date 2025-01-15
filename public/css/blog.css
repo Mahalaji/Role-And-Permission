@@ -1,3 +1,4 @@
+/* Base Styles (unchanged) */
 body {
     background-color: var(--filter-bg);
 }
@@ -18,10 +19,13 @@ body {
     --filter-btn-bg: azure;
     --filter-btn-hover: grey;
     --filter-text: black;
+    --table:white;
+    --border:#ddd;
 }
 
 /* Dark Mode */
 .dark {
+    --table:#333;
     --table-bg: #1e1e1e;
     --table-text: #f0f0f0;
     --table-border: #333;
@@ -36,88 +40,75 @@ body {
     --filter-btn-bg: #444;
     --filter-btn-hover: #666;
     --filter-text: #f0f0f0;
+    --border:grey;
 }
 
-#BlogsTable {
+#Table {
     width: 100% !important;
     border-collapse: collapse;
     background-color: var(--table-bg);
-    /* Dark background */
     color: var(--table-bg);
-    /* Light text color */
     border: 2px solid var(--table-border);
     border-radius: 5px;
 }
 
 /* Table Header */
-#BlogsTable thead th {
-    background-color: var(--table-bg);
-    /* Header background */
+#Table thead th {
+    background-color: var(--table);
     color: var(--table-text);
-    /* Header text color */
     padding: 12px;
     text-align: left;
-    border-bottom: 2px solid var(--table-border);
-    /* Header bottom border */
+    border-bottom: 2px solid white;
     font-weight: bold;
-    border: 2px solid var(--table-border);
-
+    border: 2px solid var(--border) !important;
 }
 
 /* Table Body Rows */
-#BlogsTable tbody tr {
+#Table tbody tr {
     border-bottom: 1px solid var(--table-border);
-    /* Row separator */
 }
 
-#BlogsTable tbody tr:nth-child(odd) {
+#Table tbody tr:nth-child(odd) {
     background-color: #1e1e1e;
-    /* Odd row background */
 }
 
-#BlogsTable tbody tr:nth-child(even) {
+#Table tbody tr:nth-child(even) {
     background-color: #2a2a2a;
-    /* Even row background */
 }
 
 /* Row Hover */
-#BlogsTable tbody tr:hover {
+#Table tbody tr:hover {
     background-color: #374151;
-    /* Row hover background */
     color: #ffffff;
-    /* Row hover text color */
 }
 
 /* Table Cells */
-#BlogsTable tbody td {
+#Table tbody td {
     padding: 12px;
     text-align: left;
-    background-color: var(--table-bg);
+    background-color: var(--table);
     color: var(--table-text);
-    border: 2px solid var(--table-border);
-
+    border: 2px solid var(--border);
 }
 
 /* Status Column */
-#BlogsTable th#status,
-#BlogsTable td#status {
+#Table th#status,
+#Table td#status {
     text-align: center;
     font-weight: bold;
     color: var(--table-text);
-    /* Highlight color for status */
 }
 
 /* Edit and Delete Buttons */
-#BlogsTable tbody td:last-child,
-#BlogsTable tbody td:nth-last-child(2) {
+#Table tbody td:last-child,
+#Table tbody td:nth-last-child(2) {
     text-align: center;
 }
 
-#BlogsTable tbody td a {
+#Table tbody td a {
     display: inline-block;
     padding: 6px 12px;
     background-color: #4caf50;
-    /* Green for Edit */
     color: var(--table-bg);
     border-radius: 4px;
     text-decoration: none;
@@ -125,18 +116,35 @@ body {
     font-size: 14px;
 }
 
-#BlogsTable tbody td a.delete {
+#Table tbody td a.delete {
     background-color: #e74c3c;
-    /* Red for Delete */
 }
 
-#BlogsTable tbody td a:hover {
+#Table tbody td a:hover {
     background-color: #45a049;
-    /* Darker green for Edit hover */
 }
 
-#BlogsTable tbody td a.delete:hover {
+#Table tbody td a.delete:hover {
     background-color: #c0392b;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    background-color: var(--table-border) !important;
+}
+
+.card-body {
+    background-color: var(--table-border) !important;
+    color: var(--filter-text) !important;
+}
+
+.card-header {
+    background-color: var(--table-border) !important;
+    color: var(--filter-text) !important;
+}
+
+#myEditor li {
+    background-color: var(--table-border) !important;
+    color: var(--filter-text);
 }
 
 h2 {
@@ -147,7 +155,20 @@ h2 {
 
 .left {
     margin-bottom: 10px;
-    margin-left: 92%;
+    margin-left: 85%;
+    text-align: end;
+    padding: 6px;
+    background: azure; 
+    color: black !important; 
+    text-decoration: none !important;
+    border-radius: 5px;
+    font-size: 14px;
+    border: 1px solid var(--table-text);
+    display: inline-block; 
+    cursor: pointer; 
+}
+
+.view {
     text-align: end;
     padding: 6px;
     background: azure; 
@@ -166,10 +187,10 @@ h2 {
 
 .filter-container {
     background-color: var(--filter-bg);
-    padding: 20px;
-    border-radius: 10px;
+    padding: 3%;
+    border-radius: 3%;
     box-shadow: 0 2px 10px var(--filter-shadow);
-    margin-bottom: 14px;
+    margin-bottom: 3%;
 }
 
 .filter-container h4 {
@@ -229,10 +250,95 @@ h2 {
 
 .info {
     width: 100%;
-    background-color: var(--background) !important;
-
+    background-color: var(--table-bg) !important;
 }
 
 #status {
     width: 100% !important;
+}
+
+/* Media Queries for Responsiveness */
+
+/* For screens smaller than 1200px (e.g., large tablets, smaller desktops) */
+@media screen and (max-width: 1200px) {
+    #Table thead th,
+    #Table tbody td {
+        padding: 10px; /* Adjust padding for smaller screens */
+    }
+
+    h2 {
+        font-size: 32px; /* Reduce font size */
+    }
+
+    .filter-container {
+        padding: 20px; /* Adjust padding */
+    }
+
+    .filter input[type="date"] {
+        width: 120px; /* Adjust input width */
+    }
+
+    .filter button {
+        padding: 6px 12px;
+    }
+}
+
+/* For screens smaller than 768px (e.g., tablets) */
+@media screen and (max-width: 768px) {
+    #Table thead th,
+    #Table tbody td {
+        padding: 8px; /* Reduce padding further */
+    }
+
+    h2 {
+        font-size: 28px; /* Reduce heading font size */
+    }
+
+    .filter-container {
+        padding: 15px; /* Adjust padding */
+    }
+
+    .filter input[type="date"] {
+        width: 100%; /* Full width input */
+    }
+
+    .filter button {
+        padding: 6px 10px;
+    }
+
+    .left,
+    .view {
+        font-size: 12px; /* Smaller button font */
+    }
+}
+
+/* For screens smaller than 480px (e.g., mobile phones) */
+@media screen and (max-width: 480px) {
+    #Table {
+        font-size: 12px; /* Smaller font size */
+    }
+
+    #Table thead th,
+    #Table tbody td {
+        padding: 6px; /* Smaller padding */
+    }
+
+    h2 {
+        font-size: 24px; /* Further reduce heading size */
+    }
+
+    .filter-container {
+        padding: 10px; /* Reduce padding */
+    }
+
+    .filter input[type="date"],
+    .filter button {
+        width: 100%; /* Full width inputs and buttons */
+    }
+
+    .left,
+    .view {
+        font-size: 10px; /* Smaller button font */
+        padding: 4px; /* Smaller button padding */
+    }
 }

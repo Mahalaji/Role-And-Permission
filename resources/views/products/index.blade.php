@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+<link rel="stylesheet" href="{{ asset('css/blog.css') }}">
 @section('content')
 <main>
 <div class="row">
@@ -21,13 +21,15 @@
     </div>
 @endsession
 
-<table class="table table-bordered">
+<table id="Table" class="table table-bordered">
+    <thead>
     <tr>
         <th>No</th>
         <th>Name</th>
         <th>Details</th>
         <th width="280px">Action</th>
     </tr>
+    </thead>
     @foreach ($products as $product)
     <tr>
         <td>{{ ++$i }}</td>

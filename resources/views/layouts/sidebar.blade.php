@@ -1,9 +1,4 @@
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Sidebar Menu with Internal Toggle</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
         :root {
     --primary-color: #4a90e2;
@@ -15,7 +10,7 @@
 
 .dark {
     --primary-color: #90caf9; /* Lighter blue for dark mode */
-    --bg-color: #121212; /* Dark background */
+    --bg-color: #1e1e1e; /* Dark background */
     --text-color: #ffffff; /* Light text color */
     --sidebar-bg: #1e1e1e; /* Dark sidebar background */
     --sidebar-hover: #333333; /* Slightly lighter hover effect */
@@ -210,8 +205,6 @@ body {
 }
 
     </style>
-</head>
-
 <body>
     <div id="mySidebar" class="sidebar">
         <div class="sidebar-header">
@@ -295,9 +288,7 @@ body {
         $(document).ready(function () {
             let sidebarwidth = $('#mySidebar').css('width');
 
-            if (sidebarwidth == '300px') {
-                console.log('width300');
-            }
+          
             $('.toggle-btn').click(function () {
                 let width = $('#mySidebar').css('width');
                 if (width == '300px') {
@@ -307,9 +298,9 @@ body {
                     $('.menu-toggle-icon').prev('div').css('display', 'none');
                     $('.menu-item:last').find('div').css('display', 'none')
                     $('.active').find('.menu-sub').css('display', 'none')
-                    $('#app').css('margin-left', '-208px');
+                    $('#app').css('margin-left', '-21%');
                     $('.menu-toggle-icon').css('display', 'none');
-
+                    $('.menu-sub').css('padding-left', '10px');
                 } else if (width == '65px') {
                     $('.menu').css('padding-left', '0rem');
                     $('.menu-toggle').css('padding', '15px 25px');
@@ -318,7 +309,7 @@ body {
                     $('.active').find('.menu-sub').css('display', 'block')
                     $('#app').css('margin-left', '24px');
                     $('.menu-toggle-icon').css('display', 'block');
-
+                    $('.menu-sub').css('padding-left', '0px');
                 }
 
             });

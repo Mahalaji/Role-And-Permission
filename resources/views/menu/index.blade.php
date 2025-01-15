@@ -7,10 +7,7 @@
     <div class="container mt-4">
         <h2>Menu List</h2>
         <form class="left" method="post">
-        <a href="{{ asset('/menu/add') }}"
-           style="padding: 10px; background: azure; text-decoration: none; color: black; border-radius: 5px; font-size: 14px; border: 1px solid black;">
-            Add-Menu
-        </a>
+        <a href="{{ asset('/menu/add') }}">Add-Menu</a>
         </form>
             <meta name="csrf-token" content="{{ csrf_token() }}">
             <div class="filter-container">
@@ -24,7 +21,7 @@
                 </div>
             </div>
 
-            <table id="menuTable" class="table table-bordered table-striped" style="width: 1100px;">
+            <table id="Table" class="table table-bordered table-striped" style="width: 1100px;">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -53,7 +50,7 @@ $(document).ready(function() {
         }
     });
 
-    const table = $('#menuTable').DataTable({
+    const table = $('#Table').DataTable({
         processing: true,
         serverSide: true,
         ajax: {

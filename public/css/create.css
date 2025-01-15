@@ -3,7 +3,40 @@
   padding: 0;
   box-sizing: border-box;
 }
+:root {
+  --table-bg: white;
+  --table-text: black;
+  --table-border: #ddd;
+  --table: #f1f1f1;
+  --table-even-row-bg: #f9f9f9;
+  --header-bg: grey;
+  --header-text: white;
+  --filter-bg: #fff;
+  --filter-shadow: rgba(0, 0, 0, 0.1);
+  --filter-border: #ccc;
+  --filter-input-bg: #f9f9f9;
+  --filter-btn-bg: azure;
+  --filter-btn-hover: grey;
+  --filter-text: black;
+}
 
+/* Dark Mode */
+.dark {
+  --table-bg: #1e1e1e;
+  --table-text: #f0f0f0;
+  --table-border: #333;
+  --table: #333;
+  --table-even-row-bg: #292929;
+  --header-bg: #444;
+  --header-text: #f0f0f0;
+  --filter-bg: #2a2a2a;
+  --filter-shadow: rgba(255, 255, 255, 0.1);
+  --filter-border: #555;
+  --filter-input-bg: #333;
+  --filter-btn-bg: #444;
+  --filter-btn-hover: #666;
+  --filter-text: #f0f0f0;
+}
 body {
   font-family: 'Inter', sans-serif;
   background-color: #f0f4f8;
@@ -14,10 +47,12 @@ body {
 }
 
 .form1 {
-  background: #fff;
+  background: var(--table);
   padding: 28px;
   margin: 32px 40px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  
 }
 
 .form1 .input-group {
@@ -26,7 +61,7 @@ body {
 
 .input-group label {
   font-size: 25px;
-  color: #333;
+  color: var(--filter-text);
   display: block;
   margin-bottom: 5px;
 }

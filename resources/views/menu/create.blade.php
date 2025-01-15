@@ -1,11 +1,12 @@
 @extends('layouts.app')
-@section('title', 'Menulist')
+<link rel="stylesheet" href="{{ asset('css/blog.css') }}">
 
+@section('title', 'Menulist')
 @section('content')
 <script src="http://127.0.0.1:8000/bootstrap-iconpicker/js/iconset/fontawesome5-3-1.min.js"></script>
     <script src="http://127.0.0.1:8000/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js"></script>
     <script src="http://127.0.0.1:8000/bootstrap-iconpicker/js/jquery-menu-editor.min.js"></script>
-    <h1 style="text-align: center; background-color:rgb(54, 148, 192); padding:10px; border-radius:10px;">Menu Editor</h1>
+    <h1 style="text-align: center; background-color:#3586ff; padding:10px; border-radius:10px;">Menu Editor</h1>
     <div class="containersss">
         
     <ul id="myEditor" class="sortableLists list-group">

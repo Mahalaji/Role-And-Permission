@@ -8,8 +8,7 @@
       
 
             <form class="left" method="post">
-                <a href="{{ asset('/language/add') }}"
-                    style="padding: 10px; background: azure; text-decoration: none; color: black; border-radius: 5px; font-size: 14px; border: 1px solid black;">Add-Language</a>
+                <a href="{{ asset('/language/add') }}">Add-Language</a>
             </form>
             <meta name="csrf-token" content="{{ csrf_token() }}">
             <div class="filter-container">
@@ -23,7 +22,7 @@
                 </div>
             </div>
 
-            <table id="LanguageTable" class="table table-bordered table-striped" style="width: 1100px;">
+            <table id="Table" class="table table-bordered table-striped" style="width: 1100px;">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -53,7 +52,7 @@ $(document).ready(function() {
         }
     });
 
-    const table = $('#LanguageTable').DataTable({
+    const table = $('#Table').DataTable({
         processing: true,
         serverSide: true,
         ajax: {

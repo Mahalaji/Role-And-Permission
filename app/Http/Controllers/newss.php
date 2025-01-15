@@ -111,6 +111,10 @@ class newss extends Controller
             ];
 
             return DataTables::of($query)
+            ->addColumn('s.no', function ($row) {
+                static $serialNumber = 1; 
+                return $serialNumber++; 
+            })
             ->addColumn('status_dropdown', function ($row) use ($statuses, $user, $designationStatusMapping) {
                 $designationId = $user->designation_id;
                 $id = $row->status_id;
@@ -161,7 +165,7 @@ class newss extends Controller
                 ->addColumn('time_update_ago', function ($row) {
                     return \Carbon\Carbon::parse($row->updated_at)->diffForHumans();
                 })
-                ->rawColumns(['edit', 'delete', 'time_ago', 'time_update_ago', 'status_dropdown'])
+                ->rawColumns(['edit', 'delete', 'time_ago', 'time_update_ago', 'status_dropdown','s.no'])
                 ->make(true);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()]);
@@ -277,6 +281,10 @@ class newss extends Controller
         try {
             $query = newscategory::select('id', 'title');
             return DataTables::of($query)
+            ->addColumn('s.no', function ($row) {
+                static $serialNumber = 1; 
+                return $serialNumber++; 
+            })
                 ->addColumn('edit', function ($row) {
                     return '<a href="/newscategory/edit/' . $row->id . '" class="btn btn-sm btn-primary"style="color:black"><i class="fas fa-edit"></i></a>';
                 })
@@ -286,7 +294,7 @@ class newss extends Controller
                                 <button type="submit" class="btn btn-sm btn-danger"style="border: none; outline: none;"><i class="fas fa-trash"></i></button>
                             </form>';
                 })
-                ->rawColumns(['edit', 'delete'])
+                ->rawColumns(['edit', 'delete','s.no'])
                 ->make(true);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()]);

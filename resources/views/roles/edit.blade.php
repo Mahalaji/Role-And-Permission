@@ -30,8 +30,8 @@
 
         <div class="form1">
             <div class="input-group">
-                <label>Name </label><br>
-                <input type="text" name="name" placeholder="Name" class="form-control" value="{{ $role->name }}">
+                <label>Name </label>
+                <input type="text" name="name" placeholder="Name"  value="{{ $role->name }}">
             </div>
         </div>
 </main>

@@ -1,8 +1,16 @@
 @extends('layouts.app')
 <style> 
+:root{
+    --form-bg:#ffffff;
+    --form-color:black;
+}
+.dark{
+    --form-bg:#333;
+    --form-color:white;
+}
 /* General Form Styling */
 form {
-    background-color: #ffffff;
+    background-color: var(--form-bg);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -43,7 +51,7 @@ form strong {
     display: block;
     font-size: 14px;
     font-weight: bold;
-    color: #555;
+    color: var(--form-color) !important;
     margin-bottom: 5px;
 }
 
