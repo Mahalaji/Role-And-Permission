@@ -8,12 +8,12 @@ use App\Models\Blog;
 use App\Models\news;
 
 
-class dashboard extends Controller
+class Dashboard extends Controller
 {
     public function dashboard(Request $request){
-        $users = Blog::all();
-        $news = news::all(); 
-        return view('frontend.dashboard', [
+        $users = Blog::where('status_id', 1)->latest()->get();
+        $news = news::where('status_id', 1)->latest()->get();; 
+        return view('frontend.Dashboard.dashboard', [
             'users' => $users,
             'news' => $news,
         ]);

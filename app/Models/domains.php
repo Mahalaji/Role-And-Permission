@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class domains extends Model
+class Domains extends Model
 {
     protected $table = 'domain';
 

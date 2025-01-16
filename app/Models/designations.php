@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class designations extends Model
+class Designations extends Model
 {
     protected $table = 'designation';
     function department(){

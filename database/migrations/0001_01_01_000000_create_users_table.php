@@ -3,6 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\str;
+
 
 return new class extends Migration
 {
@@ -19,7 +21,7 @@ return new class extends Migration
             $table->string('designation_id');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->rememberToken();
+            $table->rememberToken()->default(Str::random(10));
             $table->timestamps();
         });
 

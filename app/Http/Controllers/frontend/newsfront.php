@@ -6,31 +6,32 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\news;
 use App\Models\newscategory;
-class newsfront extends Controller
+class Newsfront extends Controller
 {
     public function shownews()
     {
-        $newsview = news::with('categories')->get();
+        $newsview = news::where('status_id', 1)->latest()->with('categories')->get();
         $categories = newscategory::get();
-        return view('frontend.news', compact('newsview', 'categories'));
+        return view('frontend.News.news', compact('newsview', 'categories'));
     }
     public function newsbyslug($slug){
         $news= news::with('categories')->whereLike('slug', $slug)->first();
-        $related_news = news::where('category_id', $news->categories->id)->get();
+        $related_news = news::where('status_id', 1)->where('category_id', $news->categories->id)->get();
         
-        return view('Frontend.particularnews',['news' => $news,'related_news'=>$related_news]);
+        return view('Frontend.News.particularnews',['news' => $news,'related_news'=>$related_news]);
     }
     public function newsbytitle($newscat)
     {
-        $category = newscategory::with('news')->where('title', $newscat)->first();
+        $categorys = newscategory::with('news')->where('title', $newscat)->first();
+        $category=$categorys->news->where('status_id',1);
     
         if (!$category) {
             abort(404, 'Category not found');
         }
     
-        $related_title_news = $category->news;
+        $related_title_news = $category;
     
-        return view('Frontend.newscategory', [
+        return view('Frontend.News.newscategory', [
             'related_title_news' => $related_title_news,
         ]);
     }
@@ -39,8 +40,12 @@ class newsfront extends Controller
     $offset = $request->input('offset', 0);  
     $limit = $request->input('limit', 2);  
 
-    $news = news::skip($offset)->take($limit)->get();  
-    $count = news::count();
+    $news = news::where('status_id', 1)
+    ->latest()
+    ->skip($offset)
+    ->take($limit)
+    ->get();  
+    $count = news::where('status_id', 1)->count();
  
     $data = $news->map(function ($news) {
         return [

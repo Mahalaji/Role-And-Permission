@@ -9,30 +9,30 @@ use App\Models\Blog;
 use App\Models\Blogcategory;
 
 
-class blogfront extends Controller
+class Blogfront extends Controller
 {
     public function showblog()
     {
-        $Blogs = Blog::with('categories')->get();
+        $Blogs = Blog::where('status_id', 1)->latest()->with('categories')->get();
         $categories = Blogcategory::withCount('blogs')->get();
-        return view('frontend.blogs', compact('Blogs', 'categories'));
+        return view('frontend.Blog.blogs', compact('Blogs', 'categories'));
     }
     public function blogsbyslug($slug){
         $blog= Blog::with('categories')->whereLike('slug', $slug)->first();
-        $related_blogs = Blog::where('category_id', $blog->categories->id)->get();
-        return view('Frontend.particularblog',['blog' => $blog,'related_blogs'=>$related_blogs]);
+        $related_blogs = Blog::where('status_id', 1)->where('category_id', $blog->categories->id)->get();
+        return view('Frontend.Blog.particularblog',['blog' => $blog,'related_blogs'=>$related_blogs]);
     }
     public function blogsbytitle($blogcat)
     {
-        $category = Blogcategory::with('blogs')->where('title', $blogcat)->first();
-    
+        $categorys = Blogcategory::with('blogs')->where('title', $blogcat)->first();
+        $category=$categorys->blogs->where('status_id',1);
         if (!$category) {
             abort(404, 'Category not found');
         }
     
-        $related_title_blog = $category->blogs;
+        $related_title_blog = $category;
     
-        return view('Frontend.blogcategory', [
+        return view('Frontend.Blog.blogcategory', [
             'related_title_blog' => $related_title_blog,
         ]);
 
@@ -44,8 +44,13 @@ public function loadMoreBlogs(Request $request)
     $offset = $request->input('offset', 0);  
     $limit = $request->input('limit', 2);  
 
-    $blogs = Blog::skip($offset)->take($limit)->get();  
-    $count = Blog::count();
+    $blogs = Blog::where('status_id', 1)
+    ->latest()
+    ->skip($offset)
+    ->take($limit)
+    ->get();
+
+    $count = Blog::where('status_id', 1)->count();
  
     $data = $blogs->map(function ($blog) {
         return [
