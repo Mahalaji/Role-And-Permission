@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\permissions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
 class Module extends Controller
 {
     public function getModuleAjax(Request $request)
@@ -45,8 +46,8 @@ class Module extends Controller
             // ->addColumn('addpermission', function ($row) {
             //     return '<a href="/module/permission/add/' . $row->id . '"style="color:black">Add Permission</a>';
             // })
-                ->addColumn('edit', function ($row) {
-                    return '<a href="/module/edit/' . $row->id . '" class="btn btn-sm btn-primary"style="color:black"><i class="fas fa-edit"></i></a>';
+                ->addColumn('MVCcreate', function ($row) {
+                    return '<a href="/mvc/create/' . $row->id . '"style="color:black"><i class="fas fa-key"></i></a>';
                 })
                 ->addColumn('delete', function ($row) {
                     return '<form action="/destorymodule/' . $row->id . '" method="POST" onsubmit="return confirm(\'Are you sure?\');">
@@ -60,7 +61,7 @@ class Module extends Controller
                 ->addColumn('time_update_ago', function ($row) {
                     return \Carbon\Carbon::parse($row->updated_at)->diffForHumans();
                 })
-                ->rawColumns(['edit', 'delete','time_ago','time_update_ago','addpermissions'])
+                ->rawColumns(['MVCcreate', 'delete','time_ago','time_update_ago','addpermissions'])
                 ->make(true);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()]);
@@ -129,19 +130,94 @@ public function moduleadd(Request $request){
 }
 
 public function editmodule($id){
-    $editmodule = modules::find($id); 
-        
-            if (!$editmodule) {
-                return redirect()->back()->with('error', 'Module not found');
-            }
-     
-            if (!is_object($editmodule)) {
-                return redirect()->back()->with('error', 'Invalid module data');
-            }
-        
+    // dd($id);
+    $module = modules::find($id); 
+    $module_name = $module->module_name;
+    $module_name =ucfirst($module_name);
+    // Create a Model with a Migration
+    Artisan::call("make:model $module_name -m");
     
-            return view('Backend.module.edit', compact('editmodule'));
+    // Create a Controller
+    Artisan::call("make:controller $module_name");
+
+    // Add index, create, and edit methods dynamically to the controller
+    $controllerPath = app_path("Http/Controllers/$module_name.php");
+    $controllerContent = file_get_contents($controllerPath);
+
+    // Define the methods dynamically
+    $methods = <<<EOD
+
+    // Index method
+    public function index()
+    {
+        return view('$module_name.index');
+    }
+
+    // Create method
+    public function create()
+    {
+        return view('$module_name.create');
+    }
+
+    // Edit method
+    public function edit()
+    {
+        return view('$module_name.edit');
+    }
+
+EOD;
+
+    // Insert the methods into the controller
+    $controllerContent = preg_replace(
+        '/\{/',
+        "{\n" . $methods,
+        $controllerContent,
+        1
+    );
+
+    file_put_contents($controllerPath, $controllerContent);
+
+    // Create the directory for views if it doesn't exist
+    $viewDirectory = resource_path("views/$module_name");
+    if (!File::exists($viewDirectory)) {
+        File::makeDirectory($viewDirectory, 0755, true); // Recursive directory creation
+    }
+
+    // Create Views
+    $viewContent = "<h1>Welcome to My New View</h1>";
+    file_put_contents($viewDirectory . '/index.blade.php', $viewContent);
+    file_put_contents($viewDirectory . '/edit.blade.php', $viewContent);
+    file_put_contents($viewDirectory . '/create.blade.php', $viewContent);
+
+    // Clear the view cache
+    Artisan::call('view:clear');
+
+    // Register routes dynamically
+    $this->registerRoutes($module_name);
+
+    // Return a success message
+    return redirect('/module');
 }
+
+private function registerRoutes($module_name)
+{
+    // Dynamically add routes to the `web.php` file
+    $routesPath = base_path('routes/web.php');
+    $routeDefinition = <<<EOD
+
+// Routes for {$module_name}Controller
+Route::get('/{$module_name}', [\App\Http\Controllers\\{$module_name}::class, 'index'])->name('{$module_name}');
+Route::get('/{$module_name}/create', [\App\Http\Controllers\\{$module_name}::class, 'create'])->name('{$module_name}');
+Route::get('/{$module_name}/edit', [\App\Http\Controllers\\{$module_name}::class, 'edit'])->name('{$module_name}');
+
+EOD;
+
+    // Append the routes if not already defined
+    if (!str_contains(file_get_contents($routesPath), "Routes for {$module_name}Controller")) {
+        file_put_contents($routesPath, $routeDefinition, FILE_APPEND);
+    }
+}
+
 public function updatemodule(Request $request){
         $request->validate([
             'module_name' => 'required',

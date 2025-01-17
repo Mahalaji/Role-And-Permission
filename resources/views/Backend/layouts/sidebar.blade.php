@@ -1,220 +1,227 @@
+<style>
+    :root {
+        --primary-color: #4a90e2;
+        --bg-color: white;
+        --text-color: #333;
+        --sidebar-bg: #ffffff;
+        --sidebar-hover: #e6f0ff;
+        --logo-color: brightness(0) invert(0);
+    }
 
-    <style>
-        :root {
-    --primary-color: #4a90e2;
-    --bg-color: white;
-    --text-color: #333;
-    --sidebar-bg: #ffffff;
-    --sidebar-hover: #e6f0ff;
-    --logo-color:brightness(0) invert(0);
-}
-.logo {
+    .logo {
         filter: var(--logo-color);
     }
-.dark {
-    --primary-color: #90caf9; /* Lighter blue for dark mode */
-    --bg-color: #1e1e1e; /* Dark background */
-    --text-color: #ffffff; /* Light text color */
-    --sidebar-bg: #1e1e1e; /* Dark sidebar background */
-    --sidebar-hover: #333333; /* Slightly lighter hover effect */
-    --logo-color:remove;
 
-}
+    .dark {
+        --primary-color: #90caf9;
+        /* Lighter blue for dark mode */
+        --bg-color: #1e1e1e;
+        /* Dark background */
+        --text-color: #ffffff;
+        /* Light text color */
+        --sidebar-bg: #1e1e1e;
+        /* Dark sidebar background */
+        --sidebar-hover: #333333;
+        /* Slightly lighter hover effect */
+        --logo-color: remove;
 
-body {
-    font-family: 'Poppins', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-}
+    }
 
-.sidebar {
-    height: 100vh;
-    width: 300px;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    background-color: var(--sidebar-bg);
-    overflow-y: auto;
-    transition: 0.3s;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    white-space: nowrap;
-}
+    body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+    }
 
-/* Hide scrollbar for modern browsers */
-.sidebar::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-}
-
-.sidebar {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-.sidebar-header {
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-.sidebar-header h3 {
-    margin: 0;
-    font-size: 1.2em;
-    color: var(--primary-color);
-}
-
-.toggle-btn {
-    background: none;
-    border: none;
-    color: var(--text-color);
-    font-size: 20px;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.toggle-btn:hover {
-    color: var(--primary-color);
-}
-
-.sidebar a {
-    padding: 15px 25px;
-    text-decoration: none;
-    font-size: 16px;
-    color: var(--text-color);
-    display: flex;
-    align-items: center;
-    transition: 0.2s;
-}
-
-.sidebar a:hover {
-    background-color: var(--sidebar-hover);
-    color: var(--primary-color);
-}
-
-.sidebar a i {
-    min-width: 30px;
-    font-size: 20px;
-}
-
-#main {
-    transition: margin-left .3s;
-    padding: 20px;
-    margin-left: 300px;
-}
-
-.sidebar.closed {
-    width: 65px;
-}
-
-.sidebar.closed .sidebar-header h3 {
-    display: none;
-}
-
-.sidebar.closed a span {
-    display: none;
-}
-
-.sidebar.closed~#main {
-    margin-left: 70px;
-}
-
-.menu,
-.menu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.menu-toggle-icon {
-    margin-left: auto;
-    font-size: 16px;
-}
-
-#btn {
-    cursor: pointer;
-}
-
-@media screen and (max-width: 768px) {
     .sidebar {
-        width: 70px;
+        height: 100vh;
+        width: 300px;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: var(--sidebar-bg);
+        overflow-y: auto;
+        transition: 0.3s;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        white-space: nowrap;
     }
 
-    .sidebar .sidebar-header h3 {
-        display: none;
+    /* Hide scrollbar for modern browsers */
+    .sidebar::-webkit-scrollbar {
+        width: 0;
+        height: 0;
     }
 
-    .sidebar a span {
-        display: none;
+    .sidebar {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .sidebar-header {
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .sidebar-header h3 {
+        margin: 0;
+        font-size: 1.2em;
+        color: var(--primary-color);
+    }
+
+    .toggle-btn {
+        background: none;
+        border: none;
+        color: var(--text-color);
+        font-size: 20px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .toggle-btn:hover {
+        color: var(--primary-color);
+    }
+
+    .sidebar a {
+        padding: 15px 25px;
+        text-decoration: none;
+        font-size: 16px;
+        color: var(--text-color);
+        display: flex;
+        align-items: center;
+        transition: 0.2s;
+    }
+
+    .sidebar a:hover {
+        background-color: var(--sidebar-hover);
+        color: var(--primary-color);
+    }
+
+    .sidebar a i {
+        min-width: 30px;
+        font-size: 20px;
     }
 
     #main {
+        transition: margin-left .3s;
+        padding: 20px;
+        margin-left: 300px;
+    }
+
+    .sidebar.closed {
+        width: 65px;
+    }
+
+    .sidebar.closed .sidebar-header h3 {
+        display: none;
+    }
+
+    .sidebar.closed a span {
+        display: none;
+    }
+
+    .sidebar.closed~#main {
         margin-left: 70px;
     }
 
-    .sidebar.open {
-        width: 300px;
+    .menu,
+    .menu ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
     }
 
-    .sidebar.open .sidebar-header h3 {
-        display: block;
+    .menu-toggle-icon {
+        margin-left: auto;
+        font-size: 16px;
     }
 
-    .sidebar.open a span {
-        display: inline;
+    #btn {
+        cursor: pointer;
     }
 
-    .sidebar.open~#main {
-        margin-left: 300px;
+    @media screen and (max-width: 768px) {
+        .sidebar {
+            width: 70px;
+        }
+
+        .sidebar .sidebar-header h3 {
+            display: none;
+        }
+
+        .sidebar a span {
+            display: none;
+        }
+
+        #main {
+            margin-left: 70px;
+        }
+
+        .sidebar.open {
+            width: 300px;
+        }
+
+        .sidebar.open .sidebar-header h3 {
+            display: block;
+        }
+
+        .sidebar.open a span {
+            display: inline;
+        }
+
+        .sidebar.open~#main {
+            margin-left: 300px;
+        }
     }
-}
 
-/* Dark Mode Styles */
-.dark body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-}
+    /* Dark Mode Styles */
+    .dark body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+    }
 
-.dark .sidebar {
-    background-color: var(--sidebar-bg);
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-}
+    .dark .sidebar {
+        background-color: var(--sidebar-bg);
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
 
-.dark .sidebar a {
-    color: var(--text-color);
-}
+    .dark .sidebar a {
+        color: var(--text-color);
+    }
 
-.dark .sidebar a:hover {
-    background-color: var(--sidebar-hover);
-    color: var(--primary-color);
-}
+    .dark .sidebar a:hover {
+        background-color: var(--sidebar-hover);
+        color: var(--primary-color);
+    }
 
-.dark .sidebar-header h3 {
-    color: var(--primary-color);
-}
+    .dark .sidebar-header h3 {
+        color: var(--primary-color);
+    }
 
-.dark .toggle-btn {
-    color: var(--text-color);
-}
+    .dark .toggle-btn {
+        color: var(--text-color);
+    }
 
-.dark .toggle-btn:hover {
-    color: var(--primary-color);
-}
+    .dark .toggle-btn:hover {
+        color: var(--primary-color);
+    }
 
-.dark .menu-toggle-icon {
-    color: var(--text-color);
-}
+    .dark .menu-toggle-icon {
+        color: var(--text-color);
+    }
+</style>
 
-    </style>
 <body>
     <div id="mySidebar" class="sidebar">
         <div class="sidebar-header">
-        <div id="img"><img src="https://www.absglobaltravel.com/public/images/footer-abs-logo.webp" height="50" style="padding-left: 25%;" class="logo">
-                </div>
+            <div id="img"><img src="https://www.absglobaltravel.com/public/images/footer-abs-logo.webp" height="50"
+                    style="padding-left: 25%;" class="logo">
+            </div>
 
             <button class="toggle-btn" onclick="toggleNav()">
                 <i class="fas fa-bars"></i>
@@ -294,7 +301,7 @@ body {
         $(document).ready(function () {
             let sidebarwidth = $('#mySidebar').css('width');
 
-          
+
             $('.toggle-btn').click(function () {
                 let width = $('#mySidebar').css('width');
                 if (width == '300px') {
@@ -307,13 +314,15 @@ body {
                     $('#app').css('margin-left', '-35%');
                     $('.menu-toggle-icon').css('display', 'none');
                     $('.menu-sub').css('padding-left', '10px');
-                    $('#img').css('display','none');
-                    $('.sidebar-header').css('padding','24px');
-                    $('#Table_wrapper').css('width','120%');
-                    $('.filter-container').css('width','120%')
-                    $('.row').css('margin-left','12%')
+                    $('#img').css('display', 'none');
+                    $('.sidebar-header').css('padding', '24px');
+                    $('#Table_wrapper').css('width', '120%');
+                    $('.filter-container').css('width', '120%')
+                    $('.row').css('margin-left', '12%')
                     $('#Tables').attr('style', 'margin-left: 13% !important; width: 87% !important;');
-
+                    $('.left').css({'margin-left': '113%','white-space': 'nowrap'});
+                    $('.form1').css('margin-left','16%')
+                    $('.header').css('margin-left','10%')
                 } else if (width == '65px') {
                     $('.menu').css('padding-left', '0rem');
                     $('.menu-toggle').css('padding', '15px 25px');
@@ -323,12 +332,15 @@ body {
                     $('#app').css('margin-left', '24px');
                     $('.menu-toggle-icon').css('display', 'block');
                     $('.menu-sub').css('padding-left', '0px');
-                    $('#img').css('display','block');
-                    $('.sidebar-header').css('padding','10px');
-                    $('#Table_wrapper').css('width','100%');
-                    $('.filter-container').css('width','100%')
-                    $('.row').css('margin-left','-15px')
-                    $('#Tables').css({'margin-left': '13%','width': '100% '});
+                    $('#img').css('display', 'block');
+                    $('.sidebar-header').css('padding', '10px');
+                    $('#Table_wrapper').css('width', '100%');
+                    $('.filter-container').css('width', '100%')
+                    $('.row').css('margin-left', '-15px')
+                    $('#Tables').css({ 'margin-left': '13%', 'width': '100% ' });
+                    $('.left').css({'margin-left': '85%','white-space': 'nowrap'});
+                    $('.form1').css('margin-left','3%')
+                    $('.header').css('margin-left','0%')
 
                 }
 

@@ -58,7 +58,7 @@ nav a:hover {
 /* Main content */
 main {
     padding: 4rem 4%;
-    max-width: 1500px;
+    max-width: 100%;
     margin: 0 auto;
 }
 
@@ -76,7 +76,7 @@ h2 {
 .post-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 2.5rem;
+    gap: 3.5rem;
     justify-items: center;
     margin-top: 3rem;
 }
@@ -267,7 +267,7 @@ a{
 }
 .featured {
     height: 320px;
-    width: 450px;
+    width: 100%;
   }
   #load-more {
     width: 200px;

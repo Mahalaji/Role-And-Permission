@@ -42,7 +42,9 @@ body {
     --filter-text: #f0f0f0;
     --border:grey;
 }
-
+.containersss{
+    margin-right: 58%;
+}
 #Table {
     width: 100% !important;
     border-collapse: collapse;
@@ -167,6 +169,7 @@ h2 {
     display: inline-block; 
     cursor: pointer; 
 }
+
 
 .view {
     text-align: end;

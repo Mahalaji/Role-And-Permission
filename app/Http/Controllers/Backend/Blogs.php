@@ -13,8 +13,95 @@ use App\Models\statuss;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
 class Blogs extends Controller
 {
+    public function test(Request $request)
+    {
+        // Create a Model with a Migration
+        Artisan::call('make:model Test2 -m');
+    
+        // Create a Controller
+        Artisan::call('make:controller Test2Controller');
+    
+        // Add index, create, and edit methods dynamically to the controller
+        $controllerPath = app_path('Http/Controllers/Test2Controller.php');
+        $controllerContent = file_get_contents($controllerPath);
+
+        // Define the methods
+        $methods = <<<EOD
+
+    // Index method
+    public function index()
+    {
+        return view('Test2.index');
+    }
+
+    // Create method
+    public function create()
+    {
+        return view('Test2.create');
+    }
+
+    // Edit method
+    public function edit()
+    {
+        return view('Test2.edit');
+    }
+
+EOD;
+
+        // Insert the methods into the controller
+        $controllerContent = preg_replace(
+            '/\{/',
+            "{\n" . $methods,
+            $controllerContent,
+            1
+        );
+
+        file_put_contents($controllerPath, $controllerContent);
+
+        // Create the directory for views if it doesn't exist
+        $viewDirectory = resource_path('views/Test2');
+        if (!File::exists($viewDirectory)) {
+            File::makeDirectory($viewDirectory, 0755, true); // Recursive directory creation
+        }
+    
+        // Create Views
+        $viewContent = "<h1>Welcome to My New View</h1>";
+        file_put_contents($viewDirectory . '/index.blade.php', $viewContent);
+        file_put_contents($viewDirectory . '/edit.blade.php', $viewContent);
+        file_put_contents($viewDirectory . '/create.blade.php', $viewContent);
+    
+        // Clear the view cache
+        Artisan::call('view:clear');
+
+        // Register routes dynamically
+        $this->registerRoutes();
+
+        // Return a success message
+        return response("Model, Controller with methods, Views, and Routes created successfully.", 200);
+    }
+
+    private function registerRoutes()
+    {
+        // Dynamically add routes to the `web.php` file
+        $routesPath = base_path('routes/web.php');
+        $routeDefinition = <<<EOD
+
+// Routes for Test2Controller
+Route::get('/test2', [\App\Http\Controllers\Test2Controller::class, 'index'])->name('test2.index');
+Route::get('/test2/create', [\App\Http\Controllers\Test2Controller::class, 'create'])->name('test2.create');
+Route::get('/test2/edit', [\App\Http\Controllers\Test2Controller::class, 'edit'])->name('test2.edit');
+
+EOD;
+
+        // Append the routes if not already defined
+        if (!str_contains(file_get_contents($routesPath), 'Routes for Test2Controller')) {
+            file_put_contents($routesPath, $routeDefinition, FILE_APPEND);
+        }
+    }
    public function blogshow(){
     return view('Backend.blog.index');
    }

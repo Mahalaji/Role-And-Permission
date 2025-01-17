@@ -75,8 +75,10 @@ class Menu extends Controller
         modules::truncate();
 
         $jsonDataArray = json_decode($request->input('json_output'), true);
-
+// dd($jsonDataArray);
         if (is_array($jsonDataArray)) {
+            // $lastElement = end($jsonDataArray); // Get the last element of the array
+            // dd($lastElement);
             function saveModule($data, $parentId = 0)
             {
                 foreach ($data as $item) {

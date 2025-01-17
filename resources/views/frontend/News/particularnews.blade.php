@@ -20,7 +20,7 @@
                </div>
                   
        </section>
-       <div class="col-md-3" style="padding-left: 100px; margin-top: 40px;">
+       <div class="col-md-3" style="padding-left: 1%; margin-top: 40px;">
        <h4><strong>Related Category News</strong></h4>
              <ul class="list">
                @foreach ($related_news as $news)

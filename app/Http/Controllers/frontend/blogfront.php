@@ -22,23 +22,39 @@ class Blogfront extends Controller
         $related_blogs = Blog::where('status_id', 1)->where('category_id', $blog->categories->id)->get();
         return view('Frontend.Blog.particularblog',['blog' => $blog,'related_blogs'=>$related_blogs]);
     }
-    public function blogsbytitle($blogcat)
-    {
-        $categorys = Blogcategory::with('blogs')->where('title', $blogcat)->first();
-        $category=$categorys->blogs->where('status_id',1);
-        if (!$category) {
-            abort(404, 'Category not found');
-        }
+//     public function blogsbytitle($blogcat)
+//     {
+//         $categorys = Blogcategory::with('blogs')->where('title', $blogcat)->first();
+//         $category=$categorys->blogs->where('status_id',1);
+//         if (!$category) {
+//             abort(404, 'Category not found');
+//         }
     
-        $related_title_blog = $category;
+//         $related_title_blog = $category;
     
-        return view('Frontend.Blog.blogcategory', [
-            'related_title_blog' => $related_title_blog,
-        ]);
+//         return view('Frontend.Blog.blogcategory', [
+//             'related_title_blog' => $related_title_blog,
+//         ]);
 
 
     
+// }
+public function getBlogsByCategory(Request $request)
+{
+    $categoryId = $request->input('category_id');
+    
+    if (!$categoryId) {
+        return response()->json(['status' => 'error', 'message' => 'Category ID is required']);
+    }
+
+    $blogs = Blog::where('category_id', $categoryId)->where('status_id',1)->get();
+
+    return response()->json([
+        'status' => 'success',
+        'data' => $blogs
+    ]);
 }
+
 public function loadMoreBlogs(Request $request)
 {
     $offset = $request->input('offset', 0);  

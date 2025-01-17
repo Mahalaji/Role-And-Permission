@@ -20,6 +20,8 @@ use App\Http\Controllers\frontend\Dashboard;
 use App\Http\Controllers\frontend\Blogfront;
 use App\Http\Controllers\frontend\Newsfront;
 use App\Http\Controllers\Backend\Blogs;
+use App\Http\Controllers\Test;
+
 
 
 
@@ -45,7 +47,7 @@ Route::group(['middleware' => ['auth']], function() {
 
 
 //blog
-Route::get('/blog',[Blogs::class, 'blogshow'])->name('blog')->middleware('role:Admin|Blog_Team');
+Route::get('/blog',[Blogs::class, 'test'])->name('blog')->middleware('role:Admin|Blog_Team');
 Route::post('/getBlogsAjax', [Blogs::class, 'getBlogsAjax']);
 Route::post('/updateBlogStatus',[Blogs::class,'updateBlogStatus']);
 Route::get('/blog/add', [Blogs::class, 'title']);
@@ -108,7 +110,7 @@ Route::get('/module/add',[Module::class,'moduleadd']);
 Route::post('/addmodule',[Module::class,'addmodule']);
 // Route::get('/module/permission/add/{id}', [Module::class, 'add_permission']);
 // Route::post('/addpermission',[Module::class,'addpermission']);
-Route::get('/module/edit/{id}', [Module::class, 'editmodule']);
+Route::get('/mvc/create/{id}', [Module::class, 'editmodule']);
 Route::post('/editmodule',[Module::class,'updatemodule']);
 Route::post('/destorymodule/{id}', [Module::class, 'destorymodule']);
 Route::post('/ShowPermissions',[Module::class,'ShowPermissions'])->name('ShowPermissions')->middleware('role:Admin');
@@ -169,8 +171,16 @@ Route::get('/blogs', [Blogfront::class, 'showblog']);
 Route::get('/news', [Newsfront::class, 'shownews']);
 Route::get('/Blogs/{article}', [Blogfront::class, 'blogsbyslug']);
 Route::get('/News/{article}', [Newsfront::class, 'newsbyslug']);
-Route::get('/Blogtitle/{article}', [Blogfront::class, 'blogsbytitle']);
-Route::get('/newstitle/{article}', [Newsfront::class, 'newsbytitle']);
+Route::get('/ajaxblogs/category', [Blogfront::class, 'getBlogsByCategory']);
+Route::get('/ajaxnews/category', [Newsfront::class, 'fetchByCategory']);
+
+// Route::get('/Blogtitle/{article}', [Blogfront::class, 'blogsbytitle']);
+// Route::get('/newstitle/{article}', [Newsfront::class, 'newsbytitle']);
 Route::get('/ajaxblogs', [Blogfront::class, 'loadMoreBlogs'])->name('ajaxblogs');
 Route::get('/ajaxnews', [Newsfront::class, 'loadMoreNews'])->name('ajaxnews');
+
+
+
 });
+
+

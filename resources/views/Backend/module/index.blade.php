@@ -19,7 +19,7 @@
                         <th>Parent Id</th>
                         <th>Create Date</th>
                         <th>Update Date</th>
-                        <th>Edit</th>
+                        <th>MVC</th>
                         <th>Delete</th>
                     </tr>
                 </thead>
@@ -88,7 +88,7 @@
                         return row.time_update_ago || data;
                     }
                 },
-                { data: 'edit', orderable: false, searchable: false },
+                { data: 'MVCcreate', orderable: false, searchable: false },
                 { data: 'delete', orderable: false, searchable: false }
             ]
         });

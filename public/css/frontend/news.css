@@ -71,9 +71,7 @@ h2 {
     text-transform: uppercase;
     letter-spacing: 1px;
 }
-.row{
-   flex-wrap: nowrap !important;
-}
+
 strong{
     width: auto !important;
 }
@@ -155,8 +153,8 @@ h5.form-like .card-title {
 
 .post-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 2.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(343px, 1fr));
+    gap: 3.5rem;
     justify-items: center;
     margin-top: 3rem;
 }
@@ -274,7 +272,7 @@ footer {
 }
 .featured {
     height: 320px;
-    width: 450px;
+    width: 100%;
   }
   a{
     text-decoration: none;
@@ -301,6 +299,7 @@ footer {
 @media (max-width: 768px) {
     #loadMore {
         width: 100%; /* Ensure the button spans the entire width on mobile */
+        margin-left: 20%;
     }
     nav {
         flex-direction: column;
@@ -321,9 +320,7 @@ footer {
         margin-bottom: 1rem;
     }
 
-    .post-grid {
-        grid-template-columns: 1fr;
-    }
+ 
 
     footer {
         font-size: 0.9rem;
