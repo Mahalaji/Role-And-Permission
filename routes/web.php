@@ -47,7 +47,7 @@ Route::group(['middleware' => ['auth']], function() {
 
 
 //blog
-Route::get('/blog',[Blogs::class, 'test'])->name('blog')->middleware('role:Admin|Blog_Team');
+Route::get('/blog',[Blogs::class, 'blogshow'])->name('blog')->middleware('role:Admin|Blog_Team');
 Route::post('/getBlogsAjax', [Blogs::class, 'getBlogsAjax']);
 Route::post('/updateBlogStatus',[Blogs::class,'updateBlogStatus']);
 Route::get('/blog/add', [Blogs::class, 'title']);
@@ -110,7 +110,10 @@ Route::get('/module/add',[Module::class,'moduleadd']);
 Route::post('/addmodule',[Module::class,'addmodule']);
 // Route::get('/module/permission/add/{id}', [Module::class, 'add_permission']);
 // Route::post('/addpermission',[Module::class,'addpermission']);
-Route::get('/mvc/create/{id}', [Module::class, 'editmodule']);
+// Route::get('/mvc/create/{id}', [Module::class, 'editmodule']);
+Route::get('/editmodule/{id}', [Module::class, 'editmodule'])->name('editmodule');
+
+
 Route::post('/editmodule',[Module::class,'updatemodule']);
 Route::post('/destorymodule/{id}', [Module::class, 'destorymodule']);
 Route::post('/ShowPermissions',[Module::class,'ShowPermissions'])->name('ShowPermissions')->middleware('role:Admin');
@@ -179,8 +182,16 @@ Route::get('/ajaxnews/category', [Newsfront::class, 'fetchByCategory']);
 Route::get('/ajaxblogs', [Blogfront::class, 'loadMoreBlogs'])->name('ajaxblogs');
 Route::get('/ajaxnews', [Newsfront::class, 'loadMoreNews'])->name('ajaxnews');
 
+// Routes for CountrylistController
+Route::get('/Countrylist', [\App\Http\Controllers\Backend\Countrylist::class, 'index'])->name('Countrylist');
+Route::post('/getCountryAjax', [\App\Http\Controllers\Backend\Countrylist::class, 'getCountryAjax']);
+Route::get('/Countrylist/edit/{id}', [\App\Http\Controllers\Backend\Countrylist::class, 'edit']);
+Route::post('/updateCountry', [\App\Http\Controllers\Backend\Countrylist::class, 'updateCountry']);
+Route::post('/destoryCountrylist/{id}', [\App\Http\Controllers\Backend\Countrylist::class, 'destoryCountrylist']);
+
 
 
 });
+
 
 

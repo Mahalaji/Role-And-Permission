@@ -60,8 +60,11 @@
             <select id="category_id" name="category_id">
                 <option value="">Select blog Category</option>
                 @foreach($titles as $title)
-                <option value="{{ $title->id }}">{{ $title->title }}
-                </option>
+                <option value="{{ $title->id }}" 
+                {{ isset($blog->category_id) && $blog->category_id == $title->id ? 'selected' : '' }}>
+                {{ $title->title }}
+            </option>
+              
                 @endforeach
             </select>
         </div>
@@ -71,8 +74,11 @@
             <select id="language" name="language">
                 <option value="">Select Language</option>
                 @foreach($language as $languages)
-                <option value="{{ $languages->id }}">{{ $languages->languagename }}
-                </option>
+                <option value="{{ $languages->id }}" 
+                {{ isset($blog->language_id) && $blog->language_id == $languages->id ? 'selected' : '' }}>
+                {{ $languages->languagename }}
+            </option>
+           
                 @endforeach
             </select>
         </div>
@@ -82,12 +88,28 @@
             <select id="domain" name="domain">
                 <option value="">Select Domain</option>
                 @foreach($domain as $domains)
-                <option value="{{ $domains->id }}">{{ $domains->domainname }}
-                </option>
+                <option value="{{ $domains->id }}" 
+                {{ isset($blog->domain_id) && $blog->domain_id == $domains->id ? 'selected' : '' }}>
+                {{ $domains->domainname }}
+            </option>
+               
                 @endforeach
             </select>
         </div>
         <p>@error('domain'){{$message}}@enderror</p>
+        <div class="input-group">
+            <label>Country</label>
+            <select id="countryname" name="countryname">
+                <option value="">Select Country</option>
+                @foreach($country as $countrys)
+                <option value="{{ $countrys->id }}" 
+                {{ isset($blog->country_id) && $blog->country_id == $countrys->id ? 'selected' : '' }}>
+                {{ $countrys->name }}
+            </option>
+                @endforeach
+            </select>
+        </div>
+        <p>@error('countryname'){{$message}}@enderror</p>
         <div class="input-group">
             <label>Upload Image:</label><br>
             <img src="{{ asset( $blog->image) }}" alt="" height="100" width="100">

@@ -13,7 +13,7 @@ use App\Models\newscategory;
 use App\Models\domains;
 use App\Models\languages;
 use App\Models\statuss;
-use App\Models\designations;
+use App\Models\Countrylists;
 
 
 use function Laravel\Prompts\select;
@@ -25,7 +25,9 @@ class Newss extends Controller
         $titles = newscategory::select('title', 'id')->get();
         $domain = domains::select('domainname', 'id')->get();
         $language = languages::select('languagename', 'id')->get();
-        return view('Backend.news.create', compact('titles', 'domain', 'language'));
+        $country = Countrylists::select('name', 'id')->get();
+
+        return view('Backend.news.create', compact('titles', 'domain', 'language','country'));
     }
     function createnews(Request $request)
     {
@@ -44,6 +46,8 @@ class Newss extends Controller
             'meta_description' => 'required',
             'language' => 'required',
             'domain' => 'required',
+            'countryname' => 'required',
+
         ]);
 
         $newsadd = new news();
@@ -61,6 +65,8 @@ class Newss extends Controller
         $newsadd->user_id = $userid->id;
         $newsadd->language_id = $request->language;
         $newsadd->domain_id = $request->domain;
+        $newsadd->country_id = $request->countryname;
+
 
 
         if ($request->hasFile('news_image')) {
@@ -199,7 +205,9 @@ class Newss extends Controller
         $titles = newscategory::select('title', 'id')->get();
         $domain = domains::select('domainname', 'id')->get();
         $language = languages::select('languagename', 'id')->get();
-        return view('Backend.news.edit', compact('news', 'titles', 'domain', 'language'));
+        $country = Countrylists::select('name', 'id')->get();
+
+        return view('Backend.news.edit', compact('news', 'titles', 'domain', 'language','country'));
     }
     public function updatenews(Request $request)
     {
@@ -216,6 +224,8 @@ class Newss extends Controller
             'meta_description' => 'required',
             'language' => 'required',
             'domain' => 'required',
+            'countryname' => 'required',
+
         ]);
 
         $newsedit = news::find($request->id);
@@ -240,6 +250,7 @@ class Newss extends Controller
         $newsedit->language_id = $request->language;
         $newsedit->domain_id = $request->domain;
         $newsedit->status_id =5;
+        $newsedit->country_id = $request->countryname;
 
 
         if ($request->hasFile('news_image')) {

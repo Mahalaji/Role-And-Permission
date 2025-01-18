@@ -228,49 +228,48 @@
             </button>
         </div>
         <ul class="menu">
-            @foreach($menu->json_output as $item)
-                <li
-                    class="menu-item {{ request()->routeIs($item['href']) || (isset($item['children']) && collect($item['children'])->pluck('href')->contains(request()->route()->getName())) ? 'open active' : '' }}">
-                    <a href="{{ $item['href'] ? route($item['href']) : 'javascript:void(0);' }}"
-                        class="menu-link menu-toggle">
-                        <i class="menu-icon {{ $item['icon'] ?? 'fas fa-circle' }}"></i>
-                        <div data-i18n="{{ $item['title'] ?? '' }}">{{ $item['text'] }}</div>
-                        @if(!empty($item['children']))
-                            <i class="menu-toggle-icon fas fa-caret-down" style="padding-left: 50%;"></i>
-                            <!-- Dropdown Icon -->
-                        @endif
-                    </a>
-                    @if(!empty($item['children']))
-                        <ul class="menu-sub"
-                            style="display: {{ request()->routeIs($item['href']) || (isset($item['children']) && collect($item['children'])->pluck('href')->contains(request()->route()->getName())) ? 'block' : 'none' }};">
-                            @foreach($item['children'] as $child)
-                                <li class="menu-item {{ request()->routeIs($child['href']) ? 'active' : '' }}">
-                                    <a href="{{ $child['href'] ? route($child['href']) : 'javascript:void(0);' }}"
-                                        class="menu-link">
-                                        <i class="menu-icon {{ $child['icon'] ?? 'fas fa-circle' }}"></i>
-                                        <div data-i18n="{{ $child['title'] ?? '' }}">{{ $child['text'] }}</div>
-                                    </a>
-                                    @if(!empty($child['children']))
-                                        <ul class="menu-sub">
-                                            @foreach($child['children'] as $subChild)
-                                                <li class="menu-item {{ request()->routeIs($subChild['href']) ? 'active' : '' }}">
-                                                    <a href="{{ $subChild['href'] ? route($subChild['href']) : 'javascript:void(0);' }}"
-                                                        class="menu-link">
-                                                        <i class="menu-icon {{ $subChild['icon'] ?? 'fas fa-circle' }}"></i>
-                                                        <div data-i18n="{{ $subChild['title'] ?? '' }}">{{ $subChild['text'] }}
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    @endif
-                                </li>
-                            @endforeach
-                        </ul>
-                    @endif
-                </li>
-            @endforeach
-        </ul>
+    @foreach($menu->json_output as $item)
+        <li class="menu-item {{ request()->routeIs($item['href']) || (isset($item['children']) && collect($item['children'])->pluck('href')->contains(request()->route()->getName())) ? 'open active' : '' }}">
+            <a href="{{ isset($item['href']) && Route::has($item['href']) ? route($item['href']) : 'javascript:void(0);' }}"
+                class="menu-link menu-toggle">
+                <i class="menu-icon {{ $item['icon'] ?? 'fas fa-circle' }}"></i>
+                <div data-i18n="{{ $item['title'] ?? '' }}">{{ $item['text'] }}</div>
+                @if(!empty($item['children']))
+                    <i class="menu-toggle-icon fas fa-caret-down" style="padding-left: 50%;"></i>
+                    <!-- Dropdown Icon -->
+                @endif
+            </a>
+            @if(!empty($item['children']))
+                <ul class="menu-sub"
+                    style="display: {{ request()->routeIs($item['href']) || (isset($item['children']) && collect($item['children'])->pluck('href')->contains(request()->route()->getName())) ? 'block' : 'none' }};">
+                    @foreach($item['children'] as $child)
+                        <li class="menu-item {{ request()->routeIs($child['href']) ? 'active' : '' }}">
+                            <a href="{{ isset($child['href']) && Route::has($child['href']) ? route($child['href']) : 'javascript:void(0);' }}"
+                                class="menu-link">
+                                <i class="menu-icon {{ $child['icon'] ?? 'fas fa-circle' }}"></i>
+                                <div data-i18n="{{ $child['title'] ?? '' }}">{{ $child['text'] }}</div>
+                            </a>
+                            @if(!empty($child['children']))
+                                <ul class="menu-sub">
+                                    @foreach($child['children'] as $subChild)
+                                        <li class="menu-item {{ request()->routeIs($subChild['href']) ? 'active' : '' }}">
+                                            <a href="{{ isset($subChild['href']) && Route::has($subChild['href']) ? route($subChild['href']) : 'javascript:void(0);' }}"
+                                                class="menu-link">
+                                                <i class="menu-icon {{ $subChild['icon'] ?? 'fas fa-circle' }}"></i>
+                                                <div data-i18n="{{ $subChild['title'] ?? '' }}">{{ $subChild['text'] }}</div>
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
+        </li>
+    @endforeach
+</ul>
+
     </div>
     <script>
         function toggleNav() {

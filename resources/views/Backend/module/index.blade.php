@@ -6,9 +6,9 @@
 <div class="info" style="background: white;">
     <div class="container mt-4">
         <h2>Module</h2>
-        <form class="left" method="post">
+        <!-- <form class="left" method="post">
             <a href="{{ asset('/module/add') }}">Add-Module</a>
-        </form>
+        </form> -->
         <div class="mt-3">
             <table id="Table" class="table table-bordered table-striped">
                 <thead>
@@ -231,6 +231,33 @@
             });
 
         });
+        
     });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    // Event delegation for dynamically rendered buttons
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('editModuleButton')) {
+            const moduleId = event.target.getAttribute('data-id');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Do you want to Create MVC',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `/editmodule/${moduleId}`;
+                } else {
+                    Swal.fire('Action canceled', '', 'info');
+                }
+            });
+        }
+    });
+</script>
+
+
 @endsection

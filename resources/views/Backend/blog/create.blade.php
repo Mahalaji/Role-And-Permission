@@ -46,39 +46,54 @@
             </div>
             <p>@error('seo_robat'){{$message}}@enderror</p>
         </div>
-        <div class="input-group">
-            <label>Blog Category</label>
-            <select id="category_id" name="category_id">
-                <option value="">Select blog Category</option>
-                @foreach($titles as $title)
-                <option value="{{ $title->id }}">{{ $title->title }}
-                </option>
-                @endforeach
-            </select>
+        <div id="fourth">
+            <div class="input-group">
+                <label>Blog Category</label>
+                <select id="category_id" name="category_id">
+                    <option value="">Select blog Category</option>
+                    @foreach($titles as $title)
+                        <option value="{{ $title->id }}">{{ $title->title }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <p>@error('category_id'){{$message}}@enderror</p>
+            <div class="input-group">
+                <label>Language</label>
+                <select id="language" name="language">
+                    <option value="">Select Language</option>
+                    @foreach($language as $languages)
+                        <option value="{{ $languages->id }}">{{ $languages->languagename }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <p>@error('language'){{$message}}@enderror</p>
         </div>
-        <p>@error('category_id'){{$message}}@enderror</p>
-        <div class="input-group">
-            <label>Language</label>
-            <select id="language" name="language">
-                <option value="">Select Language</option>
-                @foreach($language as $languages)
-                <option value="{{ $languages->id }}">{{ $languages->languagename }}
-                </option>
-                @endforeach
-            </select>
+        <div id="fifth">
+            <div class="input-group">
+                <label>Domain</label>
+                <select id="domain" name="domain">
+                    <option value="">Select Domain</option>
+                    @foreach($domain as $domains)
+                        <option value="{{ $domains->id }}">{{ $domains->domainname }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <p>@error('domain'){{$message}}@enderror</p>
+            <div class="input-group">
+                <label>Country</label>
+                <select id="countryname" name="countryname">
+                    <option value="">Select Country</option>
+                    @foreach($country as $countrys)
+                        <option value="{{ $countrys->id }}">{{ $countrys->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <p>@error('countryname'){{$message}}@enderror</p>
         </div>
-        <p>@error('language'){{$message}}@enderror</p>
-        <div class="input-group">
-            <label>Domain</label>
-            <select id="domain" name="domain">
-                <option value="">Select Domain</option>
-                @foreach($domain as $domains)
-                <option value="{{ $domains->id }}">{{ $domains->domainname }}
-                </option>
-                @endforeach
-            </select>
-        </div>
-        <p>@error('domain'){{$message}}@enderror</p>
         <div class="input-group">
             <label>Upload Image:</label><br>
             <input type="file" name="image" id="image" />
@@ -100,20 +115,20 @@
 @endsection
 @section('scripts')
 <script>
-function lettersOnly(input) {
-    var regex = /[^a-z ]/gi;
-    input.value = input.value.replace(regex, "");
-}
+    function lettersOnly(input) {
+        var regex = /[^a-z ]/gi;
+        input.value = input.value.replace(regex, "");
+    }
 </script>
 <script>
-ClassicEditor
-    .create(document.querySelector('#editor'))
-    .catch(error => {
-        console.error(error);
-    });
-editor.resize(300, 500);
+    ClassicEditor
+        .create(document.querySelector('#editor'))
+        .catch(error => {
+            console.error(error);
+        });
+    editor.resize(300, 500);
 </script>
 <script>
-CKEDITOR.replace('editor')
+    CKEDITOR.replace('editor')
 </script>
 @endsection

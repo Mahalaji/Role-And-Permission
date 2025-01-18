@@ -26,6 +26,8 @@ class CreateBlogsTable extends Migration
             $table->text('description'); 
             $table->string('domain_id'); 
             $table->string('language_id'); 
+            $table->integer('country_id');
+
             $table->timestamps(); 
 
             $table->foreign('category_id')->references('id')->on('blog_category')->onDelete('cascade'); 

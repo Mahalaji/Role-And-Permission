@@ -1,7 +1,5 @@
 @extends('Backend.layouts.app')
 <link rel="stylesheet" href="{{ asset('css/Backend/blog.css') }}">
-
-@section('title', 'Menulist')
 @section('content')
 <script src="http://127.0.0.1:8000/bootstrap-iconpicker/js/iconset/fontawesome5-3-1.min.js"></script>
 <script src="http://127.0.0.1:8000/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js"></script>
@@ -51,18 +49,7 @@
                         <label for="Permission">Permission</label>
                         <input type="text" name="Permission" class="form-control item-menu" id="Permission" placeholder="Permission">
                     </div>
-                    <div class="form-group">
-                        <label for="Modal Name">Modal Name</label>
-                        <input type="text" name="ModalName" class="form-control item-menu" id="ModalName" placeholder="Modal Name">
-                    </div>
-                    <div class="form-group">
-                        <label for="View">View</label>
-                        <input type="text" name="View" class="form-control item-menu" id="View" placeholder="View">
-                    </div>
-                    <div class="form-group">
-                        <label for="Controller Name">Controller Name</label>
-                        <input type="text" name="ControllerName" class="form-control item-menu" id="ControllerName" placeholder="Controller Name">
-                    </div>
+              
                     <div class="card-footer">
                         <button type="button" id="Saveoutput" onclick="event.preventDefault();
                             document.querySelector('.json-form').submit();" class="btn btn-success">Save</button>

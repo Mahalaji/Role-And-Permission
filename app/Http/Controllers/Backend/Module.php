@@ -46,9 +46,10 @@ class Module extends Controller
             // ->addColumn('addpermission', function ($row) {
             //     return '<a href="/module/permission/add/' . $row->id . '"style="color:black">Add Permission</a>';
             // })
-                ->addColumn('MVCcreate', function ($row) {
-                    return '<a href="/mvc/create/' . $row->id . '"style="color:black"><i class="fas fa-key"></i></a>';
-                })
+            ->addColumn('MVCcreate', function ($row) {
+                return "<button class='editModuleButton btn btn-primary' data-id='{$row->id}'>MVC</button>";
+            })
+            
                 ->addColumn('delete', function ($row) {
                     return '<form action="/destorymodule/' . $row->id . '" method="POST" onsubmit="return confirm(\'Are you sure?\');">
                                 ' . csrf_field() . '
@@ -133,15 +134,22 @@ public function editmodule($id){
     // dd($id);
     $module = modules::find($id); 
     $module_name = $module->module_name;
-    $module_name =ucfirst($module_name);
+    $module_name = strtolower(str_replace(' ', '', $module_name));
+
+    // $module_name =strtolower()
+    $module_name =ucwords($module_name);
+    // dd($module_name);
+
     // Create a Model with a Migration
-    Artisan::call("make:model $module_name -m");
+    $plural_module_name = $module_name . 's'; 
+
+    Artisan::call("make:model $plural_module_name -m");
     
     // Create a Controller
-    Artisan::call("make:controller $module_name");
-
+    Artisan::call("make:controller Backend/$module_name");
+    // C:\xampp\htdocs\Roleandpermission\app\Http\Controllers\Backend
     // Add index, create, and edit methods dynamically to the controller
-    $controllerPath = app_path("Http/Controllers/$module_name.php");
+    $controllerPath = app_path("Http/Controllers/Backend/$module_name.php");
     $controllerContent = file_get_contents($controllerPath);
 
     // Define the methods dynamically
@@ -150,19 +158,19 @@ public function editmodule($id){
     // Index method
     public function index()
     {
-        return view('$module_name.index');
+        return view('Backend.$module_name.index');
     }
 
     // Create method
     public function create()
     {
-        return view('$module_name.create');
+        return view('Backend.$module_name.create');
     }
 
     // Edit method
     public function edit()
     {
-        return view('$module_name.edit');
+        return view('Backend.$module_name.edit');
     }
 
 EOD;
@@ -178,16 +186,19 @@ EOD;
     file_put_contents($controllerPath, $controllerContent);
 
     // Create the directory for views if it doesn't exist
-    $viewDirectory = resource_path("views/$module_name");
+    $viewDirectory = resource_path("views/Backend/$module_name");
     if (!File::exists($viewDirectory)) {
         File::makeDirectory($viewDirectory, 0755, true); // Recursive directory creation
     }
 
     // Create Views
-    $viewContent = "<h1>Welcome to My New View</h1>";
+    $viewContent = "<h1>Welcome to My Index</h1>";
+    $vieweditContent = "<h1>Welcome to My Edit</h1>";
+    $viewcreateContent = "<h1>Welcome to My Create</h1>";
+
     file_put_contents($viewDirectory . '/index.blade.php', $viewContent);
-    file_put_contents($viewDirectory . '/edit.blade.php', $viewContent);
-    file_put_contents($viewDirectory . '/create.blade.php', $viewContent);
+    file_put_contents($viewDirectory . '/edit.blade.php', $vieweditContent);
+    file_put_contents($viewDirectory . '/create.blade.php', $viewcreateContent);
 
     // Clear the view cache
     Artisan::call('view:clear');
@@ -206,9 +217,9 @@ private function registerRoutes($module_name)
     $routeDefinition = <<<EOD
 
 // Routes for {$module_name}Controller
-Route::get('/{$module_name}', [\App\Http\Controllers\\{$module_name}::class, 'index'])->name('{$module_name}');
-Route::get('/{$module_name}/create', [\App\Http\Controllers\\{$module_name}::class, 'create'])->name('{$module_name}');
-Route::get('/{$module_name}/edit', [\App\Http\Controllers\\{$module_name}::class, 'edit'])->name('{$module_name}');
+Route::get('/{$module_name}', [\App\Http\Controllers\Backend\\{$module_name}::class, 'index'])->name('{$module_name}');
+Route::get('/{$module_name}/create', [\App\Http\Controllers\Backend\\{$module_name}::class, 'create']);
+Route::get('/{$module_name}/edit', [\App\Http\Controllers\Backend\\{$module_name}::class, 'edit']);
 
 EOD;
 
