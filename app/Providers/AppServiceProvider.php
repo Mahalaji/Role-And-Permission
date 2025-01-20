@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\modules;
-use App\Models\menus;
+use App\Models\Menus;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $menuData = menus::where('id', 1)->first();
+        $menuData = Menus::where('id', 4)->first();
         $module = modules::get();
         if ($menuData) {
             $menuData->json_output = json_decode($menuData->json_output, true);

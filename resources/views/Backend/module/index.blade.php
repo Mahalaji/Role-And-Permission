@@ -6,6 +6,7 @@
 <div class="info" style="background: white;">
     <div class="container mt-4">
         <h2>Module</h2>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <!-- <form class="left" method="post">
             <a href="{{ asset('/module/add') }}">Add-Module</a>
         </form> -->
@@ -149,6 +150,11 @@
                 let permissions = [];
                 let moduleId = moduleid;
                 let guardName = 'web';
+                console.log({
+    permissions: permissions,
+    module_id: moduleId,
+    guard_name: guardName
+});
 
                 $('.input-container .input-row').each(function () {
                     const permissionName = $(this).find('input').val().trim();

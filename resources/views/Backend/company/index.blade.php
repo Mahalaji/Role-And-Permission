@@ -29,11 +29,11 @@
 
 <div id="address-overlay"
     style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); z-index: 9999; padding: 20px;">
-    <div style="background-color: white; border-radius: 8px; max-width: 500px; margin: 50px auto; position: relative; overflow: hidden; display: flex; flex-direction: column; height: 90%;">
-        <div style="padding: 20px; background-color: white; border-bottom: 1px solid #ccc; position: sticky; top: 0; z-index: 10;">
+    <div style="background-color:var(--color); border-radius: 8px; max-width: 500px; margin: 50px auto; position: relative; overflow: hidden; display: flex; flex-direction: column; height: 90%;">
+        <div style="padding: 20px; background-color: var(--color); border-bottom: 1px solid #ccc; position: sticky; top: 0; z-index: 10;">
             <h1 style="margin: 0;">Company Address Details</h1>
             <button id="close-overlay-icon"
-                style="position: absolute; top: 25px;left: 435px; background-color: red; color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer;">
+                style="position: absolute; top: 25px;left: 435px; background-color: red; color: var(--color); border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer;">
                 ×
             </button>
         </div>
@@ -43,7 +43,7 @@
                 </div>
             </form>
         </div>
-        <div style="padding: 20px; background-color: white; border-top: 1px solid #ccc; position: sticky; bottom: 0; z-index: 10;">
+        <div style="padding: 20px; background-color: var(--color); border-top: 1px solid #ccc; position: sticky; bottom: 0; z-index: 10;">
             <button type="button" id="add-overlay"
                 style="background-color: green; color: white; padding: 10px 20px; border: none; cursor: pointer;">
                 Add Another Address

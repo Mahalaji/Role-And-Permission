@@ -15,6 +15,7 @@
     --filter-text: black;
     --table:white;
     --border:#ddd;
+    --color:white;
 }
 
 /* Dark Mode */
@@ -35,6 +36,8 @@
     --filter-btn-hover: #666;
     --filter-text: #f0f0f0;
     --border:grey;
+    --color:#333;
+
 
 }
 #Table {

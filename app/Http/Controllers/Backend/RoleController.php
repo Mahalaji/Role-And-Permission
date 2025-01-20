@@ -61,17 +61,10 @@ class RoleController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|unique:roles,name',
-            'permission' => 'required',
         ]);
 
-        $permissionsID = array_map(
-            function ($value) {
-                return (int) $value; },
-            $request->input('permission')
-        );
 
         $role = Role::create(['name' => $request->input('name')]);
-        $role->syncPermissions($permissionsID);
 
         return redirect()->route('roles.index')
             ->with('success', 'Role created successfully');

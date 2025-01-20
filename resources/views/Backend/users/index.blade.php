@@ -145,8 +145,8 @@
        <th>No</th>
        <th>Name</th>
        <th>Email</th>
-       <th>Department</th>
-       <th>Designation</th>
+       <!-- <th>Department</th> -->
+       <!-- <th>Designation</th> -->
        <th>Roles</th>
        <th width="280px">Action</th>
    </tr>
@@ -156,8 +156,6 @@
         <td>{{ ++$i }}</td>
         <td>{{ $user->name }}</td>
         <td>{{ $user->email }}</td>
-        <td>{{ $user->department ? $user->department->departmentname : 'No Department' }}</td>
-        <td>{{ $user->designation ? $user->designation->designationname : 'No Designation' }}</td>
         <td>
           @if(!empty($user->getRoleNames()))
             @foreach($user->getRoleNames() as $v)

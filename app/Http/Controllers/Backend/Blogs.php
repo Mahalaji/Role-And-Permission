@@ -39,7 +39,7 @@ class Blogs extends Controller
             'title' => 'required',
             'name' => 'required',
             'category_id' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif',
             'description' => 'required',
             'seo_title' => 'required',
             'meta_keyword' => 'required',
@@ -71,12 +71,17 @@ class Blogs extends Controller
 
 
         if ($request->hasFile('image')) {
+            $request->validate([
+                'image' => 'file|max:102400', 
+            ]);
+        
             $image = $request->file('image');
             $imageName = time() . '_' . $image->getClientOriginalName();
             $imagePath = 'images/' . $imageName;
             $image->move(public_path('images'), $imageName);
             $Blogadd->image = $imagePath;
         }
+        
 
         $slug = Str::slug($request->title);
         $existingSlugCount = Blog::where('slug', $slug)->count();
@@ -143,9 +148,9 @@ class Blogs extends Controller
                     return \Carbon\Carbon::parse($row->updated_at)->diffForHumans();
                 })
                 ->addColumn('status_dropdown', function ($row) use ($statuses, $user, $designationStatusMapping) {
+                    $name=$row->username;
                     $designationId = $user->designation_id;
                     $id = $row->status_id;
-                    $name=$row->username;
                     
                     if ($designationId < 4) {
                         if ($designationId <= $id || $user->hasRole(['Admin'])) {
@@ -226,7 +231,7 @@ class Blogs extends Controller
             'title' => 'required',
             'name' => 'required',
             'category_id' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif',
             'description' => 'required',
             'seo_title' => 'required',
             'meta_keyword' => 'required',

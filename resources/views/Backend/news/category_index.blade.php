@@ -14,7 +14,7 @@
             <thead>
                 <tr>
                     <th>S.No.</th>
-                    <th>seo title</th>
+                    <th>Name</th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>

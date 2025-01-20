@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\log;
+
 class Module extends Controller
 {
     public function getModuleAjax(Request $request)
@@ -263,35 +265,55 @@ public function destorymodule($id){
 
 public function savePermissions(Request $request)
 {
-    $moduleId = $request->module_id;
-    $guardName = $request->guard_name;
-    $permissions = $request->permissions;
+    try {
+        $moduleId = $request->module_id;
+        $guardName = $request->guard_name;
+        $permissions = $request->permissions;
 
-    foreach ($permissions as $permission) {
-        if (isset($permission['id'])) {
-            // Update existing permission
-            DB::table('permissions')
-                ->where('id', $permission['id'])
-                ->update([
+        // Validate input
+        if (!$permissions || !is_array($permissions)) {
+            throw new \Exception('Permissions data is invalid or missing.');
+        }
+
+        foreach ($permissions as $permission) {
+            if (isset($permission['id'])) {
+                // Update existing permission
+                DB::table('permissions')
+                    ->where('id', $permission['id'])
+                    ->update([
+                        'name' => $permission['name'],
+                        'module_id' => $moduleId,
+                        'guard_name' => $guardName,
+                        'updated_at' => now(),
+                    ]);
+            } else {
+                // Create new permission
+                DB::table('permissions')->insert([
                     'name' => $permission['name'],
                     'module_id' => $moduleId,
                     'guard_name' => $guardName,
+                    'created_at' => now(),
                     'updated_at' => now(),
                 ]);
-        } else {
-            // Create new permission
-            DB::table('permissions')->insert([
-                'name' => $permission['name'],
-                'module_id' => $moduleId,
-                'guard_name' => $guardName,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        } 
-    }
+            } 
+        }
 
-    return response()->json(['success' => true]);
+        return response()->json(['success' => true]);
+
+    } catch (\Exception $e) {
+        // Log the detailed error
+        Log::error('Error saving permissions: ' . $e->getMessage(), [
+            'module_id' => $request->module_id,
+            'guard_name' => $request->guard_name,
+            'permissions' => $request->permissions,
+        ]);
+
+        // Return a detailed error response
+        return response()->json(['success' => false, 'error' => $e->getMessage()]);
+    }
 }
+
+
 
 public function ShowPermissions(Request $request){
     $validated = $request->validate([

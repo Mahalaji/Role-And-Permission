@@ -38,7 +38,7 @@ class Newss extends Controller
             'name' => 'required',
             'email' => 'required',
             'category_id' => 'required',
-            'news_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'news_image' => 'required|image|mimes:jpeg,png,jpg,gif',
             'description' => 'required',
             'seo_title' => 'required',
             'meta_keyword' => 'required',
@@ -96,7 +96,7 @@ class Newss extends Controller
     {
         try {
             $user = Auth::user();
-            $query = news::select('id', 'title', 'category_id', 'domain_id', 'language_id', 'status_id', 'created_at')->with('categories', 'domain', 'language', 'status');
+            $query = news::select('id', 'title', 'category_id', 'domain_id', 'language_id', 'status_id', 'created_at','username')->with('categories', 'domain', 'language', 'status');
             if (!($user->hasRole(['Admin', 'News_Team']))) {
                 $query->where('user_id', $user->id);
             }
@@ -125,8 +125,10 @@ class Newss extends Controller
             ->addColumn('status_dropdown', function ($row) use ($statuses, $user, $designationStatusMapping) {
                 $designationId = $user->designation_id;
                 $id = $row->status_id;
-                if ($designationId <= 4) {
-                    if ($designationId < $id || $user->hasRole(['Admin'])) {
+                $name=$row->username;
+                
+                if ($designationId < 4) {
+                    if ($designationId <= $id || $user->hasRole(['Admin'])) {
                         $options = '';
 
                         if ($user->hasRole(['Admin'])) {
@@ -149,11 +151,12 @@ class Newss extends Controller
                             } else {
                                 return $statuses[$row->status_id] ?? 'Unknown';
                             }
+                   
                         }
                     } else {
-                        return "verify by senior";
+                        return "verify by $name" ;
                     }
-                }else{
+                } else {
                     return $statuses[$row->status_id] ?? 'Unknown';
                 }
             })
@@ -181,8 +184,10 @@ class Newss extends Controller
     public function updateNewsStatus(Request $request)
     {
         try {
+            $user = Auth::user();
             $news = news::findOrFail($request->news_id);
             $news->status_id = $request->status_id;
+            $news->username = $user->name;
             $news->save();
 
             return response()->json(['message' => 'Status updated successfully.']);
@@ -216,7 +221,7 @@ class Newss extends Controller
             'name' => 'required',
             'email' => 'required',
             'category_id' => 'required',
-            'news_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'news_image' => 'required|image|mimes:jpeg,png,jpg,gif',
             'description' => 'required',
             'seo_title' => 'required',
             'meta_keyword' => 'required',

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('parent_id')->default(0); 
             $table->string('module_name'); 
             $table->string('permission')->default(0); 
-            $table->string('user_id'); 
+            $table->string('user_id')->default(0); 
             $table->timestamps();
         });
     }

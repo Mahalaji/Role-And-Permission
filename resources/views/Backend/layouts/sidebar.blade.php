@@ -270,6 +270,7 @@
     @endforeach
 </ul>
 
+
     </div>
     <script>
         function toggleNav() {
@@ -336,7 +337,7 @@
                     $('#Table_wrapper').css('width', '100%');
                     $('.filter-container').css('width', '100%')
                     $('.row').css('margin-left', '-15px')
-                    $('#Tables').css({ 'margin-left': '13%', 'width': '100% ' });
+                    $('#Tables').css({ 'margin-left': '0%', 'width': '100% ' });
                     $('.left').css({'margin-left': '85%','white-space': 'nowrap'});
                     $('.form1').css('margin-left','3%')
                     $('.header').css('margin-left','0%')

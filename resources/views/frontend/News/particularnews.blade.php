@@ -11,7 +11,7 @@
                    <img src="{{ asset($news->news_image) }}" class="card-img-top" >
                     </div>
                     <div class="post-content">
-                        <h3><strong> Title: </strong>{{ $news['Title'] }}</h3>
+                        <h3><strong> Title: </strong>{{ $news['title'] }}</h3>
                         <p>{{ $news['description'] }}</p>
                         <p class="para"> <strong>create Date: </strong>{{ $news['created_at'] }}</p>
                         <p class="para"> <strong>Update Date: </strong>{{ $news['updated_at'] }}</p>
