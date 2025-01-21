@@ -48,9 +48,6 @@ class Blogs extends Controller
             'language' => 'required',
             'domain' => 'required',
             'countryname' => 'required',
-
-
-
         ]);
         $Blogadd = new Blog();
         $Blogadd->title = $request->title;

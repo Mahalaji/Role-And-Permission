@@ -20,7 +20,8 @@ use App\Http\Controllers\frontend\Dashboard;
 use App\Http\Controllers\frontend\Blogfront;
 use App\Http\Controllers\frontend\Newsfront;
 use App\Http\Controllers\Backend\Blogs;
-use App\Http\Controllers\Test;
+use App\Http\Controllers\Backend\FileManagerController;
+
 
 
 
@@ -189,9 +190,30 @@ Route::get('/Countrylist/edit/{id}', [\App\Http\Controllers\Backend\Countrylist:
 Route::post('/updateCountry', [\App\Http\Controllers\Backend\Countrylist::class, 'updateCountry']);
 Route::post('/destoryCountrylist/{id}', [\App\Http\Controllers\Backend\Countrylist::class, 'destoryCountrylist']);
 
+// Routes for CitylistController
+Route::get('/Citylist', [\App\Http\Controllers\Backend\Citylist::class, 'index'])->name('Citylist');
+Route::post('/getCityAjax', [\App\Http\Controllers\Backend\Citylist::class, 'getCityAjax']);
+Route::get('/City/edit/{id}', [\App\Http\Controllers\Backend\Citylist::class, 'edit']);
+Route::post('/updateCity', [\App\Http\Controllers\Backend\Citylist::class, 'updateCity']);
+Route::post('/destoryCity/{id}', [\App\Http\Controllers\Backend\Citylist::class, 'destoryCity']);
 
+
+
+// Routes for StatelistController
+Route::get('/Statelist', [\App\Http\Controllers\Backend\Statelist::class, 'index'])->name('Statelist');
+Route::post('/getStateAjax', [\App\Http\Controllers\Backend\Statelist::class, 'getStateAjax']);
+
+// Route::get('/Statelist/create', [\App\Http\Controllers\Backend\Statelist::class, 'create']);
+Route::get('/State/edit/{id}', [\App\Http\Controllers\Backend\Statelist::class, 'edit']);
+Route::post('/updatestate', [\App\Http\Controllers\Backend\Statelist::class, 'updatestate']);
+Route::post('/destoryState/{id}', [\App\Http\Controllers\Backend\Statelist::class, 'destoryState']);
+
+
+Route::get('filemanager', [FileManagerController::class, 'index'])->name('filemanager');
 
 });
+
+
 
 
 

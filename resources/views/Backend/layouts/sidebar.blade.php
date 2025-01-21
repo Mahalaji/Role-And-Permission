@@ -321,8 +321,9 @@
                     $('.row').css('margin-left', '12%')
                     $('#Tables').attr('style', 'margin-left: 13% !important; width: 87% !important;');
                     $('.left').css({'margin-left': '113%','white-space': 'nowrap'});
-                    $('.form1').css('margin-left','16%')
-                    $('.header').css('margin-left','10%')
+                    $('.form1').css('margin-left','16%');
+                    $('.header').css('margin-left','10%');
+                    $('#navbar').css('padding-left','76%');
                 } else if (width == '65px') {
                     $('.menu').css('padding-left', '0rem');
                     $('.menu-toggle').css('padding', '15px 25px');
@@ -339,9 +340,9 @@
                     $('.row').css('margin-left', '-15px')
                     $('#Tables').css({ 'margin-left': '0%', 'width': '100% ' });
                     $('.left').css({'margin-left': '85%','white-space': 'nowrap'});
-                    $('.form1').css('margin-left','3%')
-                    $('.header').css('margin-left','0%')
-
+                    $('.form1').css('margin-left','3%');
+                    $('.header').css('margin-left','0%');
+                    $('#navbar').css('padding-left','73%');
                 }
 
             });
