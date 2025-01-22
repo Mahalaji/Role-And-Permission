@@ -6,14 +6,17 @@
 :root{
     --background: white;
     --navbar: white;
+    --color:black;
 
 }
 .dark{
     --background: #1e1e1e; 
     --navbar: #333;
-
+  --color:white;
 }
-
+#icon{
+    color: var(--color);
+}
 body {
     font-family: 'Inter', sans-serif;
     background-color: #f0f4f8;

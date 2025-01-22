@@ -28,6 +28,8 @@ use App\Http\Controllers\Backend\FileManagerController;
 
 
 
+
+
    
 Route::get('/', function () {
     return view('welcome');
@@ -209,11 +211,6 @@ Route::post('/updatestate', [\App\Http\Controllers\Backend\Statelist::class, 'up
 Route::post('/destoryState/{id}', [\App\Http\Controllers\Backend\Statelist::class, 'destoryState']);
 
 
-Route::get('filemanager', [FileManagerController::class, 'index'])->name('filemanager');
+Route::get('/filemanager', [FileManagerController::class, 'index'])->name('filemanager');
 
 });
-
-
-
-
-

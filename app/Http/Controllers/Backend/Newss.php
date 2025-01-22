@@ -221,7 +221,7 @@ class Newss extends Controller
             'name' => 'required',
             'email' => 'required',
             'category_id' => 'required',
-            'news_image' => 'required|image|mimes:jpeg,png,jpg,gif',
+            // 'news_image' => 'required|image|mimes:jpeg,png,jpg,gif',
             'description' => 'required',
             'seo_title' => 'required',
             'meta_keyword' => 'required',

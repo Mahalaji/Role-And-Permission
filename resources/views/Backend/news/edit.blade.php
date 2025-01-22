@@ -101,11 +101,11 @@
                     <select id="countryname" name="countryname">
                         <option value="">Select Country</option>
                         @foreach($country as $countrys)
-                                <option value="{{ $countrys->id }}" {{ isset($news->country_id) && $news->country_id == $countrys->id ? 'selected' : '' }}>
-                                    {{ $countrys->name }}
-                                </option>
-                                <!-- <option value="{{ $countrys->id }}">{{ $countrys->name }}
-                            </option> -->
+                            <option value="{{ $countrys->id }}" {{ isset($news->country_id) && $news->country_id == $countrys->id ? 'selected' : '' }}>
+                                {{ $countrys->name }}
+                            </option>
+                            <!-- <option value="{{ $countrys->id }}">{{ $countrys->name }}
+                                </option> -->
                         @endforeach
                     </select>
                 </div>
@@ -118,10 +118,12 @@
             <p>@error('email'){{$message}}@enderror</p>
 
             <div class="input-group">
-                <label>Upload Image:</label><br>
                 <img src="{{ asset($news->news_image) }}" alt="" height="100" width="100">
-                <input type="file" name="news_image" id="news_image"
-                    value="{{ old('news_image', $news->news_image) }}" />
+                <input type="text" id="image_label" class="form-control" name="news_image" aria-label="Image"
+                    aria-describedby="button-image">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="button-image">Select</button>
+                </div>
             </div>
             <p>@error('news_image'){{$message}}@enderror</p>
             <div class="input-group">
@@ -138,6 +140,30 @@
 </main>
 @endsection
 @section('scripts')
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        document.getElementById('button-image').addEventListener('click', (event) => {
+            event.preventDefault();
+
+            window.open('/file-manager/fm-button', 'fm', 'width=1400,height=800');
+        });
+    });
+
+    // set file link
+    function fmSetLink($url) {
+        document.getElementById('image_label').value = $url;
+    }
+</script>
+<script>
+    CKEDITOR.editorConfig = function (config) {
+
+        //...
+
+        // Upload image
+        config.filebrowserImageBrowseUrl = '/file-manager/ckeditor';
+    };
+</script>
 <script>
     function lettersOnly(input) {
         var regex = /[^a-z ]/gi;
