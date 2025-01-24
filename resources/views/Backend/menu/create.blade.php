@@ -49,7 +49,9 @@
                         <label for="Permission">Permission</label>
                         <input type="text" name="Permission" class="form-control item-menu" id="Permission" placeholder="Permission">
                     </div>
-              
+                        <input type="hidden" name="modulesname" class="form-control item-menu" id="modulesname">
+                        <input type="hidden" name="moduleid" class="form-control item-menu" id="moduleid">
+                        <input type="hidden" name="deletestatus" class="form-control item-menu" id="deletestatus">
                     <div class="card-footer">
                         <button type="button" id="Saveoutput" onclick="event.preventDefault();
                             document.querySelector('.json-form').submit();" class="btn btn-success">Save</button>
@@ -88,7 +90,10 @@
             text: '#text',
             href: '#href',
             target: '#target',
-            title: '#title'
+            title: '#title',
+            modulesname: '#modulesname',
+            moduleid: '#moduleid',
+            deletestatus: '#deletestatus'
         }
     });
 
@@ -96,8 +101,29 @@
     editor.setUpdateButton($('#btnUpdate'));
     editor.setData(arrayjson);
 
+    let moduleIdCounter = 1; // Reset the counter for module IDs on each update
+
+    // Function to update the modules data and increment moduleid
+    function updateModulesData(item) {
+        if (!item.text) return;
+        item.modulesname = toCamelCase(item.text);
+        item.moduleid = moduleIdCounter++; // Assign the current counter value and then increment it
+        item.deletestatus = '1';
+        if (item.children && item.children.length > 0) {
+            item.children.forEach(updateModulesData); // Recursively update children if they exist
+        }
+    }
+
+    // Function to convert string to camelCase
+    function toCamelCase(str) {
+        return str
+            .replace(/[-_\s\/]+(.)?/g, (match, chr) => (chr ? chr.toUpperCase() : '')) // Remove spaces, slashes, underscores
+            .replace(/^(.)/, (match, chr) => chr.toLowerCase()); // Ensure first character is lowercase
+    }
+
     $('#btnAdd').click(function () {
         editor.add();
+        updateTextarea();
     });
 
     $('#btnUpdate').click(function () {
@@ -106,15 +132,16 @@
     });
 
     $('#Saveoutput').click(function (event) {
-        event.preventDefault();
         updateTextarea();
         document.querySelector('.json-form').submit();
     });
 
     function updateTextarea() {
         var jsonString = editor.getString();
-        console.log("Updated JSON:", jsonString);
-        $('#myTextarea').val(jsonString);
+        var jsonData = JSON.parse(jsonString);
+        moduleIdCounter = 1; // Reset module ID counter before updating
+        jsonData.forEach(updateModulesData);
+        $('#myTextarea').val(JSON.stringify(jsonData, null, 2));
     }
 
     $('#myEditor_icon').iconpicker({

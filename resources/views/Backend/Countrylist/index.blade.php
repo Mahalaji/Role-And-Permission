@@ -83,6 +83,7 @@ $(document).ready(function() {
                 searchable: false
             },
         ],
+        lengthMenu:[5,10,25,50,100]
     });
 
     $('#filterButton').on('click', function() {

@@ -94,10 +94,16 @@
             </div>
             <p>@error('countryname'){{$message}}@enderror</p>
         </div>
-        <div class="input-group">
-            <label>Upload Image:</label><br>
-            <input type="file" name="image" id="image" />
-        </div>
+        <div class="mb-3">
+                <label class="form-label fw-bold">Upload Image:</label><br>
+                <div class="d-flex flex-column align-items-center">
+                    <div class="input-group">
+                        <input type="text" id="image_label" class="form-control" name="image"
+                            placeholder="Select an image..." aria-label="Image">
+                        <button class="btn btn-outline-secondary" type="button" id="button-image">Select</button>
+                    </div>
+                </div>
+            </div>
         <p>@error('image'){{$message}}@enderror</p>
 
         <div class="input-group">

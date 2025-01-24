@@ -39,7 +39,7 @@ class Blogs extends Controller
             'title' => 'required',
             'name' => 'required',
             'category_id' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif',
+            'image' => 'required',
             'description' => 'required',
             'seo_title' => 'required',
             'meta_keyword' => 'required',
@@ -64,21 +64,9 @@ class Blogs extends Controller
         $Blogadd->language_id = $request->language;
         $Blogadd->domain_id = $request->domain;
         $Blogadd->country_id = $request->countryname;
+        $Blogadd->image = $request->image;
 
 
-
-        if ($request->hasFile('image')) {
-            $request->validate([
-                'image' => 'file|max:102400', 
-            ]);
-        
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $imagePath = 'images/' . $imageName;
-            $image->move(public_path('images'), $imageName);
-            $Blogadd->image = $imagePath;
-        }
-        
 
         $slug = Str::slug($request->title);
         $existingSlugCount = Blog::where('slug', $slug)->count();
@@ -228,7 +216,7 @@ class Blogs extends Controller
             'title' => 'required',
             'name' => 'required',
             'category_id' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif',
+            'image' => 'required',
             'description' => 'required',
             'seo_title' => 'required',
             'meta_keyword' => 'required',
@@ -262,14 +250,10 @@ class Blogs extends Controller
         $Blogedit->updated_at = now();
         $Blogedit->status_id = 5;
         $Blogedit->country_id = $request->countryname;
+        $Blogedit->image = $request->image;
 
 
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('images'), $imageName);
-            $Blogedit->image = 'images/' . $imageName;
-        }
+
 
         if ($Blogedit->Title !== $request->title) {
             $slug = Str::slug($request->title);

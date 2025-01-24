@@ -121,6 +121,43 @@
             }
         };
     </script>
+      <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById('button-image').addEventListener('click', (event) => {
+            event.preventDefault();
+
+            // Calculate the center position
+            const width = 600;
+            const height = 400;
+            const left = (window.screen.width / 2) - (width / 2);
+            const top = (window.screen.height / 2) - (height / 2);
+
+            // Open the window in the center
+            window.open(
+                '/file-manager/fm-button',
+                'fm',
+                `width=${width},height=${height},top=${top},left=${left}`
+            );
+        });
+    });
+
+    // Set file link
+    function fmSetLink($url) {
+        const modifiedUrl = $url.replace(/^https?:\/\/[^\/]+\//, ''); // Removes protocol and domain
+        document.getElementById('image_label').value = modifiedUrl;
+    }
+</script>
+
+<script>
+    CKEDITOR.editorConfig = function (config) {
+
+        //...
+
+        // Upload image
+        config.filebrowserImageBrowseUrl = '/file-manager/ckeditor';
+        
+    };
+</script>
 </body>
 
 </html>

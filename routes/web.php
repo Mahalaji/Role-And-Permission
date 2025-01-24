@@ -40,9 +40,9 @@ Auth::routes();
 Route::get('/home', [HomeController::class, 'index'])->name('home');
   
 Route::group(['middleware' => ['auth']], function() {
-    Route::resource('roles', RoleController::class)->middleware('role:Admin');
+    Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class)->middleware('role:Admin');
-    Route::resource('products', ProductController::class)->middleware('role:Admin');
+    Route::resource('products', ProductController::class);
 
     Route::get('/access/{article}',[RoleController::class,'access'])->name('access');
     Route::post('/roles/{roleId}/update-access', [RoleController::class, 'updateAccess'])->name('roles.updateAccess');
@@ -105,7 +105,7 @@ Route::post('/deleteCompanyAddress', [Companies::class, 'deleteaddress']);
 Route::post('/saveCompanyAddress', [Companies::class, 'saveCompanyAddress']);
 
 //module
-Route::view('/module','Backend.module.index')->name('module')->middleware('role:Admin');
+Route::get('/module',[Module::class, 'index'])->name('module')->middleware('role:Admin');
 Route::post('/getModuleAjax', [Module::class, 'getModuleAjax']);
 Route::get('/submodule/add/{id}', [Module::class, 'add_submodule']);
 Route::post('/addsubmodule',[Module::class,'addsubmodule']);
@@ -114,7 +114,13 @@ Route::post('/addmodule',[Module::class,'addmodule']);
 // Route::get('/module/permission/add/{id}', [Module::class, 'add_permission']);
 // Route::post('/addpermission',[Module::class,'addpermission']);
 // Route::get('/mvc/create/{id}', [Module::class, 'editmodule']);
-Route::get('/editmodule/{id}', [Module::class, 'editmodule'])->name('editmodule');
+Route::post('/createmvc', [Module::class, 'mvc']);
+Route::post('/mvctable', [Module::class, 'mvctable']);
+
+//recycle
+Route::view('/module/recycle', 'Backend.module.recycleindex');
+Route::post('/getModuleRecycleAjax', [Module::class, 'getModuleRecycleAjax']);
+Route::post('/restoremodule/{id}', [Module::class, 'restoremodule']);
 
 
 Route::post('/editmodule',[Module::class,'updatemodule']);
@@ -214,3 +220,8 @@ Route::post('/destoryState/{id}', [\App\Http\Controllers\Backend\Statelist::clas
 Route::get('/filemanager', [FileManagerController::class, 'index'])->name('filemanager');
 
 });
+
+// Routes for TestController
+Route::get('/Test', [\App\Http\Controllers\Backend\Test::class, 'index'])->name('Test');
+Route::get('/Test/create', [\App\Http\Controllers\Backend\Test::class, 'create']);
+Route::get('/Test/edit', [\App\Http\Controllers\Backend\Test::class, 'edit']);

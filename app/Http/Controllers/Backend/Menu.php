@@ -69,9 +69,9 @@ class Menu extends Controller
 
     function updatejsondata(Request $request)
 {
-    $blog = menus::find($request->id);
+    $module = menus::find($request->id);
 
-    if ($blog) {
+    if ($module) {
         modules::truncate();
 
         $jsonDataArray = json_decode($request->input('json_output'), true);
@@ -83,7 +83,7 @@ class Menu extends Controller
             {
                 foreach ($data as $item) {
                     $module = new modules();
-                    $module->module_name = $item['text'] ?? 'Unnamed Module';
+                    $module->module_name = $item['modulesname'] ?? 'Unnamed Module';
                     $module->parent_id = $parentId;
                     
                     $module->created_at = now();
@@ -99,15 +99,15 @@ class Menu extends Controller
             saveModule($jsonDataArray);
         }
 
-        $blog->json_output = json_encode($jsonDataArray);
+        $module->json_output = json_encode($jsonDataArray);
 
-        if ($blog->save()) {
-            return redirect()->route('menu')->with('success', 'Blog and modules updated successfully!');
+        if ($module->save()) {
+            return redirect()->route('menu')->with('success', ' modules updated successfully!');
         } else {
-            return redirect()->back()->with('error', 'Failed to update the blog.');
+            return redirect()->back()->with('error', 'Failed to update the module.');
         }
     } else {
-        return redirect()->route('addmenubar')->with('error', 'Blog not found.');
+        return redirect()->route('addmenubar')->with('error', 'module not found.');
     }
 }
 public function addmenu(Request $request){

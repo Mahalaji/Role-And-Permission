@@ -38,7 +38,7 @@ class Newss extends Controller
             'name' => 'required',
             'email' => 'required',
             'category_id' => 'required',
-            'news_image' => 'required|image|mimes:jpeg,png,jpg,gif',
+            'news_image' => 'required',
             'description' => 'required',
             'seo_title' => 'required',
             'meta_keyword' => 'required',
@@ -66,16 +66,9 @@ class Newss extends Controller
         $newsadd->language_id = $request->language;
         $newsadd->domain_id = $request->domain;
         $newsadd->country_id = $request->countryname;
+        $newsadd->news_image = $request->news_image;
 
 
-
-        if ($request->hasFile('news_image')) {
-            $Image = $request->file('news_image');
-            $imageName = time() . '_' . $Image->getClientOriginalName();
-            $imagePath = 'news_images/' . $imageName;
-            $Image->move(public_path('news_images'), $imageName);
-            $newsadd->news_image = $imagePath;
-        }
 
         $slug = Str::slug($request->title);
         $existingSlugCount = news::where('slug', $slug)->count();
@@ -256,15 +249,10 @@ class Newss extends Controller
         $newsedit->domain_id = $request->domain;
         $newsedit->status_id =5;
         $newsedit->country_id = $request->countryname;
+        $newsedit->news_image = $request->news_image;
 
 
-        if ($request->hasFile('news_image')) {
-            $Image = $request->file('news_image');
-            $imageName = time() . '_' . $Image->getClientOriginalName();
-            $imagePath = 'news_images/' . $imageName;
-            $Image->move(public_path('news_images'), $imageName);
-            $newsedit->news_image = $imagePath;
-        }
+   
 
         if ($newsedit->title !== $request->title) {
             $slug = Str::slug($request->title);

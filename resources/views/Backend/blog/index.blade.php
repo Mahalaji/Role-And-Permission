@@ -88,6 +88,7 @@
                 { data: 'edit', orderable: false, searchable: false },
                 { data: 'delete', orderable: false, searchable: false },
             ],
+            lengthMenu:[5,10,25,50,100]
         });
 
         $('#filterButton').on('click', function () {

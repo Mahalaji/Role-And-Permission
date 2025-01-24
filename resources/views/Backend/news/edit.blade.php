@@ -1,4 +1,16 @@
 <link rel="stylesheet" href="{{ asset('css/Backend/create.css') }}">
+<style>
+    .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    .img-thumbnail {
+        max-width: 200px;
+        max-height: 200px;
+        object-fit: cover;
+    }
+</style>
 @extends('Backend.layouts.app')
 @section('content')
 <main id="main" class="main">
@@ -105,7 +117,7 @@
                                 {{ $countrys->name }}
                             </option>
                             <!-- <option value="{{ $countrys->id }}">{{ $countrys->name }}
-                                </option> -->
+                                            </option> -->
                         @endforeach
                     </select>
                 </div>
@@ -117,12 +129,19 @@
             </div>
             <p>@error('email'){{$message}}@enderror</p>
 
-            <div class="input-group">
-                <img src="{{ asset($news->news_image) }}" alt="" height="100" width="100">
-                <input type="text" id="image_label" class="form-control" name="news_image" aria-label="Image"
-                    aria-describedby="button-image">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" id="button-image">Select</button>
+            <div class="mb-3">
+                <label class="form-label fw-bold">Upload Image:</label><br>
+                <div class="d-flex flex-column align-items-center">
+                    <!-- Display Image Preview -->
+                    <img src="{{ asset($news->news_image) }}" alt="Uploaded Image" class="img-thumbnail mb-2"
+                        height="100" width="100">
+
+                    <!-- Input Group for Image Selection -->
+                    <div class="input-group">
+                        <input type="text" id="image_label" class="form-control" name="news_image"
+                            placeholder="Select an image..." aria-label="Image">
+                        <button class="btn btn-outline-secondary" type="button" id="button-image">Select</button>
+                    </div>
                 </div>
             </div>
             <p>@error('news_image'){{$message}}@enderror</p>
@@ -140,30 +159,7 @@
 </main>
 @endsection
 @section('scripts')
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
 
-        document.getElementById('button-image').addEventListener('click', (event) => {
-            event.preventDefault();
-
-            window.open('/file-manager/fm-button', 'fm', 'width=1400,height=800');
-        });
-    });
-
-    // set file link
-    function fmSetLink($url) {
-        document.getElementById('image_label').value = $url;
-    }
-</script>
-<script>
-    CKEDITOR.editorConfig = function (config) {
-
-        //...
-
-        // Upload image
-        config.filebrowserImageBrowseUrl = '/file-manager/ckeditor';
-    };
-</script>
 <script>
     function lettersOnly(input) {
         var regex = /[^a-z ]/gi;

@@ -7,7 +7,36 @@
     <link href="{{ asset('vendor/file-manager/css/file-manager.css') }}" rel="stylesheet">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ asset('css/Backend/blog.css') }}">
+<style>
+  :root{
+    --colorh2:black;
+    --colortable:#fff;
+    --colortext:black;
 
+  }
+  .dark{
+    --colorh2:white;
+    --colortable:#333;
+    --colortext:white;
+
+  }
+  h2{
+    color: var(--colorh2);
+  }
+  .fm {
+  
+    background-color: var(--colortable) !important;
+    color:var(--colortext) !important ;
+}
+.table {
+
+    color:var(--colortext) !important;
+}
+.fm-table thead th {
+  background: var(--colortable) !important;
+}
+</style>
 </head>
 
 <body>

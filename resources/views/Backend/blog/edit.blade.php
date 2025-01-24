@@ -110,11 +110,18 @@
             </select>
         </div>
         <p>@error('countryname'){{$message}}@enderror</p>
-        <div class="input-group">
-            <label>Upload Image:</label><br>
-            <img src="{{ asset( $blog->image) }}" alt="" height="100" width="100">
-            <input type="file" name="image" id="image" />
-        </div>
+        <div class="mb-3">
+                <label class="form-label fw-bold">Upload Image:</label><br>
+                <div class="d-flex flex-column align-items-center">
+                    <img src="{{ asset($blog->image) }}" alt="Uploaded Image" class="img-thumbnail mb-2"
+                        height="100" width="100">
+                    <div class="input-group">
+                        <input type="text" id="image_label" class="form-control" name="news_image"
+                            placeholder="Select an image..." aria-label="Image">
+                        <button class="btn btn-outline-secondary" type="button" id="button-image">Select</button>
+                    </div>
+                </div>
+            </div>
         <p>@error('image'){{$message}}@enderror</p>
         <div class="input-group">
             <label for="editor">Description</label>

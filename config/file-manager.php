@@ -31,7 +31,7 @@ return [
      * List of disk names that you want to use
      * (from config/filesystems)
      */
-    'diskList'          => ['public'],
+    'diskList'          => ['filemanger'],
 
     /**
      * Default disk for left manager
@@ -125,7 +125,7 @@ return [
      *
      * null or value in minutes
      */
-    'aclRulesCache'     => null,
+    'aclRulesCache'     => 1,
 
     //********* Default configuration for DefaultConfigRepository END **********
 
@@ -150,11 +150,11 @@ return [
      */
     'aclRules'          => [
         null => [
-            //['disk' => 'public', 'path' => '/', 'access' => 2],
+            ['disk' => 'public', 'path' => '/', 'access' => 2],
         ],
         1    => [
-            //['disk' => 'public', 'path' => 'images/arch*.jpg', 'access' => 2],
-            //['disk' => 'public', 'path' => 'files/*', 'access' => 1],
+            ['disk' => 'public', 'path' => 'images/arch*.jpg', 'access' => 2],
+            ['disk' => 'public', 'path' => 'files/*', 'access' => 1],
         ],
     ],
 
