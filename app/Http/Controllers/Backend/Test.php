@@ -13,8 +13,8 @@ class Test extends Controller
     // Index method
     public function index()
     {
-        $columns = ['id', 'title', 'name', 'username', 'slug']; // Array of selected columns
-        $data = DB::table("blogs")->select($columns)->get(); // Fetch data from the specified table
+        $columns = ['id', 'title', 'created_at', 'updated_at']; // Array of selected columns
+        $data = DB::table("blog_category")->select($columns)->get(); // Fetch data from the specified table
         return view('Backend.Test.index', ['columns' => $columns, 'data' => $data]); // Pass as an array
     }
 
@@ -27,7 +27,7 @@ class Test extends Controller
     // Edit method
     public function edit($id)
     {
-        $item = DB::table('blogs')->where('id', $id)->first(); // Fetch the item to edit
+        $item = DB::table('blog_category')->where('id', $id)->first(); // Fetch the item to edit
         return view('Backend.Test.edit', ['item' => $item]);
     }
 

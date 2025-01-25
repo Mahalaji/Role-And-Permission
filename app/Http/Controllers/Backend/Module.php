@@ -162,58 +162,52 @@ class Module extends Controller
         $id = $request->moduleId;
         $tablename = $request->tablename;
         $columns = $request->input('columns', []); // Default to an empty array if no columns are selected
-    
+
         // Validate that the module exists
         $module = modules::find($id);
         if (!$module) {
             return redirect()->back()->withErrors('Module not found');
         }
-    
+
         // Format the module name
         $module_name = strtolower(str_replace(' ', '', $module->module_name));
         $module_name = ucwords($module_name);
-    
+
         // Define paths and names
         $plural_module_name = $module_name . 's';
         $modelPath = app_path("Models/$plural_module_name.php");
         $controllerPath = app_path("Http/Controllers/Backend/$module_name.php");
-        $migrationFiles = glob(database_path("migrations/*_create_" . strtolower($plural_module_name) . "_table.php"));
         $viewDirectory = resource_path("views/Backend/$module_name");
-    
+
         // Delete existing files if they exist
         if (file_exists($modelPath)) {
             unlink($modelPath);
         }
-    
+
         if (file_exists($controllerPath)) {
             unlink($controllerPath);
         }
-    
-        foreach ($migrationFiles as $migrationFile) {
-            if (file_exists($migrationFile)) {
-                unlink($migrationFile);
-            }
-        }
-    
+
+
         if (File::exists($viewDirectory)) {
             File::deleteDirectory($viewDirectory);
         }
-    
+
         // Create a Model with a Migration
-        Artisan::call("make:model $plural_module_name -m");
-    
+        Artisan::call("make:model $plural_module_name ");
+
         // Create a Controller
         Artisan::call("make:controller Backend/$module_name");
-    
+
         // Read the controller content
         $controllerContent = file_get_contents($controllerPath);
-    
+
         // Ensure DB facade is included after the namespace declaration
         $useDB = "use Illuminate\\Support\\Facades\\DB;\n";
         if (!str_contains($controllerContent, $useDB)) {
             $controllerContent = preg_replace('/namespace\s+.*?;/', "$0\n$useDB", $controllerContent, 1);
         }
-    
+
         // Define the methods dynamically
         $columnsString = implode("', '", $columns);
         $methods = <<<EOD
@@ -240,7 +234,7 @@ class Module extends Controller
         }
     
     EOD;
-    
+
         // Insert the methods into the controller
         $controllerContent = preg_replace(
             '/\{/',
@@ -248,61 +242,116 @@ class Module extends Controller
             $controllerContent,
             1
         );
-    
+
         // Write the updated content back to the controller file
         file_put_contents($controllerPath, $controllerContent);
-    
+
         // Create the directory for views
         File::makeDirectory($viewDirectory, 0755, true);
-    
+
         // Generate the table in the index view
         $tableHeaders = '';
         foreach ($columns as $column) {
             $tableHeaders .= "<th>" . ucwords($column) . "</th>";
         }
-    
+
         // Fetch data from the database for the given table
         $data = DB::table($tablename)->select($columns)->get();
-    
+
         $tableData = '';
         foreach ($data as $row) {
             $tableData .= "<tr>";
             foreach ($columns as $column) {
                 $tableData .= "<td>" . htmlspecialchars($row->$column) . "</td>";
             }
+            $tableData .= "<td>
+                <a href='/$module_name/edit/" . $row->id . "' class='btn btn-primary btn-sm' style='background: azure; border-radius: 7px; border: 1px solid grey; color: black;'>
+                    <i class='fas fa-edit'></i> Edit
+                </a>
+            </td>";
+            $tableData .= "<td>
+                <form action='/$module_name/delete/" . $row->id . "' method='POST' style='display:inline;'>
+                    <button type='submit' class='btn btn-sm' style='background: azure; border-radius: 7px; border: 1px solid grey; color: black;'>
+                        <i class='fas fa-trash'></i> Delete
+                    </button>
+                </form>
+            </td>";
             $tableData .= "</tr>";
         }
-    
+
+
+
         $viewContent = <<<EOD
+        @extends('Backend.layouts.app')
+        <link rel="stylesheet" href="{{ asset('css/Backend/blog.css') }}">
+        @section('content')
     <h1>$module_name List</h1>
-    <table class="table table-bordered">
+      <div class="left" >
+            <a href="{{ asset('/$module_name/create') }}">Add-$module_name</a>
+        </div>
+    <table id="Table" class="table table-bordered">
         <thead>
             <tr>
                 $tableHeaders
+            <th>Edit</th>
+            <th>Delete</th>
             </tr>
         </thead>
         <tbody>
             $tableData
         </tbody>
     </table>
+    @endsection
     EOD;
-    
+
+        $createFormFields = '';
+        foreach ($columns as $column) {
+            if (strtolower($column) === 'id') {
+                continue;
+            }
+
+            $formattedColumn = ucwords($column);
+
+            $createFormFields .= <<<EOD
+        <div class="form-group">
+            <label for="$column">{$formattedColumn}</label>
+            <input type="text" class="form-control" id="$column" name="$column" placeholder="Enter $formattedColumn">
+        </div>
+        EOD;
+        }
+
+
+        $createViewContent = <<<EOD
+    @extends('Backend.layouts.app')
+    <link rel="stylesheet" href="{{ asset('css/Backend/create.css') }}">
+    @section('content')
+    <main id="main" class="main">
+    <h1 class="header">Create $module_name</h1>
+    <form action="/$module_name/store" method="POST">
+    <div class="form1">
+        @csrf
+        $createFormFields
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    @endsection
+    EOD;
+
         // Create view files
         file_put_contents($viewDirectory . '/index.blade.php', $viewContent);
         file_put_contents($viewDirectory . '/edit.blade.php', "<h1>Edit $module_name</h1>");
-        file_put_contents($viewDirectory . '/create.blade.php', "<h1>Create $module_name</h1>");
-    
+        file_put_contents($viewDirectory . '/create.blade.php', $createViewContent);
+
         // Clear the view cache
         Artisan::call('view:clear');
-    
+
         // Register routes dynamically
         $this->registerRoutes($module_name);
-    
+
         // Return a success message
         return redirect('/module')->with('success', 'MVC structure recreated successfully.');
     }
-    
-        private function registerRoutes($module_name)
+
+    private function registerRoutes($module_name)
     {
         // Dynamically add routes to the `web.php` file
         $routesPath = base_path('routes/web.php');
@@ -311,7 +360,11 @@ class Module extends Controller
 // Routes for {$module_name}Controller
 Route::get('/{$module_name}', [\App\Http\Controllers\Backend\\{$module_name}::class, 'index'])->name('{$module_name}');
 Route::get('/{$module_name}/create', [\App\Http\Controllers\Backend\\{$module_name}::class, 'create']);
-Route::get('/{$module_name}/edit', [\App\Http\Controllers\Backend\\{$module_name}::class, 'edit']);
+Route::get('/{$module_name}/edit/{id}', [\App\Http\Controllers\Backend\\{$module_name}::class, 'edit']);
+Route::get('/{$module_name}/delete/{id}', [\App\Http\Controllers\Backend\\{$module_name}::class, 'delete']);
+Route::post('/{$module_name}/store', [\App\Http\Controllers\Backend\\{$module_name}::class, 'store']);
+
+
 
 EOD;
 
@@ -485,9 +538,6 @@ EOD;
             return response()->json(['success' => false, 'error' => $e->getMessage()]);
         }
     }
-
-
-
     public function ShowPermissions(Request $request)
     {
         $validated = $request->validate([
