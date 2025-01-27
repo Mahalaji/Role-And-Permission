@@ -228,7 +228,9 @@ Route::get('/filemanager', [FileManagerController::class, 'index'])->name('filem
 Route::get('/Test', [\App\Http\Controllers\Backend\Test::class, 'index'])->name('Test');
 Route::get('/Test/create', [\App\Http\Controllers\Backend\Test::class, 'create']);
 Route::get('/Test/edit/{id}', [\App\Http\Controllers\Backend\Test::class, 'edit']);
-Route::get('/Test/delete/{id}', [\App\Http\Controllers\Backend\Test::class, 'delete']);
+Route::post('/Test/delete/{id}', [\App\Http\Controllers\Backend\Test::class, 'delete']);
 Route::post('/Test/store', [\App\Http\Controllers\Backend\Test::class, 'store']);
+Route::post('/Test/update', [\App\Http\Controllers\Backend\Test::class, 'update']);
+
 
 

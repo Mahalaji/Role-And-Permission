@@ -159,6 +159,9 @@ class Module extends Controller
 
     public function mvc(Request $request)
     {
+        $inputTypes = $request->input('inputTypes', []);
+
+
         $id = $request->moduleId;
         $tablename = $request->tablename;
         $columns = $request->input('columns', []); // Default to an empty array if no columns are selected
@@ -210,30 +213,90 @@ class Module extends Controller
 
         // Define the methods dynamically
         $columnsString = implode("', '", $columns);
-        $methods = <<<EOD
+      // Define the methods dynamically
+$methods = <<<EOD
     
-        // Index method
-        public function index()
-        {
-            \$columns = ['$columnsString']; // Array of selected columns
-            \$data = DB::table("$tablename")->select(\$columns)->get(); // Fetch data from the specified table
-            return view('Backend.$module_name.index', ['columns' => \$columns, 'data' => \$data]); // Pass as an array
+// Index method
+public function index()
+{
+    \$columns = ['$columnsString']; // Array of selected columns
+    \$data = DB::table("$tablename")->select(\$columns)->get(); // Fetch data from the specified table
+    return view('Backend.$module_name.index', ['columns' => \$columns, 'data' => \$data]); // Pass as an array
+}
+
+// Create method
+public function create()
+{   
+    return view('Backend.$module_name.create');
+}
+
+// Edit method
+public function edit(\$id)
+{
+   \$columns = ['$columnsString']; // Columns to edit
+    \$item = DB::table('$tablename')->where('id', \$id)->first(); // Fetch the item to edit
+    return view('Backend.$module_name.edit', ['item' => \$item, 'columns' => \$columns]);
+}
+
+// Store method
+public function store(Request \$request)
+{
+    // Get the table name and columns from the request
+    \$tablename = \$request->input('tablename');
+    \$columns = \$request->input('columns', []);  // Default to an empty array if no columns are selected
+
+    // Prepare the validation rules dynamically based on the columns
+    \$rules = [];
+    foreach (\$columns as \$column) {
+        // Skip the 'id' column, as it's auto-incremented
+        if (strtolower(\$column) !== 'id') {
+            \$rules[\$column] = 'required';  // You can adjust the rules (e.g., 'string', 'max:255', etc.)
         }
-    
-        // Create method
-        public function create()
-        {
-            return view('Backend.$module_name.create');
+    }
+
+    // Validate the incoming request data based on the rules
+    \$validatedData = \$request->validate(\$rules);
+
+    // Insert the validated data into the table
+    DB::table(\$tablename)->insert(\$validatedData);
+
+    // Redirect to the module's index page with a success message
+    return redirect("/$module_name")->with('success', "$module_name created successfully.");
+}
+
+// Update method
+public function update(Request \$request)
+{
+    \$tablename = \$request->input('tablename');
+    \$columns = \$request->input('columns', []);  // Columns from the form
+    \$id = \$request->input('id'); // Hidden input field with ID
+
+    \$rules = [];
+    foreach (\$columns as \$column) {
+        if (strtolower(\$column) !== 'id') {
+            \$rules[\$column] = 'required'; // Adjust validation rules
         }
-    
-        // Edit method
-        public function edit(\$id)
-        {
-            \$item = DB::table('$tablename')->where('id', \$id)->first(); // Fetch the item to edit
-            return view('Backend.$module_name.edit', ['item' => \$item]);
-        }
-    
-    EOD;
+    }
+
+    \$validatedData = \$request->validate(\$rules);
+    DB::table(\$tablename)->where('id', \$id)->update(\$validatedData);
+
+    return redirect("/$module_name")->with('success', "$module_name updated successfully.");
+}
+
+// Delete method
+public function delete(\$id)
+{
+    \$tablename = request()->input('tablename'); // Get the table name from the request
+
+    // Delete the record with the given ID
+    DB::table(\$tablename)->where('id', \$id)->delete();
+
+    // Redirect to the module's index page with a success message
+    return redirect("/$module_name")->with('success', "$module_name deleted successfully.");
+}
+
+EOD;
 
         // Insert the methods into the controller
         $controllerContent = preg_replace(
@@ -252,7 +315,10 @@ class Module extends Controller
         // Generate the table in the index view
         $tableHeaders = '';
         foreach ($columns as $column) {
-            $tableHeaders .= "<th>" . ucwords($column) . "</th>";
+            // Skip adding 'id' to the visible headers
+            if ($column !== 'id') {
+                $tableHeaders .= "<th>" . ucwords($column) . "</th>";
+            }
         }
 
         // Fetch data from the database for the given table
@@ -262,83 +328,151 @@ class Module extends Controller
         foreach ($data as $row) {
             $tableData .= "<tr>";
             foreach ($columns as $column) {
-                $tableData .= "<td>" . htmlspecialchars($row->$column) . "</td>";
+                // Skip displaying 'id' in the data rows
+                if ($column !== 'id') {
+                    $tableData .= "<td>" . htmlspecialchars($row->$column) . "</td>";
+                }
             }
+            // Include actions using the 'id' column
             $tableData .= "<td>
-                <a href='/$module_name/edit/" . $row->id . "' class='btn btn-primary btn-sm' style='background: azure; border-radius: 7px; border: 1px solid grey; color: black;'>
-                    <i class='fas fa-edit'></i> Edit
-                </a>
-            </td>";
+        <a href='/$module_name/edit/" . $row->id . "' class='btn btn-primary btn-sm' style='background: azure; border-radius: 7px; border: 1px solid grey; color: black;'>
+            <i class='fas fa-edit'></i> Edit
+        </a>
+    </td>";
             $tableData .= "<td>
-                <form action='/$module_name/delete/" . $row->id . "' method='POST' style='display:inline;'>
-                    <button type='submit' class='btn btn-sm' style='background: azure; border-radius: 7px; border: 1px solid grey; color: black;'>
-                        <i class='fas fa-trash'></i> Delete
-                    </button>
-                </form>
-            </td>";
+        <form action='/$module_name/delete/" . $row->id . "' method='POST' style='display:inline;'>
+            <button type='submit' class='btn btn-sm' style='background: azure; border-radius: 7px; border: 1px solid grey; color: black;'>
+                <i class='fas fa-trash'></i> Delete
+            </button>
+        </form>
+    </td>";
             $tableData .= "</tr>";
         }
 
-
-
         $viewContent = <<<EOD
-        @extends('Backend.layouts.app')
-        <link rel="stylesheet" href="{{ asset('css/Backend/blog.css') }}">
-        @section('content')
-    <h1>$module_name List</h1>
-      <div class="left" >
-            <a href="{{ asset('/$module_name/create') }}">Add-$module_name</a>
-        </div>
-    <table id="Table" class="table table-bordered">
-        <thead>
-            <tr>
-                $tableHeaders
+@extends('Backend.layouts.app')
+<link rel="stylesheet" href="{{ asset('css/Backend/blog.css') }}">
+@section('content')
+<h1>$module_name List</h1>
+<div class="left">
+    <a href="{{ asset('/$module_name/create') }}">Add-$module_name</a>
+</div>
+<table id="Table" class="table table-bordered">
+    <thead>
+        <tr>
+            $tableHeaders
             <th>Edit</th>
             <th>Delete</th>
-            </tr>
-        </thead>
-        <tbody>
-            $tableData
-        </tbody>
-    </table>
-    @endsection
-    EOD;
+        </tr>
+    </thead>
+    <tbody>
+        $tableData
+    </tbody>
+</table>
+@endsection
+EOD;
 
-        $createFormFields = '';
-        foreach ($columns as $column) {
-            if (strtolower($column) === 'id') {
-                continue;
-            }
 
-            $formattedColumn = ucwords($column);
+$createFormFields = '';
+foreach ($inputTypes as $column => $inputType) {
+    if (strtolower($column) === 'id') {
+        continue; // Skip 'id' field
+    }
 
-            $createFormFields .= <<<EOD
+    $formattedColumn = ucwords(str_replace('_', ' ', $column)); // Format column name for display
+
+    // Check input type and generate the appropriate field
+    if ($inputType === 'textarea') {
+        $createFormFields .= <<<EOD
         <div class="form-group">
-            <label for="$column">{$formattedColumn}</label>
-            <input type="text" class="form-control" id="$column" name="$column" placeholder="Enter $formattedColumn">
+            <label for="$column">$formattedColumn</label>
+            <textarea class="form-control" id="$column" name="$column" placeholder="Enter $formattedColumn" style="width: 100%; height: 150px;"></textarea>
         </div>
         EOD;
-        }
+    } else {
+        $createFormFields .= <<<EOD
+        <div class="form-group">
+            <label for="$column">$formattedColumn</label>
+            <input type="$inputType" class="form-control" id="$column" name="$column" placeholder="Enter $formattedColumn">
+        </div>
+        EOD;
+    }
+}
 
-
-        $createViewContent = <<<EOD
-    @extends('Backend.layouts.app')
-    <link rel="stylesheet" href="{{ asset('css/Backend/create.css') }}">
-    @section('content')
-    <main id="main" class="main">
-    <h1 class="header">Create $module_name</h1>
-    <form action="/$module_name/store" method="POST">
+// Generate the complete create view content
+$createViewContent = <<<EOD
+@extends('Backend.layouts.app')
+<link rel="stylesheet" href="{{ asset('css/Backend/create.css') }}">
+@section('content')
+<main id="main" class="main">
+<h1 class="header">Create $module_name</h1>
+<form action="/$module_name/store" method="POST">
     <div class="form1">
         @csrf
         $createFormFields
         <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-    @endsection
-    EOD;
+    </div>
+</form>
+</main>
+@endsection
+EOD;
+
+//edit
+$createFormeditFields = '';
+foreach ($inputTypes as $column => $inputType) {
+    $formattedColumn = ucwords(str_replace('_', ' ', $column)); // Format column name for display
+
+    if (strtolower($column) === 'id') {
+        $createFormeditFields .= <<<EOD
+        <input type="hidden" class="form-control" id="$column" name="$column" value="{{ \$item->$column }}">
+        EOD;
+        continue; 
+    }
+
+  
+    if ($inputType === 'textarea') {
+        $createFormeditFields .= <<<EOD
+        <div class="form-group">
+            <label for="$column">$formattedColumn</label>
+            <textarea class="form-control" id="$column" name="$column" placeholder="Enter $formattedColumn" style="width: 100%; height: 150px;">{{ \$item->$column }}</textarea>
+        </div>
+        EOD;
+    } else {
+        $createFormeditFields .= <<<EOD
+        <div class="form-group">
+            <label for="$column">$formattedColumn</label>
+            <input type="$inputType" class="form-control" id="$column" name="$column" value="{{ \$item->$column }}" placeholder="Enter $formattedColumn">
+        </div>
+        EOD;
+    }
+}
+
+
+$createeditContent = <<<EOD
+@extends('Backend.layouts.app')
+<link rel="stylesheet" href="{{ asset('css/Backend/create.css') }}">
+@section('content')
+<main id="main" class="main">
+<h1 class="header">Update $module_name</h1>
+<form action="/$module_name/update" method="POST">
+    <div class="form1">
+        @csrf
+        <!-- Hidden Inputs -->
+        <input type="hidden" name="tablename" value="$tablename">
+        <input type="hidden" name="columns[]" value="{{ implode(',', \$columns) }}">
+
+        <!-- Editable Form Fields -->
+        $createFormeditFields
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
+</main>
+@endsection
+EOD;
 
         // Create view files
         file_put_contents($viewDirectory . '/index.blade.php', $viewContent);
-        file_put_contents($viewDirectory . '/edit.blade.php', "<h1>Edit $module_name</h1>");
+        file_put_contents($viewDirectory . '/edit.blade.php', $createeditContent);
         file_put_contents($viewDirectory . '/create.blade.php', $createViewContent);
 
         // Clear the view cache
@@ -363,6 +497,9 @@ Route::get('/{$module_name}/create', [\App\Http\Controllers\Backend\\{$module_na
 Route::get('/{$module_name}/edit/{id}', [\App\Http\Controllers\Backend\\{$module_name}::class, 'edit']);
 Route::get('/{$module_name}/delete/{id}', [\App\Http\Controllers\Backend\\{$module_name}::class, 'delete']);
 Route::post('/{$module_name}/store', [\App\Http\Controllers\Backend\\{$module_name}::class, 'store']);
+Route::post('/{$module_name}/update', [\App\Http\Controllers\Backend\\{$module_name}::class, 'update']);
+
+
 
 
 

@@ -12,7 +12,9 @@
         --text: white;
         --texth2: white;
     }
-
+  .form-label{
+    color: black;
+  }
     .module-selection {
         background: var(--back);
         padding: 2rem;
@@ -106,7 +108,7 @@
     }
 
     .custom-checkbox input[type="checkbox"] {
-        width: 18px;
+        width: 30px;
         height: 18px;
         margin-right: 10px;
         cursor: pointer;
@@ -119,7 +121,7 @@
         font-size: 0.95rem;
         cursor: pointer;
         user-select: none;
-        margin: 0;
+        margin-left: 10px;
         /* Prevent label from wrapping awkwardly */
         flex: 1;
         white-space: nowrap;
@@ -182,28 +184,73 @@
 
         <form action="/createmvc" method="POST">
             @csrf
+
+            <!-- Column Selection Section -->
             <div class="columns-grid">
                 @foreach ($columns as $column)
-                <div class="column-item">
-                    <div class="custom-checkbox">
+                    @if (in_array($column, ['id']))
                         <input 
                             type="checkbox" 
                             class="form-check-input" 
                             id="column_{{ $loop->index }}" 
                             name="columns[]" 
-                            value="{{ $column }}"
+                            value="{{ $column }}" 
+                            checked 
+                            hidden
                         >
-                        <label class="form-check-label" for="column_{{ $loop->index }}">
-                            {{ $column }}
-                        </label>
-                    </div>
-                </div>
+                    @else
+                        <div class="column-item">
+                            <div class="custom-checkbox">
+                                <input 
+                                    type="checkbox" 
+                                    class="form-check-input" 
+                                    id="column_{{ $loop->index }}" 
+                                    name="columns[]" 
+                                    value="{{ $column }}"
+                                >
+                                <label class="form-check-label" for="column_{{ $loop->index }}">
+                                    {{ $column }}
+                                </label>
+                            </div>
+                        </div>
+                    @endif
                 @endforeach
             </div>
-            
-            <input type="hidden" name="moduleId" value="{{old('moduleId',$moduleId)}}" readonly>
-            <input type="hidden" name="tablename" value="{{old('tablename',$tablename)}}" readonly>
 
+            <!-- Select Input Type Section -->
+            <div class="module-header">
+                <h2>Select Input Type</h2>
+                <p class="text-muted">Assign input types to the columns</p>
+            </div>
+
+            <div class="columns-grid">
+                @foreach ($columns as $column)
+                    <div class="column-item">
+                        <label for="inputType_{{ $loop->index }}" class="form-label">
+                            {{ $column }}
+                        </label>
+                        <select 
+                            name="inputTypes[{{ $column }}]" 
+                            id="inputType_{{ $loop->index }}" 
+                            class="custom-select"
+                            style="margin-left: 10px; flex: 1;"
+                        >
+                            <option value="text" selected>Text</option>
+                            <option value="number">Number</option>
+                            <option value="email">Email</option>
+                            <option value="password">Password</option>
+                            <option value="textarea">Textarea</option>
+                            <option value="date">Date</option>
+                        </select>
+                    </div>
+                @endforeach
+            </div>
+
+            <!-- Hidden Inputs -->
+            <input type="hidden" name="moduleId" value="{{ old('moduleId', $moduleId) }}" readonly>
+            <input type="hidden" name="tablename" value="{{ old('tablename', $tablename) }}" readonly>
+
+            <!-- Submit Button -->
             <button type="submit" class="submit-btn">
                 Submit Selection
             </button>

@@ -1,60 +1,28 @@
-    @extends('Backend.layouts.app')
-    <link rel="stylesheet" href="{{ asset('css/Backend/blog.css') }}">
+@extends('Backend.layouts.app')
     @section('content')
-<h1>Test List</h1>
-  <div class="left" >
-        <a href="{{ asset('/Test/create') }}">Add-Test</a>
-    </div>
-<table id="Table" class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Id</th><th>Title</th><th>Created_at</th><th>Updated_at</th>
-        <th>Edit</th>
-        <th>Delete</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr><td>1</td><td>Health</td><td>2025-01-20 09:40:57</td><td>2025-01-20 09:40:57</td><td>
-                <a href='/Test/edit/1' class='btn btn-primary btn-sm' style='background: azure; border-radius: 7px; border: 1px solid grey; color: black;'>
-                    <i class='fas fa-edit'></i> Edit
-                </a>
-            </td><td>
-                <form action='/Test/delete/1' method='POST' style='display:inline;'>
-                    <button type='submit' class='btn btn-sm' style='background: azure; border-radius: 7px; border: 1px solid grey; color: black;'>
-                        <i class='fas fa-trash'></i> Delete
-                    </button>
-                </form>
-            </td></tr><tr><td>2</td><td>Education</td><td>2025-01-20 09:41:15</td><td>2025-01-20 09:41:15</td><td>
-                <a href='/Test/edit/2' class='btn btn-primary btn-sm' style='background: azure; border-radius: 7px; border: 1px solid grey; color: black;'>
-                    <i class='fas fa-edit'></i> Edit
-                </a>
-            </td><td>
-                <form action='/Test/delete/2' method='POST' style='display:inline;'>
-                    <button type='submit' class='btn btn-sm' style='background: azure; border-radius: 7px; border: 1px solid grey; color: black;'>
-                        <i class='fas fa-trash'></i> Delete
-                    </button>
-                </form>
-            </td></tr><tr><td>3</td><td>Photograph</td><td>2025-01-20 09:41:24</td><td>2025-01-20 09:41:52</td><td>
-                <a href='/Test/edit/3' class='btn btn-primary btn-sm' style='background: azure; border-radius: 7px; border: 1px solid grey; color: black;'>
-                    <i class='fas fa-edit'></i> Edit
-                </a>
-            </td><td>
-                <form action='/Test/delete/3' method='POST' style='display:inline;'>
-                    <button type='submit' class='btn btn-sm' style='background: azure; border-radius: 7px; border: 1px solid grey; color: black;'>
-                        <i class='fas fa-trash'></i> Delete
-                    </button>
-                </form>
-            </td></tr><tr><td>4</td><td>Travel</td><td>2025-01-20 09:42:05</td><td>2025-01-20 09:42:05</td><td>
-                <a href='/Test/edit/4' class='btn btn-primary btn-sm' style='background: azure; border-radius: 7px; border: 1px solid grey; color: black;'>
-                    <i class='fas fa-edit'></i> Edit
-                </a>
-            </td><td>
-                <form action='/Test/delete/4' method='POST' style='display:inline;'>
-                    <button type='submit' class='btn btn-sm' style='background: azure; border-radius: 7px; border: 1px solid grey; color: black;'>
-                        <i class='fas fa-trash'></i> Delete
-                    </button>
-                </form>
-            </td></tr>
-    </tbody>
-</table>
-@endsection
+    <h1>Pages List</h1>
+    <a href="{{ route('pages.create') }}" class="btn btn-success">Add New</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>{{ ucfirst('id') }}</th><th>{{ ucfirst('title') }}</th><th>{{ ucfirst('description') }}</th><th>{{ ucfirst('created_at') }}</th><th>{{ ucfirst('updated_at') }}</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($data as $row)
+            <tr>
+                <td>{{ $row->id }}</td><td>{{ $row->title }}</td><td>{{ $row->description }}</td><td>{{ $row->created_at }}</td><td>{{ $row->updated_at }}</td>
+                <td>
+                    <a href="{{ route('pages.edit', $row->id) }}" class="btn btn-primary">Edit</a>
+                    <form action="{{ route('pages.destroy', $row->id) }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+    @endsection

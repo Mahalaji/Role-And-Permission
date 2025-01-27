@@ -1,35 +1,46 @@
 <?php
-
-namespace App\Http\Controllers\Backend;
-use Illuminate\Support\Facades\DB;
-
-
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-
-class Test extends Controller
-{
-
-    // Index method
-    public function index()
+    
+    namespace App\Http\Controllers\Backend;
+    
+    use App\Http\Controllers\Controller;
+    use App\Models\Tests;
+    use Illuminate\Http\Request;
+    
+    class Test extends Controller
     {
-        $columns = ['id', 'title', 'created_at', 'updated_at']; // Array of selected columns
-        $data = DB::table("blog_category")->select($columns)->get(); // Fetch data from the specified table
-        return view('Backend.Test.index', ['columns' => $columns, 'data' => $data]); // Pass as an array
+        public function index()
+        {
+            $data = Tests::all();
+            return view('Backend.pages.index', compact('data'));
+        }
+    
+        public function create()
+        {
+            return view('Backend.pages.create');
+        }
+    
+        public function store(Request $request)
+        {
+            Tests::create($request->all());
+            return redirect()->route('pages.index')->with('success', 'Test created successfully.');
+        }
+    
+        public function edit($id)
+        {
+            $item = Tests::findOrFail($id);
+            return view('Backend.pages.edit', compact('item'));
+        }
+    
+        public function update(Request $request, $id)
+        {
+            $item = Tests::findOrFail($id);
+            $item->update($request->all());
+            return redirect()->route('pages.index')->with('success', 'Test updated successfully.');
+        }
+    
+        public function destroy($id)
+        {
+            Tests::destroy($id);
+            return redirect()->route('pages.index')->with('success', 'Test deleted successfully.');
+        }
     }
-
-    // Create method
-    public function create()
-    {
-        return view('Backend.Test.create');
-    }
-
-    // Edit method
-    public function edit($id)
-    {
-        $item = DB::table('blog_category')->where('id', $id)->first(); // Fetch the item to edit
-        return view('Backend.Test.edit', ['item' => $item]);
-    }
-
-    //
-}
