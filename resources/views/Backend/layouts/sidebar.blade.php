@@ -331,6 +331,8 @@
                     $('.form1').css('margin-left','16%');
                     $('.header').css('margin-left','10%');
                     $('#navbar').css('padding-left','76%');
+                    $('#table').attr('style', 'width: 120% !important');
+
                 } else if (width == '65px') {
                     $('.menu').css('padding-left', '0rem');
                     $('.menu-toggle').css('padding', '15px 25px');
@@ -350,6 +352,8 @@
                     $('.form1').css('margin-left','3%');
                     $('.header').css('margin-left','0%');
                     $('#navbar').css('padding-left','73%');
+                    $('#table').attr('style', 'width: 100% !important');
+
                 }
 
             });

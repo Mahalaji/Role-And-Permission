@@ -241,6 +241,10 @@
                             <option value="password">Password</option>
                             <option value="textarea">Textarea</option>
                             <option value="date">Date</option>
+                            <option value="file">File</option>
+                            <option value="radio">Radio</option>
+                            <option value="checkbox">Checkbox</option>
+
                         </select>
                     </div>
                 @endforeach

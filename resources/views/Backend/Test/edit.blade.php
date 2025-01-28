@@ -1,17 +1,41 @@
 @extends('Backend.layouts.app')
-    @section('content')
-    <h1>Edit Pages</h1>
-    <form action="{{ route('pages.update', $item->id) }}" method="POST">
-        @csrf
-        @method('PUT')
-        <div class="form-group">
-            <label for="id">Id</label>
-                <input type="text" name="id" class="form-control" value="{{ $item->id }}" required><label for="title">Title</label>
-                <input type="text" name="title" class="form-control" value="{{ $item->title }}" required><label for="description">Description</label>
-                <input type="text" name="description" class="form-control" value="{{ $item->description }}" required><label for="created_at">Created_at</label>
-                <input type="text" name="created_at" class="form-control" value="{{ $item->created_at }}" required><label for="updated_at">Updated_at</label>
-                <input type="text" name="updated_at" class="form-control" value="{{ $item->updated_at }}" required>
-        </div>
-        <button type="submit" class="btn btn-success">Update</button>
-    </form>
-    @endsection
+<link rel="stylesheet" href="{{ asset('css/Backend/create.css') }}">
+@section('content')
+<main id="main" class="main">
+<h1 class="header">Edit Test</h1>
+<form class="simple" method="post" action="/Test/update" enctype="multipart/form-data">
+<div class="form1">
+    @csrf
+    @method('POST')
+
+    <input type="hidden" name="tablename" value="test">
+
+     <input type='hidden' name='id' value='{{ $item->id }}' /> 
+                  <div class='input-group'>
+                      <label>Name</label><br>
+                      <input type='text' name='name' value='{{ $item->name }}' />
+                  </div> 
+                  <div class='input-group'>
+                      <label>Title</label><br>
+                      <input type='text' name='title' value='{{ $item->title }}' />
+                  </div>
+                  <div class='mb-3'>
+                      <label class='form-label fw-bold'>Image</label><br>
+                      <div class='d-flex flex-column align-items-center'>
+                          <img src='{{ asset($item->image) }}' alt='Uploaded Image' class='img-thumbnail mb-2' height='100' width='100'>
+                          <div class='input-group'>
+                              <input type='text' id='image_label' class='form-control' name='image'
+                                  placeholder='Select an image...' aria-label='Image'>
+                              <button class='btn btn-outline-secondary' type='button' id='button-image'>Select</button>
+                          </div>
+                      </div>
+                  </div> 
+                  <div class='input-group'>
+                      <label>Updated_at</label><br>
+                      <input type='date' name='updated_at' value='{{ $item->updated_at }}' />
+                  </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+</div>
+</form>
+</main>
+@endsection

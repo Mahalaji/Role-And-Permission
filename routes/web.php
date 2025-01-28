@@ -220,17 +220,28 @@ Route::post('/destoryState/{id}', [\App\Http\Controllers\Backend\Statelist::clas
 Route::get('/filemanager', [FileManagerController::class, 'index'])->name('filemanager');
 
 });
-
-
-
-
-// Routes for TestController
-Route::get('/Test', [\App\Http\Controllers\Backend\Test::class, 'index'])->name('Test');
-Route::get('/Test/create', [\App\Http\Controllers\Backend\Test::class, 'create']);
-Route::get('/Test/edit/{id}', [\App\Http\Controllers\Backend\Test::class, 'edit']);
-Route::post('/Test/delete/{id}', [\App\Http\Controllers\Backend\Test::class, 'delete']);
-Route::post('/Test/store', [\App\Http\Controllers\Backend\Test::class, 'store']);
-Route::post('/Test/update', [\App\Http\Controllers\Backend\Test::class, 'update']);
-
-
-
+// Test Routes
+Route::get('/Test', [\App\Http\Controllers\Backend\TestController::class, 'index'])->name('Test');
+Route::get('/Test/create', [\App\Http\Controllers\Backend\TestController::class, 'create']);
+Route::post('/Test/store', [\App\Http\Controllers\Backend\TestController::class, 'store']);
+Route::get('/Test/edit/{id}', [\App\Http\Controllers\Backend\TestController::class, 'edit']);
+Route::post('/Test/update', [\App\Http\Controllers\Backend\TestController::class, 'update']);
+Route::post('/Test/delete/{id}', [\App\Http\Controllers\Backend\TestController::class, 'delete']);// Test Routes
+Route::get('/Test', [\App\Http\Controllers\Backend\TestController::class, 'index'])->name('Test');
+Route::get('/Test/create', [\App\Http\Controllers\Backend\TestController::class, 'create']);
+Route::post('/Test/store', [\App\Http\Controllers\Backend\TestController::class, 'store']);
+Route::get('/Test/edit/{id}', [\App\Http\Controllers\Backend\TestController::class, 'edit']);
+Route::post('/Test/update', [\App\Http\Controllers\Backend\TestController::class, 'update']);
+Route::post('/Test/delete/{id}', [\App\Http\Controllers\Backend\TestController::class, 'delete']);// Test Routes
+Route::get('/Test', [\App\Http\Controllers\Backend\TestController::class, 'index'])->name('Test');
+Route::get('/Test/create', [\App\Http\Controllers\Backend\TestController::class, 'create']);
+Route::post('/Test/store', [\App\Http\Controllers\Backend\TestController::class, 'store']);
+Route::get('/Test/edit/{id}', [\App\Http\Controllers\Backend\TestController::class, 'edit']);
+Route::post('/Test/update', [\App\Http\Controllers\Backend\TestController::class, 'update']);
+Route::post('/Test/delete/{id}', [\App\Http\Controllers\Backend\TestController::class, 'delete']);// Test Routes
+Route::get('/Test', [\App\Http\Controllers\Backend\TestController::class, 'index'])->name('Test');
+Route::get('/Test/create', [\App\Http\Controllers\Backend\TestController::class, 'create']);
+Route::post('/Test/store', [\App\Http\Controllers\Backend\TestController::class, 'store']);
+Route::get('/Test/edit/{id}', [\App\Http\Controllers\Backend\TestController::class, 'edit']);
+Route::post('/Test/update', [\App\Http\Controllers\Backend\TestController::class, 'update']);
+Route::post('/Test/delete/{id}', [\App\Http\Controllers\Backend\TestController::class, 'delete']);
