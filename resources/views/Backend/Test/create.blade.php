@@ -1,16 +1,25 @@
-    @extends('Backend.layouts.app')
-    <link rel="stylesheet" href="{{ asset('css/Backend/create.css') }}">
-    @section('content')
-    <main id="main" class="main">
+@extends('Backend.layouts.app')
+<link rel="stylesheet" href="{{ asset('css/Backend/create.css') }}">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+@section('content')
+<main id="main" class="main">
     <h1 class="header">Create Test</h1>
     <form class="simple" method="post" action="/Test/store" enctype="multipart/form-data">
-    <div class="form1">
-        @csrf
-         
-                    <div class='input-group'>
-                        <label>Name</label><br>
-                        <input type='text' name='name' />
-                    </div> 
+        <div class="form1">
+            @csrf
+            
+                <div class='input-group'>
+                    <label>Name</label><br>
+                    <select class='form-control select2' name='name' id='name'>
+                        <option value=''>Select Name</option>
+                        @foreach(DB::table('blogs')->select('title')->get() as $item)
+                            <option value='{{ $item->title }}'>
+                                {{ $item->title }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div> 
                     <div class='input-group'>
                         <label>Title</label><br>
                         <input type='text' name='title' />
@@ -20,7 +29,7 @@
                         <div class='d-flex flex-column align-items-center'>
                             <div class='input-group'>
                                 <input type='text' id='image_label' class='form-control' name='image'
-                                    placeholder='Select an image...' aria-label='Image'>
+                                       placeholder='Select an image...' aria-label='Image'>
                                 <button class='btn btn-outline-secondary' type='button' id='button-image'>Select</button>
                             </div>
                         </div>
@@ -29,8 +38,20 @@
                         <label>Updated_at</label><br>
                         <input type='date' name='updated_at' />
                     </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
         </div>
     </form>
-    </main>
-    @endsection
+</main>
+@endsection
+
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.select2').select2({
+            width: '100%',
+            placeholder: 'Select an option'
+        });
+    });
+</script>
+@endsection

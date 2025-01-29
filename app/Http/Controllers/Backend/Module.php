@@ -31,10 +31,24 @@ class Module extends Controller
     }
     public function mvctable(Request $request)
     {
+        $tables = DB::select('SHOW TABLES');
+        $tableNames = [];
+        foreach ($tables as $table) {
+            foreach ($table as $tableName) {
+                $tableNames[] = $tableName;
+            }
+        }
         $moduleId = $request->input('moduleId');
         $tablename = $request->tableName;
         $columns = Schema::getColumnListing($tablename);
-        return view('Backend.module.mvctable', compact('columns', 'moduleId', 'tablename'));
+        return view('Backend.module.mvctable', compact('columns', 'moduleId', 'tablename','tableNames'));
+    }
+    public function getColumns($table)
+    {
+        // Get the column list from the table
+        $columns = Schema::getColumnListing($table);
+    
+        return response()->json(['columns' => $columns]);
     }
     public function getModuleAjax(Request $request)
     {
@@ -158,10 +172,12 @@ class Module extends Controller
     }
     public function mvc(Request $request)
     {
+        $selectedData = json_decode($request->input('selected_data'), true);
         $inputTypes = $request->input('inputTypes', []);
         $id = $request->moduleId;
         $tablename = $request->tablename;
         $columns = $request->input('columns', []);
+        // dd($selectedData);
 
         // Validate the module
         $module = modules::find($id);
@@ -188,7 +204,7 @@ class Module extends Controller
         $this->updateController($controllerPath, $tablename, $columns, $module_name);
 
         // Generate Views
-        $this->generateViews($viewDirectory, $module_name, $tablename, $columns, $inputTypes);
+        $this->generateViews($viewDirectory, $module_name, $tablename, $columns, $inputTypes,$selectedData);
 
         // Clear View Cache
         Artisan::call('view:clear');
@@ -231,8 +247,8 @@ class Module extends Controller
     public function edit(\$id)
     {
         \$columns = ['$columnsString'];
-        \$item = DB::table('$tablename')->where('id', \$id)->first();
-        return view('Backend.$module_name.edit', compact('item', 'columns'));
+        \$text = DB::table('$tablename')->where('id', \$id)->first();
+        return view('Backend.$module_name.edit', compact('text', 'columns'));
     }
     
     // Store method
@@ -328,7 +344,7 @@ EOD;
         // Write the updated content back to the controller file
         file_put_contents($controllerPath, $controllerContent);
     }
-    protected function generateViews($viewDirectory, $module_name, $tablename, $columns, $inputTypes)
+    protected function generateViews($viewDirectory, $module_name, $tablename, $columns, $inputTypes, $selectedData)
     {
         File::makeDirectory($viewDirectory, 0755, true);
     
@@ -390,28 +406,69 @@ EOD;
     @endsection
     EOD;
     
+        // Helper function to generate select2 field
+        function generateSelect2Field($col, $config) {
+            $coll = ucwords($col);
+            if ($config['method'] === 'table') {
+                return "
+                <div class='input-group'>
+                    <label>$coll</label><br>
+                    <select class='form-control select2' name='$col' id='$col'>
+                        <option value=''>Select $coll</option>
+                        @foreach(DB::table('{$config['table']}')->select('{$config['column']}')->get() as \$item)
+                            <option value='{{ \$item->{$config['column']} }}'>
+                                {{ \$item->{$config['column']} }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>";
+            } else {
+                $options = array_combine(
+                    explode(',', $config['key']), 
+                    explode(',', $config['value'])
+                );
+                $optionsHtml = '';
+                foreach ($options as $key => $value) {
+                    $optionsHtml .= "<option value='$key'>$value</option>";
+                }
+                return "
+                <div class='input-group'>
+                    <label>$coll</label><br>
+                    <select class='form-control select2' name='$col' id='$col'>
+                        <option value=''>Select $coll</option>
+                        $optionsHtml
+                    </select>
+                </div>";
+            }
+        }
+    
         // Create View
         $formFields = '';
         foreach ($inputTypes as $col => $type) {
-            // Skip adding 'id' field to the form
             if ($col != 'id') {
-                $coll = ucwords($col);
-        
-                if ($type == 'file') {
+                if ($type === 'select2') {
+                    // Find configuration for this select2 field
+                    $config = collect($selectedData)->firstWhere('columnName', $col);
+                    if ($config) {
+                        $formFields .= generateSelect2Field($col, $config);
+                    }
+                } elseif ($type === 'file') {
                     // Special handling for file input
+                    $coll = ucwords($col);
                     $formFields .= "
                     <div class='mb-3'>
                         <label class='form-label fw-bold'>$coll</label><br>
                         <div class='d-flex flex-column align-items-center'>
                             <div class='input-group'>
                                 <input type='text' id='image_label' class='form-control' name='image'
-                                    placeholder='Select an image...' aria-label='Image'>
+                                       placeholder='Select an image...' aria-label='Image'>
                                 <button class='btn btn-outline-secondary' type='button' id='button-image'>Select</button>
                             </div>
                         </div>
                     </div>";
                 } else {
-                    // Default handling for other input types
+                    // Existing input field generation code for other types (text, number, etc.)
+                    $coll = ucwords($col);
                     $formFields .= " 
                     <div class='input-group'>
                         <label>$coll</label><br>
@@ -422,41 +479,59 @@ EOD;
         }
         
     
+        // Add select2 initialization script
         $createContent = <<<EOD
         @extends('Backend.layouts.app')
         <link rel="stylesheet" href="{{ asset('css/Backend/create.css') }}">
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        
         @section('content')
         <main id="main" class="main">
-        <h1 class="header">Create $module_name</h1>
-        <form class="simple" method="post" action="/$module_name/store" enctype="multipart/form-data">
-        <div class="form1">
-            @csrf
-            $formFields
-            <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
-        </form>
+            <h1 class="header">Create $module_name</h1>
+            <form class="simple" method="post" action="/$module_name/store" enctype="multipart/form-data">
+                <div class="form1">
+                    @csrf
+                    $formFields
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
         </main>
         @endsection
-    EOD;
     
-      // Edit View
-      $editFields = '';
-      foreach ($inputTypes as $col => $type) {
-          // Check if the column is 'id'
-          if ($col == 'id') {
-              // Create hidden input field for 'id'
-              $editFields .= " <input type='hidden' name='$col' value='{{ \$item->$col }}' />";
-          } else {
-              // For other columns, create regular input fields
-              $coll = ucwords($col);
-      
-              if ($type == 'file') {
-                  // Special handling for file input (image upload)
-                  $editFields .= "
-                  <div class='mb-3'>
+        @section('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('.select2').select2({
+                    width: '100%',
+                    placeholder: 'Select an option'
+                });
+            });
+        </script>
+        @endsection
+        EOD;
+    
+        // Edit View - Similar modifications for edit view
+        $editFields = '';
+        foreach ($inputTypes as $col => $type) {
+            if ($col === 'id') {
+                // For 'id', we keep it as a hidden input with the current value
+                $editFields .= "<input type='hidden' name='$col' value='{{ \$text->$col }}' />";
+            } else {
+                if ($type === 'select2') {
+                    // Handle select2 fields
+                    $config = collect($selectedData)->firstWhere('columnName', $col);
+                    if ($config) {
+                        $editFields .= generateSelect2Field($col, $config, "{{ \$item->$col }}");
+                    }
+                } elseif ($type === 'file') {
+                    // Special handling for file input type
+                    $coll = ucwords($col);
+                    $editFields .= "
+                    <div class='mb-3'>
                       <label class='form-label fw-bold'>$coll</label><br>
                       <div class='d-flex flex-column align-items-center'>
-                          <img src='{{ asset(\$item->$col) }}' alt='Uploaded Image' class='img-thumbnail mb-2' height='100' width='100'>
+                          <img src='{{ asset(\$text->$col) }}' alt='Uploaded Image' class='img-thumbnail mb-2' height='100' width='100'>
                           <div class='input-group'>
                               <input type='text' id='image_label' class='form-control' name='image'
                                   placeholder='Select an image...' aria-label='Image'>
@@ -464,39 +539,51 @@ EOD;
                           </div>
                       </div>
                   </div>";
-              } else {
-                  // Default handling for other input types
-                  $editFields .= " 
-                  <div class='input-group'>
-                      <label>$coll</label><br>
-                      <input type='$type' name='$col' value='{{ \$item->$col }}' />
-                  </div>";
-              }
-          }
-      }
-      
-
-$editContent = <<<EOD
-@extends('Backend.layouts.app')
-<link rel="stylesheet" href="{{ asset('css/Backend/create.css') }}">
-@section('content')
-<main id="main" class="main">
-<h1 class="header">Edit $module_name</h1>
-<form class="simple" method="post" action="/$module_name/update" enctype="multipart/form-data">
-<div class="form1">
-    @csrf
-    @method('POST')
-
-    <input type="hidden" name="tablename" value="$tablename">
-
-    $editFields
-    <button type="submit" class="btn btn-primary">Update</button>
-</div>
-</form>
-</main>
-@endsection
-EOD;
-
+                } else {
+                    // Handle other input types (text, number, etc.)
+                    $coll = ucwords($col);
+                    $editFields .= " 
+                    <div class='input-group'>
+                        <label>$coll</label><br>
+                        <input type='$type' name='$col' value='{{ \$text->$col }}' />
+                    </div>";
+                }
+            }
+        }
+        
+    
+        $editContent = <<<EOD
+        @extends('Backend.layouts.app')
+        <link rel="stylesheet" href="{{ asset('css/Backend/create.css') }}">
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        
+        @section('content')
+        <main id="main" class="main">
+            <h1 class="header">Edit $module_name</h1>
+            <form class="simple" method="post" action="/$module_name/update" enctype="multipart/form-data">
+                <div class="form1">
+                    @csrf
+                    @method('POST')
+                    <input type="hidden" name="tablename" value="$tablename">
+                    $editFields
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+            </form>
+        </main>
+        @endsection
+    
+        @section('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('.select2').select2({
+                    width: '100%',
+                    placeholder: 'Select an option'
+                });
+            });
+        </script>
+        @endsection
+        EOD;
     
         // Save views
         file_put_contents("$viewDirectory/index.blade.php", $indexContent);
@@ -646,20 +733,6 @@ EOD;
             }
         }
     }
-    // public function destorymodule($id)
-    // {
-    //     $modules = modules::find($id);
-
-    //     if (!$modules) {
-    //         return redirect()->back()->withErrors(['error' => 'Module not found']);
-    //     }
-
-    //     $modules->deletestatus = 0;
-    //     $modules->save();
-
-    //     return redirect('/module')->with('success', 'module deleted successfully');
-    // }
-
     public function savePermissions(Request $request)
     {
         try {
@@ -777,17 +850,4 @@ EOD;
         }
     }
 
-    // public function restoremodule($id)
-    // {
-    //     $modules = modules::find($id);
-
-    //     if (!$modules) {
-    //         return redirect()->back()->withErrors(['error' => 'Module not found']);
-    //     }
-
-    //     $modules->deletestatus = 1;
-    //     $modules->save();
-
-    //     return redirect('/module')->with('success', 'module deleted successfully');
-    // }
 }

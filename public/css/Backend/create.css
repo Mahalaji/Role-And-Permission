@@ -45,7 +45,9 @@ body {
 .header{
   padding-left: 40%;
 }
-
+.select2-dropdown{
+  color: black !important;
+}
 .form1 {
   background: var(--table);
   padding: 28px;

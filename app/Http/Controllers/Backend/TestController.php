@@ -26,8 +26,8 @@ class TestController extends Controller
     public function edit($id)
     {
         $columns = ['id', 'name', 'title', 'updated_at'];
-        $item = DB::table('test')->where('id', $id)->first();
-        return view('Backend.Test.edit', compact('item', 'columns'));
+        $text = DB::table('test')->where('id', $id)->first();
+        return view('Backend.Test.edit', compact('text', 'columns'));
     }
     
     // Store method

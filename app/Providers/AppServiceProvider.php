@@ -3,6 +3,7 @@
 namespace App\Providers;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use Spatie\Permission\PermissionRegistrar;
 use Illuminate\Support\Facades\View;
 use App\Models\modules;
 use App\Models\Menus;
@@ -23,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
         $menuData = Menus::where('id', 4)->first();
         $module = modules::get();
         if ($menuData) {

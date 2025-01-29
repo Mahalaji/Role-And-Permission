@@ -50,56 +50,56 @@ Route::group(['middleware' => ['auth']], function() {
 
 
 //blog
-Route::get('/blog',[Blogs::class, 'blogshow'])->name('blog')->middleware('role:Admin|Blog_Team');
+Route::get('/blog', [Blogs::class, 'blogshow'])->name('blog')->middleware(['auth', 'role:Admin|Blog_Team', 'permission:blog-index']);
 Route::post('/getBlogsAjax', [Blogs::class, 'getBlogsAjax']);
 Route::post('/updateBlogStatus',[Blogs::class,'updateBlogStatus']);
-Route::get('/blog/add', [Blogs::class, 'title']);
+Route::get('/blog/add', [Blogs::class, 'title'])->middleware(['auth', 'role:Admin|Blog_Team', 'permission:blog-create']);
 Route::post('/addblog',[Blogs::class,'addblog']);
-Route::get('/blog/edit/{id}', [Blogs::class, 'edit']);
+Route::get('/blog/edit/{id}', [Blogs::class, 'edit'])->middleware(['auth', 'role:Admin|Blog_Team', 'permission:blog-edit']);
 Route::post('/update',[Blogs::class,'update']);
-Route::post('/destory/{id}', [Blogs::class, 'destory']);
-Route::view('/blogcategory','Backend.blog.category_index')->name('blogcategory')->middleware('role:Admin|Blog_Team');
+Route::post('/destory/{id}', [Blogs::class, 'destory'])->middleware(['auth', 'role:Admin|Blog_Team', 'permission:blog-delete']);
+Route::view('/blogcategory','Backend.blog.category_index')->name('blogcategory')->middleware(['auth', 'role:Admin|Blog_Team', 'permission:blogcategory-index']);
 Route::post('/getBlogsCategoryAjax', [Blogs::class, 'getBlogsCategoryAjax']);
-Route::view('/blogcategory/add','Backend.blog.category_create');
+Route::view('/blogcategory/add','Backend.blog.category_create')->middleware(['auth', 'role:Admin|Blog_Team', 'permission:blogcategory-create']);
 Route::post('/addcategery',[Blogs::class,'addcategery']);
-Route::post('/destorycategory/{id}', [Blogs::class, 'destorycategory']);
-Route::get('/blogcategory/edit/{id}', [Blogs::class, 'editcategory']);
+Route::post('/destorycategory/{id}', [Blogs::class, 'destorycategory'])->middleware(['auth', 'role:Admin|Blog_Team', 'permission:blogcategory-delete']);
+Route::get('/blogcategory/edit/{id}', [Blogs::class, 'editcategory'])->middleware(['auth', 'role:Admin|Blog_Team', 'permission:blogcategory-edit']);
 Route::post('/updatecategery',[Blogs::class,'updateCategory']);
 
 //news
-Route::get('/news/add', [Newss::class, 'title']);
+Route::get('/news/add', [Newss::class, 'title'])->middleware('role:Admin|News_Team', 'permission:news-create');
 Route::post('/createnews',[Newss::class,'createnews']);
-Route::view('/newss','Backend.news.index')->name('newss')->middleware('role:Admin|News_Team');
+Route::view('/newss','Backend.news.index')->name('newss')->middleware('role:Admin|News_Team', 'permission:news-index');
 Route::post('/getNewsAjax', [Newss::class, 'getNewsAjax']);
 Route::post('/updateNewsStatus',[Newss::class,'updateNewsStatus']);
-Route::get('/news/edit/{id}', [Newss::class, 'editnews']);
+Route::get('/news/edit/{id}', [Newss::class, 'editnews'])->middleware('role:Admin|News_Team', 'permission:news-edit');
 Route::post('/updatenews',[Newss::class,'updatenews']);
-Route::post('/destorynews/{id}', [Newss::class, 'destorynews']);
-Route::view('/newscategory','Backend.news.category_index')->name('newscategory')->middleware('role:Admin|News_Team');
+Route::post('/destorynews/{id}', [Newss::class, 'destorynews'])->middleware('role:Admin|News_Team', 'permission:news-delete');
+Route::view('/newscategory','Backend.news.category_index')->name('newscategory')->middleware('permission:newscategory-index');
 Route::post('/getNewsCategoryAjax', [Newss::class, 'getNewsCategoryAjax']);
-Route::view('/newscategory/add','Backend.news.category_create');
+Route::view('/newscategory/add','Backend.news.category_create')->middleware('permission:newscategory-create');
 Route::post('/createnewscategory',[Newss::class,'createnewscategory']);
-Route::get('/newscategory/edit/{id}', [Newss::class, 'editnewscategory']);
+Route::get('/newscategory/edit/{id}', [Newss::class, 'editnewscategory'])->middleware('permission:newscategory-edit');
 Route::post('/updatenewscategery',[Newss::class,'updatenewscategery']);
-Route::post('/destorynewscategory/{id}', [Newss::class, 'destorynewscategory']);
+Route::post('/destorynewscategory/{id}', [Newss::class, 'destorynewscategory'])->middleware('permission:newscategory-delete');
 
 //pages
-Route::view('/pages','Backend.pages.index')->name('pages')->middleware('role:Admin|Page_Team');
+Route::view('/pages','Backend.pages.index')->name('pages')->middleware('role:Admin|Page_Team','permission:page-index');
 Route::post('/getPagesAjax', [Pagess::class, 'getPagesAjax']);
-Route::get('/editpages/{id}', [Pagess::class, 'editpages']);
+Route::get('/editpages/{id}', [Pagess::class, 'editpages'])->middleware('role:Admin|Page_Team','permission:page-edit');
 Route::post('/updatepages',[Pagess::class,'updatepages']);
-Route::view('/page/add','Backend.pages.create');
+Route::view('/page/add','Backend.pages.create')->middleware('role:Admin|Page_Team','permission:page-create');
 Route::post('/createpages',[Pagess::class,'createpages']);
-Route::post('/destorypages/{id}', [Pagess::class, 'destorypages']);
+Route::post('/destorypages/{id}', [Pagess::class, 'destorypages'])->middleware('role:Admin|Page_Team','permission:page-delete');
 
 //company
-Route::view('/company','Backend.company.index')->name('company')->middleware('role:Admin');
+Route::view('/company','Backend.company.index')->name('company')->middleware('role:Admin','permission:company-index');
 Route::post('/getCompanyAjax', [Companies::class, 'getCompanyAjax']);
-Route::view('/company/add','Backend.company.create');
+Route::view('/company/add','Backend.company.create')->middleware('role:Admin','permission:company-create');
 Route::post('/createcompany',[Companies::class,'createcompany']);
-Route::get('/company/edit/{id}', [Companies::class, 'editcompany']);
+Route::get('/company/edit/{id}', [Companies::class, 'editcompany'])->middleware('role:Admin','permission:company-edit');
 Route::post('/updatecompany',[Companies::class,'updatecompany']);
-Route::post('/destorycompany/{id}', [Companies::class, 'destorycompany']);
+Route::post('/destorycompany/{id}', [Companies::class, 'destorycompany'])->middleware('role:Admin','permission:company-delete');
 Route::post('/getCompanyaddress', [Companies::class, 'getCompanyaddress']);
 Route::post('/deleteCompanyAddress', [Companies::class, 'deleteaddress']);
 Route::post('/saveCompanyAddress', [Companies::class, 'saveCompanyAddress']);
@@ -116,6 +116,7 @@ Route::post('/addmodule',[Module::class,'addmodule']);
 // Route::get('/mvc/create/{id}', [Module::class, 'editmodule']);
 Route::post('/createmvc', [Module::class, 'mvc']);
 Route::post('/mvctable', [Module::class, 'mvctable']);
+Route::get('/getColumns/{table}', [Module::class, 'getColumns']);
 
 //recycle
 Route::view('/module/recycle', 'Backend.module.recycleindex');
@@ -220,19 +221,7 @@ Route::post('/destoryState/{id}', [\App\Http\Controllers\Backend\Statelist::clas
 Route::get('/filemanager', [FileManagerController::class, 'index'])->name('filemanager');
 
 });
-// Test Routes
-Route::get('/Test', [\App\Http\Controllers\Backend\TestController::class, 'index'])->name('Test');
-Route::get('/Test/create', [\App\Http\Controllers\Backend\TestController::class, 'create']);
-Route::post('/Test/store', [\App\Http\Controllers\Backend\TestController::class, 'store']);
-Route::get('/Test/edit/{id}', [\App\Http\Controllers\Backend\TestController::class, 'edit']);
-Route::post('/Test/update', [\App\Http\Controllers\Backend\TestController::class, 'update']);
-Route::post('/Test/delete/{id}', [\App\Http\Controllers\Backend\TestController::class, 'delete']);// Test Routes
-Route::get('/Test', [\App\Http\Controllers\Backend\TestController::class, 'index'])->name('Test');
-Route::get('/Test/create', [\App\Http\Controllers\Backend\TestController::class, 'create']);
-Route::post('/Test/store', [\App\Http\Controllers\Backend\TestController::class, 'store']);
-Route::get('/Test/edit/{id}', [\App\Http\Controllers\Backend\TestController::class, 'edit']);
-Route::post('/Test/update', [\App\Http\Controllers\Backend\TestController::class, 'update']);
-Route::post('/Test/delete/{id}', [\App\Http\Controllers\Backend\TestController::class, 'delete']);// Test Routes
+
 Route::get('/Test', [\App\Http\Controllers\Backend\TestController::class, 'index'])->name('Test');
 Route::get('/Test/create', [\App\Http\Controllers\Backend\TestController::class, 'create']);
 Route::post('/Test/store', [\App\Http\Controllers\Backend\TestController::class, 'store']);

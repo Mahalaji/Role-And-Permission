@@ -1,28 +1,35 @@
 @extends('Backend.layouts.app')
 <link rel="stylesheet" href="{{ asset('css/Backend/create.css') }}">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 @section('content')
 <main id="main" class="main">
-<h1 class="header">Edit Test</h1>
-<form class="simple" method="post" action="/Test/update" enctype="multipart/form-data">
-<div class="form1">
-    @csrf
-    @method('POST')
-
-    <input type="hidden" name="tablename" value="test">
-
-     <input type='hidden' name='id' value='{{ $item->id }}' /> 
-                  <div class='input-group'>
-                      <label>Name</label><br>
-                      <input type='text' name='name' value='{{ $item->name }}' />
-                  </div> 
-                  <div class='input-group'>
-                      <label>Title</label><br>
-                      <input type='text' name='title' value='{{ $item->title }}' />
-                  </div>
-                  <div class='mb-3'>
+    <h1 class="header">Edit Test</h1>
+    <form class="simple" method="post" action="/Test/update" enctype="multipart/form-data">
+        <div class="form1">
+            @csrf
+            @method('POST')
+            <input type="hidden" name="tablename" value="test">
+            <input type='hidden' name='id' value='{{ $text->id }}' />
+                <div class='input-group'>
+                    <label>Name</label><br>
+                    <select class='form-control select2' name='name' id='name'>
+                        <option value=''>Select Name</option>
+                        @foreach(DB::table('blogs')->select('title')->get() as $item)
+                            <option value='{{ $item->title }}'>
+                                {{ $item->title }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div> 
+                    <div class='input-group'>
+                        <label>Title</label><br>
+                        <input type='text' name='title' value='{{ $text->title }}' />
+                    </div>
+                    <div class='mb-3'>
                       <label class='form-label fw-bold'>Image</label><br>
                       <div class='d-flex flex-column align-items-center'>
-                          <img src='{{ asset($item->image) }}' alt='Uploaded Image' class='img-thumbnail mb-2' height='100' width='100'>
+                          <img src='{{ asset($text->image) }}' alt='Uploaded Image' class='img-thumbnail mb-2' height='100' width='100'>
                           <div class='input-group'>
                               <input type='text' id='image_label' class='form-control' name='image'
                                   placeholder='Select an image...' aria-label='Image'>
@@ -30,12 +37,24 @@
                           </div>
                       </div>
                   </div> 
-                  <div class='input-group'>
-                      <label>Updated_at</label><br>
-                      <input type='date' name='updated_at' value='{{ $item->updated_at }}' />
-                  </div>
-    <button type="submit" class="btn btn-primary">Update</button>
-</div>
-</form>
+                    <div class='input-group'>
+                        <label>Updated_at</label><br>
+                        <input type='date' name='updated_at' value='{{ $text->updated_at }}' />
+                    </div>
+            <button type="submit" class="btn btn-primary">Update</button>
+        </div>
+    </form>
 </main>
+@endsection
+
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.select2').select2({
+            width: '100%',
+            placeholder: 'Select an option'
+        });
+    });
+</script>
 @endsection
