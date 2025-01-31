@@ -177,7 +177,8 @@ class Module extends Controller
         $id = $request->moduleId;
         $tablename = $request->tablename;
         $columns = $request->input('columns', []);
-        // dd($selectedData);
+        $columnss = Schema::getColumnListing($tablename);
+        // dd($tablename);
 
         // Validate the module
         $module = modules::find($id);
@@ -201,7 +202,7 @@ class Module extends Controller
 
         $this->updateModel($modelPath, $tablename);
         // Generate Controller Methods
-        $this->updateController($controllerPath, $tablename, $columns, $module_name);
+        $this->updateController($controllerPath, $tablename, $columns, $module_name, $selectedData,$columnss);
 
         // Generate Views
         $this->generateViews($viewDirectory, $module_name, $tablename, $columns, $inputTypes,$selectedData);
@@ -214,7 +215,6 @@ class Module extends Controller
 
         return redirect('/module')->with('success', 'MVC structure recreated successfully.');
     }
-
     protected function cleanupFiles($modelPath, $controllerPath, $viewDirectory)
     {
         if (file_exists($modelPath))
@@ -224,41 +224,66 @@ class Module extends Controller
         if (File::exists($viewDirectory))
             File::deleteDirectory($viewDirectory);
     }
-
-    protected function updateController($controllerPath, $tablename, $columns, $module_name)
+    protected function updateController($controllerPath, $tablename, $columns, $module_name, $selectedData,$columnss)
     {
         $columnsString = implode("', '", $columns);
+        $columnss = implode("', '", $columnss);
+        // Helper function to generate select2 data fetching code
+        $select2DataCode = '';
+        foreach ($selectedData ?? [] as $config) {
+            if ($config['method'] === 'table') {
+                $select2DataCode .= "
+                \$select2_{$config['columnName']} = DB::table('{$config['table']}')
+                    ->select('{$config['column']}')
+                    ->distinct()
+                    ->get();";
+            }
+        }
+    
+        // Generate compact variables for select2 data
+        $select2CompactVars = '';
+        if (!empty($selectedData)) {
+            $select2CompactVars = " " . implode(", ", array_map(function($config) {
+                return "'select2_{$config['columnName']}'";
+            }, array_filter($selectedData, function($config) {
+                return $config['method'] === 'table';
+            })));
+        }
+    
         $methods = <<<EOD
-    // Index method
-    public function index()
-    {
-        \$columns = ['$columnsString'];
-        \$data = DB::table("$tablename")->select(\$columns)->get();
-        return view('Backend.$module_name.index', compact('columns', 'data'));
-    }
-    
-    // Create method
-    public function create()
-    {
-        return view('Backend.$module_name.create');
-    }
-    
-    // Edit method
-    public function edit(\$id)
-    {
-        \$columns = ['$columnsString'];
-        \$text = DB::table('$tablename')->where('id', \$id)->first();
-        return view('Backend.$module_name.edit', compact('text', 'columns'));
-    }
-    
-    // Store method
-    public function store(Request \$request)
-    {
-        // Define dynamic validation rules
-        \$rules = [];
+        // Index method
+        public function index()
+        {
+            \$columns = ['$columnsString'];
+            \$data = DB::table("$tablename")->select(\$columns)->get();
+            return view('Backend.$module_name.index', compact('columns', 'data'));
+        }
+        
+        // Create method
+        public function create()
+        {
+            $select2DataCode
+            
+            return view('Backend.$module_name.create', compact({$select2CompactVars}));
+        }
+        
+        // Edit method
+        public function edit(\$id)
+        {
+            \$columns = ['$columnsString'];
+            \$text = DB::table('$tablename')->where('id', \$id)->first();
+            $select2DataCode
+            return view('Backend.$module_name.edit', compact('text', 'columns', {$select2CompactVars}));
+        }
+        
+        // Store method
+        public function store(Request \$request)
+        {
+            // Define dynamic validation rules
+             \$rules = [];
         
         // Generate validation rules based on column types
-        foreach (['$columnsString'] as \$col) {
+        foreach (['$columnss'] as \$col) {
          if (\$col == 'id') {
                 continue;
             }
@@ -285,15 +310,15 @@ class Module extends Controller
 
         return redirect('/$module_name')->with('success', '$module_name created successfully.');
     }
-    
-    // Update method
-    public function update(Request \$request)
-    {
-        // Define dynamic validation rules
-        \$rules = [];
+        
+        // Update method
+        public function update(Request \$request)
+        {
+            // Define dynamic validation rules
+           \$rules = [];
         
         // Generate validation rules based on column types
-        foreach (['$columnsString'] as \$col) {
+        foreach (['$columnss'] as \$col) {
             \$type = \$inputTypes[\$col] ?? 'string';  // Default to 'string' if no type is specified
             
             // Skip the 'id' column for validation
@@ -322,90 +347,33 @@ class Module extends Controller
 
         return redirect('/$module_name')->with('success', '$module_name updated successfully.');
     }
+        
+        // Delete method
+        public function delete(\$id)
+        {
+            DB::table('$tablename')->where('id', \$id)->delete();
+            return redirect('/$module_name')->with('success', '$module_name deleted successfully.');
+        }
+    EOD;
     
-    // Delete method
-    public function delete(\$id)
-    {
-        DB::table('$tablename')->where('id', \$id)->delete();
-        return redirect('/$module_name')->with('success', '$module_name deleted successfully.');
-    }
-EOD;
-
-
         // Read the controller content
         $controllerContent = file_get_contents($controllerPath);
-
-        // Add use statement below the namespace declaration
-        $controllerContent = preg_replace('/namespace\s+[A-Za-z0-9\\\]+;/', '$0' . "\nuse Illuminate\Support\Facades\DB;", $controllerContent);
-
-        // Insert the methods into the controller
+    
+        // Add use statements
+        $controllerContent = preg_replace(
+            '/namespace\s+[A-Za-z0-9\\\]+;/', 
+            "$0\nuse Illuminate\Support\Facades\DB;\nuse Illuminate\Support\Collection;", 
+            $controllerContent
+        );
+    
+        // Insert the methods
         $controllerContent = preg_replace('/\{/', "{\n" . $methods, $controllerContent, 1);
-
-        // Write the updated content back to the controller file
+    
+        // Write the updated content
         file_put_contents($controllerPath, $controllerContent);
     }
     protected function generateViews($viewDirectory, $module_name, $tablename, $columns, $inputTypes, $selectedData)
     {
-        File::makeDirectory($viewDirectory, 0755, true);
-    
-        // Ensure 'id' is part of the columns for processing, but it won't be displayed in the table or form
-        if (!in_array('id', $columns)) {
-            array_unshift($columns, 'id'); // Add 'id' as the first column
-        }
-    
-        // Index View
-        $tableHeaders = '';
-        $indexContent = <<<EOD
-        @extends('Backend.layouts.app')
-        <link rel="stylesheet" href="{{ asset('css/Backend/blog.css') }}">
-        @section('content')
-        <div class="info" style="background: white;">
-        <div class="container mt-4">
-            <h2>$module_name List</h2>
-        <a href="/$module_name/create" class="btn btn-primary">Add $module_name</a>
-        <table id="table">
-            <thead>
-                <tr>
-                </div>
-                </div>
-        EOD;
-    
-        // Add table headers dynamically, excluding 'id' from being shown
-        foreach ($columns as $col) {
-            if ($col != 'id') {
-                $tableHeaders .= "<th>" . ucfirst($col) . "</th>";
-            }
-        }
-    
-        $indexContent .= $tableHeaders . "<th>Actions</th></tr></thead><tbody>";
-    
-        // Add rows, excluding 'id' from being shown in the table
-        $indexContent .= <<<EOD
-            @foreach(\$data as \$row)
-            <tr>
-        EOD;
-    
-        foreach ($columns as $col) {
-            if ($col != 'id') {
-                $indexContent .= "<td>{{ \$row->$col }}</td>";
-            }
-        }
-    
-        $indexContent .= <<<EOD
-                <td>
-                    <a href="/$module_name/edit/{{ \$row->id }}" class="btn btn-warning">Edit</a>
-                    <form action="/$module_name/delete/{{ \$row->id }}" method="POST" style="display:inline;">
-                        @csrf
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-    @endsection
-    EOD;
-    
         // Helper function to generate select2 field
         function generateSelect2Field($col, $config) {
             $coll = ucwords($col);
@@ -415,61 +383,101 @@ EOD;
                     <label>$coll</label><br>
                     <select class='form-control select2' name='$col' id='$col'>
                         <option value=''>Select $coll</option>
-                        @foreach(DB::table('{$config['table']}')->select('{$config['column']}')->get() as \$item)
-                            <option value='{{ \$item->{$config['column']} }}'>
-                                {{ \$item->{$config['column']} }}
+                        @foreach(\$select2_{$config['columnName']} as \$option)
+                            <option value='{{ \$option->{$config['column']} }}' {{ isset(\$text) && \$text->$col == \$option->{$config['column']} ? 'selected' : '' }}>
+                                {{ \$option->{$config['column']} }}
                             </option>
                         @endforeach
                     </select>
                 </div>";
             } else {
-                $options = array_combine(
-                    explode(',', $config['key']), 
-                    explode(',', $config['value'])
-                );
-                $optionsHtml = '';
-                foreach ($options as $key => $value) {
-                    $optionsHtml .= "<option value='$key'>$value</option>";
-                }
                 return "
                 <div class='input-group'>
                     <label>$coll</label><br>
                     <select class='form-control select2' name='$col' id='$col'>
                         <option value=''>Select $coll</option>
-                        $optionsHtml
+                        @foreach(explode(',', '{$config['key']}') as \$index => \$key)
+                            @php
+                                \$value = explode(',', '{$config['value']}')[\$index];
+                            @endphp
+                            <option value='{{ \$key }}' {{ isset(\$text) && \$text->$col == \$key ? 'selected' : '' }}>
+                                {{ \$value }}
+                            </option>
+                        @endforeach
                     </select>
                 </div>";
             }
         }
     
-        // Create View
+        // Create index view content
+        $indexContent = <<<EOD
+        @extends('Backend.layouts.app')
+        <link rel="stylesheet" href="{{ asset('css/Backend/blog.css') }}">
+        @section('content')
+        <div class="info" style="background: white;">
+            <div class="container mt-4">
+                <h2>$module_name List</h2>
+                <a href="/$module_name/create" class="btn btn-primary">Add $module_name</a>
+                <table id="table" class="table">
+                    <thead>
+                        <tr>
+                            @foreach(\$columns as \$col)
+                                @if(\$col != 'id')
+                                    <th>{{ ucfirst(\$col) }}</th>
+                                @endif
+                            @endforeach
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(\$data as \$row)
+                            <tr>
+                                @foreach(\$columns as \$col)
+                                    @if(\$col != 'id')
+                                        <td>{{ \$row->\$col }}</td>
+                                    @endif
+                                @endforeach
+                                <td>
+                                    <a href="/$module_name/edit/{{ \$row->id }}" class="btn btn-warning">Edit</a>
+                                    <form action="/$module_name/delete/{{ \$row->id }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        @endsection
+        EOD;
+    
+        // Create form fields
         $formFields = '';
         foreach ($inputTypes as $col => $type) {
             if ($col != 'id') {
                 if ($type === 'select2') {
-                    // Find configuration for this select2 field
                     $config = collect($selectedData)->firstWhere('columnName', $col);
                     if ($config) {
                         $formFields .= generateSelect2Field($col, $config);
                     }
                 } elseif ($type === 'file') {
-                    // Special handling for file input
                     $coll = ucwords($col);
                     $formFields .= "
                     <div class='mb-3'>
                         <label class='form-label fw-bold'>$coll</label><br>
                         <div class='d-flex flex-column align-items-center'>
                             <div class='input-group'>
-                                <input type='text' id='image_label' class='form-control' name='image'
-                                       placeholder='Select an image...' aria-label='Image'>
+                                <input type='text' id='{$col}_label' class='form-control' name='$col'
+                                    placeholder='Select $coll...' aria-label='$coll'>
                                 <button class='btn btn-outline-secondary' type='button' id='button-image'>Select</button>
                             </div>
                         </div>
                     </div>";
                 } else {
-                    // Existing input field generation code for other types (text, number, etc.)
                     $coll = ucwords($col);
-                    $formFields .= " 
+                    $formFields .= "
                     <div class='input-group'>
                         <label>$coll</label><br>
                         <input type='$type' name='$col' />
@@ -477,15 +485,14 @@ EOD;
                 }
             }
         }
-        
     
-        // Add select2 initialization script
+        // Create view content
         $createContent = <<<EOD
         @extends('Backend.layouts.app')
+        @section('content')
         <link rel="stylesheet" href="{{ asset('css/Backend/create.css') }}">
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-        
-        @section('content')
+    
         <main id="main" class="main">
             <h1 class="header">Create $module_name</h1>
             <form class="simple" method="post" action="/$module_name/store" enctype="multipart/form-data">
@@ -511,61 +518,22 @@ EOD;
         @endsection
         EOD;
     
-        // Edit View - Similar modifications for edit view
-        $editFields = '';
-        foreach ($inputTypes as $col => $type) {
-            if ($col === 'id') {
-                // For 'id', we keep it as a hidden input with the current value
-                $editFields .= "<input type='hidden' name='$col' value='{{ \$text->$col }}' />";
-            } else {
-                if ($type === 'select2') {
-                    // Handle select2 fields
-                    $config = collect($selectedData)->firstWhere('columnName', $col);
-                    if ($config) {
-                        $editFields .= generateSelect2Field($col, $config, "{{ \$item->$col }}");
-                    }
-                } elseif ($type === 'file') {
-                    // Special handling for file input type
-                    $coll = ucwords($col);
-                    $editFields .= "
-                    <div class='mb-3'>
-                      <label class='form-label fw-bold'>$coll</label><br>
-                      <div class='d-flex flex-column align-items-center'>
-                          <img src='{{ asset(\$text->$col) }}' alt='Uploaded Image' class='img-thumbnail mb-2' height='100' width='100'>
-                          <div class='input-group'>
-                              <input type='text' id='image_label' class='form-control' name='image'
-                                  placeholder='Select an image...' aria-label='Image'>
-                              <button class='btn btn-outline-secondary' type='button' id='button-image'>Select</button>
-                          </div>
-                      </div>
-                  </div>";
-                } else {
-                    // Handle other input types (text, number, etc.)
-                    $coll = ucwords($col);
-                    $editFields .= " 
-                    <div class='input-group'>
-                        <label>$coll</label><br>
-                        <input type='$type' name='$col' value='{{ \$text->$col }}' />
-                    </div>";
-                }
-            }
-        }
-        
-    
+        // Edit view content
         $editContent = <<<EOD
         @extends('Backend.layouts.app')
+        @section('content')
         <link rel="stylesheet" href="{{ asset('css/Backend/create.css') }}">
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-        
-        @section('content')
+    
         <main id="main" class="main">
             <h1 class="header">Edit $module_name</h1>
             <form class="simple" method="post" action="/$module_name/update" enctype="multipart/form-data">
                 <div class="form1">
                     @csrf
                     @method('POST')
+                    <input type="hidden" name="id" value="{{ \$text->id }}">
                     <input type="hidden" name="tablename" value="$tablename">
-                    $editFields
+                    $formFields
                     <button type="submit" class="btn btn-primary">Update</button>
                 </div>
             </form>
@@ -586,11 +554,11 @@ EOD;
         EOD;
     
         // Save views
+        File::makeDirectory($viewDirectory, 0755, true);
         file_put_contents("$viewDirectory/index.blade.php", $indexContent);
         file_put_contents("$viewDirectory/create.blade.php", $createContent);
         file_put_contents("$viewDirectory/edit.blade.php", $editContent);
     }
-    
     private function updateModel($modelPath, $tablename)
     {
         if (file_exists($modelPath)) {
@@ -604,33 +572,29 @@ EOD;
             }
         }
     }
-
     protected function registerRoutes($module_name)
     {
         $routePath = base_path('routes/web.php');
-
-        // Read the current content of the routes file
         $routeContent = file_get_contents($routePath);
-
-        // Regular expression to find existing routes for the module
-        $pattern = "/Route::get\('\/$module_name.*?delete\('.*?\);/s";
-
-        // Remove the existing routes if any
-        $updatedRouteContent = preg_replace($pattern, '', $routeContent);
-
-        // Append the new routes to the updated content
-        $routes = <<<EOD
-// $module_name Routes
-Route::get('/$module_name', [\App\Http\Controllers\Backend\\{$module_name}Controller::class, 'index'])->name('$module_name');
-Route::get('/$module_name/create', [\App\Http\Controllers\Backend\\{$module_name}Controller::class, 'create']);
-Route::post('/$module_name/store', [\App\Http\Controllers\Backend\\{$module_name}Controller::class, 'store']);
-Route::get('/$module_name/edit/{id}', [\App\Http\Controllers\Backend\\{$module_name}Controller::class, 'edit']);
-Route::post('/$module_name/update', [\App\Http\Controllers\Backend\\{$module_name}Controller::class, 'update']);
-Route::post('/$module_name/delete/{id}', [\App\Http\Controllers\Backend\\{$module_name}Controller::class, 'delete']);
-EOD;
-
-        // Append the new routes to the file
-        file_put_contents($routePath, $updatedRouteContent . $routes);
+    
+        // Check if routes already exist
+        $routePattern = "/Route::get\('\/$module_name'/";
+        if (!preg_match($routePattern, $routeContent)) {
+            // Routes don't exist, append new routes
+            $routes = <<<EOD
+    
+    // $module_name Routes
+    Route::get('/$module_name', [\App\Http\Controllers\Backend\\{$module_name}Controller::class, 'index'])->name('$module_name');
+    Route::get('/$module_name/create', [\App\Http\Controllers\Backend\\{$module_name}Controller::class, 'create']);
+    Route::post('/$module_name/store', [\App\Http\Controllers\Backend\\{$module_name}Controller::class, 'store']);
+    Route::get('/$module_name/edit/{id}', [\App\Http\Controllers\Backend\\{$module_name}Controller::class, 'edit']);
+    Route::post('/$module_name/update', [\App\Http\Controllers\Backend\\{$module_name}Controller::class, 'update']);
+    Route::post('/$module_name/delete/{id}', [\App\Http\Controllers\Backend\\{$module_name}Controller::class, 'delete']);
+    EOD;
+    
+            // Append the new routes to the file
+            file_put_contents($routePath, $routeContent . $routes);
+        }
     }
     public function updatemodule(Request $request)
     {

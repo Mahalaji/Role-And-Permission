@@ -8,10 +8,12 @@
         <div class="view">
             <a href="{{ asset('/dashboard') }}">Frontend</a>
         </div>
+        @can('blog-create')
+            <div class="left">
+                <a href="{{ asset('/blog/add') }}">Add-Blog</a>
+            </div>
+        @endcan
 
-        <div class="left" >
-            <a href="{{ asset('/blog/add') }}">Add-Blog</a>
-        </div>
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <div class="filter-container">
             <h4>Filter</h4>
@@ -36,8 +38,12 @@
                     <th id="status">Status</th>
                     <th>Create Date</th>
                     <!-- <th>Update Date</th> -->
+                    @can('blog-edit')
                     <th>Edit</th>
-                    <th>Delete</th>
+                    @endcan
+                    @can('blog-delete')
+                        <th>Delete</th>
+                    @endcan
                 </tr>
             </thead>
             <tbody></tbody>
@@ -74,7 +80,7 @@
                 // { data: 'name', name: 'name' },
                 { data: 'title', name: 'title' },
                 { data: 'categories.title', name: 'categories.title', orderable: false, searchable: false },
-                { data: 'domain.domainname', name: 'domain.domainname' , orderable: false, searchable: false},
+                { data: 'domain.domainname', name: 'domain.domainname', orderable: false, searchable: false },
                 { data: 'language.languagename', name: 'language.languagename', orderable: false, searchable: false },
                 { data: 'status_dropdown', name: 'status_dropdown', orderable: false, searchable: false },
                 {
@@ -82,13 +88,14 @@
                         return row.time_ago || data;
                     }
                 },
-                // { data: 'updated_at', name: 'updated_at', render: function(data, type, row) {
-                //     return row.time_update_ago || data;
-                // }},
+                @can('blog-edit')
                 { data: 'edit', orderable: false, searchable: false },
-                { data: 'delete', orderable: false, searchable: false },
+                @endcan
+                @can('blog-delete')
+                    { data: 'delete', orderable: false, searchable: false },
+                @endcan
             ],
-            lengthMenu:[5,10,25,50,100]
+            lengthMenu: [5, 10, 25, 50, 100]
         });
 
         $('#filterButton').on('click', function () {

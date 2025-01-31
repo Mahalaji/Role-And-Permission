@@ -427,8 +427,8 @@
         <div>
             <input type="radio" id="byTable" name="selectMethod" value="table" onclick="toggleOverlayContent()"> 
             <label for="byTable">By Table</label>
-            <!-- <input type="radio" id="byCustomize" name="selectMethod" value="customize" onclick="toggleOverlayContent()"> 
-            <label for="byCustomize">By Customize</label> -->
+            <input type="radio" id="byCustomize" name="selectMethod" value="customize" onclick="toggleOverlayContent()"> 
+            <label for="byCustomize">By Customize</label>
         </div>
 
         <div id="tableSelection" class="table-selection">

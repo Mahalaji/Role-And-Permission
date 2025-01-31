@@ -9,9 +9,11 @@
         <div class="view">
             <a href="{{ asset('/dashboard') }}">Frontend</a>
         </div>
-        <div class="left">
-            <a href="{{ asset('/news/add') }}">Add-News</a>
-        </div>
+        @can('news-create')
+            <div class="left">
+                <a href="{{ asset('/news/add') }}">Add-News</a>
+            </div>
+        @endcan
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <div class="filter-container">
             <h4>Filter</h4>
@@ -36,8 +38,13 @@
                     <th id="status">Status</th>
                     <th>Create Date</th>
                     <!-- <th>Update Date</th> -->
-                    <th>Edit</th>
-                    <th>Delete</th>
+                    @can('news-edit')
+                        <th>Edit</th>
+                    @endcan
+                    @can('news-delete')
+                        <th>Delete</th>
+                    @endcan
+
                 </tr>
             </thead>
             <tbody></tbody>
@@ -79,19 +86,27 @@
             // },
             {
                 data: 'title',
-                name: 'title'
+                name: 'title',
+                orderable: false,
+                searchable: false
             },
             {
                 data: 'categories.title',
-                name: 'categories.title'
+                name: 'categories.title',
+                orderable: false,
+                searchable: false
             },
             {
                 data: 'domain.domainname',
-                name: 'domain.domainname'
+                name: 'domain.domainname',
+                orderable: false,
+                searchable: false
             },
             {
                 data: 'language.languagename',
-                name: 'language.languagename'
+                name: 'language.languagename',
+                orderable: false,
+                searchable: false
             },
             {
                 data: 'status_dropdown',
@@ -106,26 +121,29 @@
                     return row.time_ago || data;
                 }
             },
-            // {
-            //     data: 'updated_at',
-            //     name: 'updated_at',
-            //     render: function(data, type, row) {
-            //         return row.time_update_ago || data;
-            //     }
-            // },
-
-            {
-                data: 'edit',
-                orderable: false,
-                searchable: false
-            },
-            {
-                data: 'delete',
-                orderable: false,
-                searchable: false
-            },
+                // {
+                //     data: 'updated_at',
+                //     name: 'updated_at',
+                //     render: function(data, type, row) {
+                //         return row.time_update_ago || data;
+                //     }
+                // },
+                @can('news-edit')
+                    {
+                        data: 'edit',
+                        orderable: false,
+                        searchable: false
+                    },
+                @endcan
+            @can('news-delete')
+                {
+                    data: 'delete',
+                    orderable: false,
+                    searchable: false
+                },
+            @endcan
             ],
-            lengthMenu:[5,10,25,50,100]
+            lengthMenu: [5, 10, 25, 50, 100]
         });
 
         $('#filterButton').on('click', function () {

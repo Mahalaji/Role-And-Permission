@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Collection;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -19,7 +20,13 @@ class TestController extends Controller
     // Create method
     public function create()
     {
-        return view('Backend.Test.create');
+        
+                $select2_name = DB::table('blogs')
+                    ->select('title')
+                    ->distinct()
+                    ->get();
+        
+        return view('Backend.Test.create', compact( 'select2_name'));
     }
     
     // Edit method
@@ -27,80 +34,85 @@ class TestController extends Controller
     {
         $columns = ['id', 'name', 'title', 'updated_at'];
         $text = DB::table('test')->where('id', $id)->first();
-        return view('Backend.Test.edit', compact('text', 'columns'));
+        
+                $select2_name = DB::table('blogs')
+                    ->select('title')
+                    ->distinct()
+                    ->get();
+        return view('Backend.Test.edit', compact('text', 'columns',  'select2_name'));
     }
     
     // Store method
     public function store(Request $request)
     {
         // Define dynamic validation rules
-        $rules = [];
-        
-        // Generate validation rules based on column types
-        foreach (['id', 'name', 'title', 'updated_at'] as $col) {
-         if ($col == 'id') {
-                continue;
-            }
-            $type = $inputTypes[$col] ?? 'string';  // Default to 'string' if no type is specified
-            
-            if ($type == 'text' || $type == 'string') {
-                $rules[$col] = 'required|string|max:255';
-            } elseif ($type == 'number' || $type == 'integer') {
-                $rules[$col] = 'required|integer';
-            } elseif ($type == 'email') {
-                $rules[$col] = 'required|email';
-            } elseif ($type == 'date') {
-                $rules[$col] = 'required|date';
-            } else {
-                $rules[$col] = 'required';
-            }
+         $rules = [];
+    
+    // Generate validation rules based on column types
+    foreach (['id', 'name', 'title', 'image', 'updated_at'] as $col) {
+     if ($col == 'id') {
+            continue;
         }
-
-        // Validate the incoming request data
-        $validatedData = $request->validate($rules);
-         $validatedData['image'] =$request->image;
-        // Insert validated data into the database
-        DB::table('test')->insert($validatedData);
-
-        return redirect('/Test')->with('success', 'Test created successfully.');
+        $type = $inputTypes[$col] ?? 'string';  // Default to 'string' if no type is specified
+        
+        if ($type == 'text' || $type == 'string') {
+            $rules[$col] = 'required|string|max:255';
+        } elseif ($type == 'number' || $type == 'integer') {
+            $rules[$col] = 'required|integer';
+        } elseif ($type == 'email') {
+            $rules[$col] = 'required|email';
+        } elseif ($type == 'date') {
+            $rules[$col] = 'required|date';
+        } else {
+            $rules[$col] = 'required';
+        }
     }
+
+    // Validate the incoming request data
+    $validatedData = $request->validate($rules);
+     $validatedData['image'] =$request->image;
+    // Insert validated data into the database
+    DB::table('test')->insert($validatedData);
+
+    return redirect('/Test')->with('success', 'Test created successfully.');
+}
     
     // Update method
     public function update(Request $request)
     {
         // Define dynamic validation rules
-        $rules = [];
+       $rules = [];
+    
+    // Generate validation rules based on column types
+    foreach (['id', 'name', 'title', 'image', 'updated_at'] as $col) {
+        $type = $inputTypes[$col] ?? 'string';  // Default to 'string' if no type is specified
         
-        // Generate validation rules based on column types
-        foreach (['id', 'name', 'title', 'updated_at'] as $col) {
-            $type = $inputTypes[$col] ?? 'string';  // Default to 'string' if no type is specified
-            
-            // Skip the 'id' column for validation
-            if ($col == 'id') {
-                continue;
-            }
-            
-            if ($type == 'text' || $type == 'string') {
-                $rules[$col] = 'required|string|max:255';
-            } elseif ($type == 'number' || $type == 'integer') {
-                $rules[$col] = 'required|integer';
-            } elseif ($type == 'email') {
-                $rules[$col] = 'required|email';
-            } elseif ($type == 'date') {
-                $rules[$col] = 'required|date';
-            } else {
-                $rules[$col] = 'required';
-            }
+        // Skip the 'id' column for validation
+        if ($col == 'id') {
+            continue;
         }
-
-        // Validate the incoming request data
-        $validatedData = $request->validate($rules);
-        $validatedData['image'] =$request->image;
-        // Update validated data in the database
-        DB::table('test')->where('id', $request->id)->update($validatedData);
-
-        return redirect('/Test')->with('success', 'Test updated successfully.');
+        
+        if ($type == 'text' || $type == 'string') {
+            $rules[$col] = 'required|string|max:255';
+        } elseif ($type == 'number' || $type == 'integer') {
+            $rules[$col] = 'required|integer';
+        } elseif ($type == 'email') {
+            $rules[$col] = 'required|email';
+        } elseif ($type == 'date') {
+            $rules[$col] = 'required|date';
+        } else {
+            $rules[$col] = 'required';
+        }
     }
+
+    // Validate the incoming request data
+    $validatedData = $request->validate($rules);
+    $validatedData['image'] =$request->image;
+    // Update validated data in the database
+    DB::table('test')->where('id', $request->id)->update($validatedData);
+
+    return redirect('/Test')->with('success', 'Test updated successfully.');
+}
     
     // Delete method
     public function delete($id)
