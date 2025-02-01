@@ -9,9 +9,8 @@
         <div class="form1">
             @csrf
             @method('POST')
-            <input type="hidden" name="id" value="{{ $text->id }}">
             <input type="hidden" name="tablename" value="test">
-            
+            <input type='hidden' name='id' value='{{ $text->id }}' />
                 <div class='input-group'>
                     <label>Name</label><br>
                     <select class='form-control select2' name='name' id='name'>
@@ -22,18 +21,47 @@
                             </option>
                         @endforeach
                     </select>
+                      @error('name')
+                            <span class='text-danger'>{{ $message }}</span>
+                        @enderror
                 </div>
-                    <div class='input-group'>
-                        <label>Title</label><br>
-                        <input type='text' name='title' />
-                    </div>
-                    <div class='input-group'>
-                        <label>Image</label><br>
-                        <input type='text' name='image' />
-                    </div>
+                <div class='input-group'>
+                    <label>Title</label><br>
+                    <select class='form-control select2' name='title' id='title'>
+                        <option value=''>Select Title</option>
+                        @foreach(explode(',', 'blogc,newsc,domanc') as $index => $key)
+                            @php
+                                $value = explode(',', 'blogCategory,newscategory,doman')[$index];
+                            @endphp
+                            <option value='{{ $key }}' {{ isset($text) && $text->title == $key ? 'selected' : '' }}>
+                                {{ $value }}
+                            </option>
+                        @endforeach
+                    </select>
+                      @error('title')
+                            <span class='text-danger'>{{ $message }}</span>
+                        @enderror
+                </div>
+                    <div class='mb-3'>
+                      <label class='form-label fw-bold'>Image</label><br>
+                      <div class='d-flex flex-column align-items-center'>
+                          <img src='{{ asset($text->image) }}' alt='Uploaded Image' class='img-thumbnail mb-2' height='100' width='100'>
+                          <div class='input-group'>
+                              <input type='text' id='image_label' class='form-control' name='image'
+                                  placeholder='Select an image...' aria-label='Image'>
+                              <button class='btn btn-outline-secondary' type='button' id='button-image'>Select</button>
+                          </div>
+                             @error('image')
+                            <span class='text-danger'>{{ $message }}</span>
+                        @enderror
+                      </div>
+                  </div>
                     <div class='input-group'>
                         <label>Updated_at</label><br>
-                        <input type='text' name='updated_at' />
+                        <input type='date' name='updated_at' value='{{ old('updated_at', $text->updated_at) }}' />
+                        @error('updated_at')
+                            <span class='text-danger'>{{ $message }}</span>
+                        @enderror
                     </div>
             <button type="submit" class="btn btn-primary">Update</button>
         </div>

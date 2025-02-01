@@ -254,7 +254,7 @@
 .table-selection label, .customize-selection label {
     display: block;
     margin-bottom: 0.5rem;
-    color: var(--textwhite);
+    color: black;
     font-weight: 500;
 }
 

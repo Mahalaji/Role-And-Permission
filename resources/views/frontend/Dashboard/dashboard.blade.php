@@ -7,7 +7,9 @@
             @foreach($users->take(4) as $row)
             <article class="feature">
                 <div class="post-image">
+                <a href="{{ url('/Blogs/' . $row->slug) }}" class="text-decoration-none text-dark">
                 <img src="{{ asset($row->image) }}" class="card-img-top" >
+                </a>
                 </div>
                 <div class="post-content">
                     <a href="{{ url('/Blogs/' . $row->slug) }}" class="text-decoration-none text-dark">
@@ -27,7 +29,9 @@
             @foreach($news->take(4) as $newss)
             <article class="feature">
                 <div class="post-image">
+                <a href="{{ url('/News/' . $newss->slug) }}" class="text-decoration-none text-dark">
                 <img src="{{ asset($newss->news_image) }}" class="card-img-top" >
+                </a>
                 </div>
                 <div class="post-content">
                     <a href="{{ url('/News/' . $newss->slug) }}" class="text-decoration-none text-dark">

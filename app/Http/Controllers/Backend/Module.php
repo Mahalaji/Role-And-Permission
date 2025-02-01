@@ -41,13 +41,13 @@ class Module extends Controller
         $moduleId = $request->input('moduleId');
         $tablename = $request->tableName;
         $columns = Schema::getColumnListing($tablename);
-        return view('Backend.module.mvctable', compact('columns', 'moduleId', 'tablename','tableNames'));
+        return view('Backend.module.mvctable', compact('columns', 'moduleId', 'tablename', 'tableNames'));
     }
     public function getColumns($table)
     {
         // Get the column list from the table
         $columns = Schema::getColumnListing($table);
-    
+
         return response()->json(['columns' => $columns]);
     }
     public function getModuleAjax(Request $request)
@@ -202,10 +202,10 @@ class Module extends Controller
 
         $this->updateModel($modelPath, $tablename);
         // Generate Controller Methods
-        $this->updateController($controllerPath, $tablename, $columns, $module_name, $selectedData,$columnss);
+        $this->updateController($controllerPath, $tablename, $columns, $module_name, $selectedData, $columnss);
 
         // Generate Views
-        $this->generateViews($viewDirectory, $module_name, $tablename, $columns, $inputTypes,$selectedData);
+        $this->generateViews($viewDirectory, $module_name, $tablename, $columns, $inputTypes, $selectedData);
 
         // Clear View Cache
         Artisan::call('view:clear');
@@ -224,7 +224,7 @@ class Module extends Controller
         if (File::exists($viewDirectory))
             File::deleteDirectory($viewDirectory);
     }
-    protected function updateController($controllerPath, $tablename, $columns, $module_name, $selectedData,$columnss)
+    protected function updateController($controllerPath, $tablename, $columns, $module_name, $selectedData, $columnss)
     {
         $columnsString = implode("', '", $columns);
         $columnss = implode("', '", $columnss);
@@ -239,17 +239,17 @@ class Module extends Controller
                     ->get();";
             }
         }
-    
+
         // Generate compact variables for select2 data
         $select2CompactVars = '';
         if (!empty($selectedData)) {
-            $select2CompactVars = " " . implode(", ", array_map(function($config) {
-                return "'select2_{$config['columnName']}'";
-            }, array_filter($selectedData, function($config) {
+            $select2CompactVars = implode(", ", array_map(function ($config) {
+                return "select2_{$config['columnName']}";
+            }, array_filter($selectedData, function ($config) {
                 return $config['method'] === 'table';
             })));
         }
-    
+
         $methods = <<<EOD
         // Index method
         public function index()
@@ -260,12 +260,18 @@ class Module extends Controller
         }
         
         // Create method
-        public function create()
-        {
-            $select2DataCode
-            
-            return view('Backend.$module_name.create', compact({$select2CompactVars}));
-        }
+     public function create()
+       {
+    $select2DataCode
+    
+    // Check if $select2CompactVars is not empty
+    if (!empty("$select2DataCode")) {
+        return view('Backend.$module_name.create', compact("{$select2CompactVars}"));
+    } else {
+        // If $select2CompactVars is empty, pass no variables to the view
+        return view('Backend.$module_name.create');
+    }
+     }
         
         // Edit method
         public function edit(\$id)
@@ -273,7 +279,7 @@ class Module extends Controller
             \$columns = ['$columnsString'];
             \$text = DB::table('$tablename')->where('id', \$id)->first();
             $select2DataCode
-            return view('Backend.$module_name.edit', compact('text', 'columns', {$select2CompactVars}));
+            return view('Backend.$module_name.edit', compact('text', 'columns', '{$select2CompactVars}'));
         }
         
         // Store method
@@ -355,27 +361,28 @@ class Module extends Controller
             return redirect('/$module_name')->with('success', '$module_name deleted successfully.');
         }
     EOD;
-    
+
         // Read the controller content
         $controllerContent = file_get_contents($controllerPath);
-    
+
         // Add use statements
         $controllerContent = preg_replace(
-            '/namespace\s+[A-Za-z0-9\\\]+;/', 
-            "$0\nuse Illuminate\Support\Facades\DB;\nuse Illuminate\Support\Collection;", 
+            '/namespace\s+[A-Za-z0-9\\\]+;/',
+            "$0\nuse Illuminate\Support\Facades\DB;\nuse Illuminate\Support\Collection;",
             $controllerContent
         );
-    
+
         // Insert the methods
         $controllerContent = preg_replace('/\{/', "{\n" . $methods, $controllerContent, 1);
-    
+
         // Write the updated content
         file_put_contents($controllerPath, $controllerContent);
     }
     protected function generateViews($viewDirectory, $module_name, $tablename, $columns, $inputTypes, $selectedData)
     {
         // Helper function to generate select2 field
-        function generateSelect2Field($col, $config) {
+        function generateSelect2Field($col, $config)
+        {
             $coll = ucwords($col);
             if ($config['method'] === 'table') {
                 return "
@@ -389,6 +396,9 @@ class Module extends Controller
                             </option>
                         @endforeach
                     </select>
+                      @error('$col')
+                            <span class='text-danger'>{{ \$message }}</span>
+                        @enderror
                 </div>";
             } else {
                 return "
@@ -405,10 +415,13 @@ class Module extends Controller
                             </option>
                         @endforeach
                     </select>
+                      @error('$col')
+                            <span class='text-danger'>{{ \$message }}</span>
+                        @enderror
                 </div>";
             }
         }
-    
+
         // Create index view content
         $indexContent = <<<EOD
         @extends('Backend.layouts.app')
@@ -452,7 +465,7 @@ class Module extends Controller
         </div>
         @endsection
         EOD;
-    
+
         // Create form fields
         $formFields = '';
         foreach ($inputTypes as $col => $type) {
@@ -471,8 +484,13 @@ class Module extends Controller
                             <div class='input-group'>
                                 <input type='text' id='{$col}_label' class='form-control' name='$col'
                                     placeholder='Select $coll...' aria-label='$coll'>
+                                   
                                 <button class='btn btn-outline-secondary' type='button' id='button-image'>Select</button>
+                              
                             </div>
+                               @error('$col')
+                            <span class='text-danger'>{{ \$message }}</span>
+                        @enderror
                         </div>
                     </div>";
                 } else {
@@ -481,11 +499,55 @@ class Module extends Controller
                     <div class='input-group'>
                         <label>$coll</label><br>
                         <input type='$type' name='$col' />
+                          @error('$col')
+                            <span class='text-danger'>{{ \$message }}</span>
+                        @enderror
                     </div>";
                 }
             }
         }
-    
+        $formeditFields = '';
+        foreach ($inputTypes as $col => $type) {
+            if ($col == 'id') {
+                // Hidden input for 'id'
+                $formeditFields .= "<input type='hidden' name='$col' value='{{ \$text->$col }}' />";
+            } else {
+                $coll = ucwords($col); // Capitalize the column name for labels
+        
+                if ($type === 'select2') {
+                    $config = collect($selectedData)->firstWhere('columnName', $col);
+                    if ($config) {
+                        $formeditFields .= generateSelect2Field($col, $config);
+                    }
+                } elseif ($type === 'file') {
+                    $formeditFields .= "
+                    <div class='mb-3'>
+                      <label class='form-label fw-bold'>$coll</label><br>
+                      <div class='d-flex flex-column align-items-center'>
+                          <img src='{{ asset(\$text->$col) }}' alt='Uploaded Image' class='img-thumbnail mb-2' height='100' width='100'>
+                          <div class='input-group'>
+                              <input type='text' id='image_label' class='form-control' name='image'
+                                  placeholder='Select an image...' aria-label='Image'>
+                              <button class='btn btn-outline-secondary' type='button' id='button-image'>Select</button>
+                          </div>
+                             @error('$col')
+                            <span class='text-danger'>{{ \$message }}</span>
+                        @enderror
+                      </div>
+                  </div>";
+                } else {
+                    $formeditFields .= "
+                    <div class='input-group'>
+                        <label>$coll</label><br>
+                        <input type='$type' name='$col' value='{{ old('$col', \$text->$col) }}' />
+                        @error('$col')
+                            <span class='text-danger'>{{ \$message }}</span>
+                        @enderror
+                    </div>";
+                }
+            }
+        }
+
         // Create view content
         $createContent = <<<EOD
         @extends('Backend.layouts.app')
@@ -499,6 +561,7 @@ class Module extends Controller
                 <div class="form1">
                     @csrf
                     $formFields
+                      
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
@@ -517,7 +580,7 @@ class Module extends Controller
         </script>
         @endsection
         EOD;
-    
+
         // Edit view content
         $editContent = <<<EOD
         @extends('Backend.layouts.app')
@@ -531,9 +594,8 @@ class Module extends Controller
                 <div class="form1">
                     @csrf
                     @method('POST')
-                    <input type="hidden" name="id" value="{{ \$text->id }}">
                     <input type="hidden" name="tablename" value="$tablename">
-                    $formFields
+                    $formeditFields
                     <button type="submit" class="btn btn-primary">Update</button>
                 </div>
             </form>
@@ -552,7 +614,7 @@ class Module extends Controller
         </script>
         @endsection
         EOD;
-    
+
         // Save views
         File::makeDirectory($viewDirectory, 0755, true);
         file_put_contents("$viewDirectory/index.blade.php", $indexContent);
@@ -576,7 +638,7 @@ class Module extends Controller
     {
         $routePath = base_path('routes/web.php');
         $routeContent = file_get_contents($routePath);
-    
+
         // Check if routes already exist
         $routePattern = "/Route::get\('\/$module_name'/";
         if (!preg_match($routePattern, $routeContent)) {
@@ -591,7 +653,7 @@ class Module extends Controller
     Route::post('/$module_name/update', [\App\Http\Controllers\Backend\\{$module_name}Controller::class, 'update']);
     Route::post('/$module_name/delete/{id}', [\App\Http\Controllers\Backend\\{$module_name}Controller::class, 'delete']);
     EOD;
-    
+
             // Append the new routes to the file
             file_put_contents($routePath, $routeContent . $routes);
         }

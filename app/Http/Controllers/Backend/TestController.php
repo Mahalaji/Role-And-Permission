@@ -18,16 +18,26 @@ class TestController extends Controller
     }
     
     // Create method
-    public function create()
-    {
-        
+ public function create()
+   {
+
                 $select2_name = DB::table('blogs')
                     ->select('title')
                     ->distinct()
                     ->get();
-        
-        return view('Backend.Test.create', compact( 'select2_name'));
-    }
+
+// Check if select2_name is not empty
+if (!empty("
+                $select2_name = DB::table('blogs')
+                    ->select('title')
+                    ->distinct()
+                    ->get();")) {
+    return view('Backend.Test.create', compact("select2_name"));
+} else {
+    // If select2_name is empty, pass no variables to the view
+    return view('Backend.Test.create');
+}
+ }
     
     // Edit method
     public function edit($id)
@@ -39,7 +49,7 @@ class TestController extends Controller
                     ->select('title')
                     ->distinct()
                     ->get();
-        return view('Backend.Test.edit', compact('text', 'columns',  'select2_name'));
+        return view('Backend.Test.edit', compact('text', 'columns', 'select2_name'));
     }
     
     // Store method
