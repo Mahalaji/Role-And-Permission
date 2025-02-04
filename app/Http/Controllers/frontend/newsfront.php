@@ -18,8 +18,9 @@ class Newsfront extends Controller
     {
         $news = news::with('categories')->whereLike('slug', $slug)->first();
         $related_news = news::where('status_id', 1)->where('category_id', $news->categories->id)->get();
-
-        return view('Frontend.News.particularnews', ['news' => $news, 'related_news' => $related_news]);
+        $newss = news::where('status_id', 1)->latest()->get();
+        $categories = newscategory::get();
+        return view('Frontend.News.singlenews', ['news' => $news, 'related_news' => $related_news,'categories'=>$categories,'newss'=>$newss]);
     }
     // public function newsbytitle($newscat)
     // {

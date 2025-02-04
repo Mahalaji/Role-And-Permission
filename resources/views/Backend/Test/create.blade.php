@@ -13,9 +13,12 @@
                     <label>Name</label><br>
                     <select class='form-control select2' name='name' id='name'>
                         <option value=''>Select Name</option>
-                        @foreach($select2_name as $option)
-                            <option value='{{ $option->title }}' {{ isset($text) && $text->name == $option->title ? 'selected' : '' }}>
-                                {{ $option->title }}
+                        @foreach(explode(',', 'blogc,newsc,domanc') as $index => $key)
+                            @php
+                                $value = explode(',', 'blogCategory,newscategory,doman')[$index];
+                            @endphp
+                            <option value='{{ $key }}' {{ isset($text) && $text->name == $key ? 'selected' : '' }}>
+                                {{ $value }}
                             </option>
                         @endforeach
                     </select>
@@ -23,23 +26,13 @@
                             <span class='text-danger'>{{ $message }}</span>
                         @enderror
                 </div>
-                <div class='input-group'>
-                    <label>Title</label><br>
-                    <select class='form-control select2' name='title' id='title'>
-                        <option value=''>Select Title</option>
-                        @foreach(explode(',', 'blogc,newsc,domanc') as $index => $key)
-                            @php
-                                $value = explode(',', 'blogCategory,newscategory,doman')[$index];
-                            @endphp
-                            <option value='{{ $key }}' {{ isset($text) && $text->title == $key ? 'selected' : '' }}>
-                                {{ $value }}
-                            </option>
-                        @endforeach
-                    </select>
-                      @error('title')
+                    <div class='input-group'>
+                        <label>Title</label><br>
+                        <input type='text' name='title' />
+                          @error('title')
                             <span class='text-danger'>{{ $message }}</span>
                         @enderror
-                </div>
+                    </div>
                     <div class='mb-3'>
                         <label class='form-label fw-bold'>Image</label><br>
                         <div class='d-flex flex-column align-items-center'>

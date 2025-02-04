@@ -20,7 +20,9 @@ class Blogfront extends Controller
     public function blogsbyslug($slug){
         $blog= Blog::with('categories')->whereLike('slug', $slug)->first();
         $related_blogs = Blog::where('status_id', 1)->where('category_id', $blog->categories->id)->get();
-        return view('Frontend.Blog.particularblog',['blog' => $blog,'related_blogs'=>$related_blogs]);
+        $categories = Blogcategory::withCount('blogs')->get();
+        $blogs = Blog::where('status_id', 1)->latest()->get();
+        return view('Frontend.Dashboard.single',['blog' => $blog,'related_blogs'=>$related_blogs,'categories'=>$categories,'blogs'=>$blogs]);
     }
 //     public function blogsbytitle($blogcat)
 //     {

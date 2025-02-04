@@ -177,20 +177,7 @@ Route::get('/designation/edit/{id}', [Designation::class, 'editdesignation']);
 Route::post('/updateDesignation',[Designation::class,'updateDesignation']);
 Route::post('/destorydesignation/{id}', [Designation::class, 'destorydesignation']);
 
-// frontend
 
-Route::get('/dashboard', [Dashboard::class, 'dashboard']);
-Route::get('/blogs', [Blogfront::class, 'showblog']);
-Route::get('/news', [Newsfront::class, 'shownews']);
-Route::get('/Blogs/{article}', [Blogfront::class, 'blogsbyslug']);
-Route::get('/News/{article}', [Newsfront::class, 'newsbyslug']);
-Route::get('/ajaxblogs/category', [Blogfront::class, 'getBlogsByCategory']);
-Route::get('/ajaxnews/category', [Newsfront::class, 'fetchByCategory']);
-
-// Route::get('/Blogtitle/{article}', [Blogfront::class, 'blogsbytitle']);
-// Route::get('/newstitle/{article}', [Newsfront::class, 'newsbytitle']);
-Route::get('/ajaxblogs', [Blogfront::class, 'loadMoreBlogs'])->name('ajaxblogs');
-Route::get('/ajaxnews', [Newsfront::class, 'loadMoreNews'])->name('ajaxnews');
 
 // Routes for CountrylistController
 Route::get('/Countrylist', [\App\Http\Controllers\Backend\Countrylist::class, 'index'])->name('Countrylist');
@@ -219,6 +206,20 @@ Route::post('/destoryState/{id}', [\App\Http\Controllers\Backend\Statelist::clas
 
 
 Route::get('/filemanager', [FileManagerController::class, 'index'])->name('filemanager');
+
+// frontend
+
+Route::get('/dashboard', [Dashboard::class, 'dashboard'])->name('dashboard');
+Route::get('/blogs', [Blogfront::class, 'showblog']);
+Route::get('/news', [Newsfront::class, 'shownews']);
+Route::get('/Blogs/{article}', [Blogfront::class, 'blogsbyslug']);
+Route::get('/News/{article}', [Newsfront::class, 'newsbyslug']);
+Route::get('/ajaxblogs/category', [Blogfront::class, 'getBlogsByCategory']);
+Route::get('/ajaxnews/category', [Newsfront::class, 'fetchByCategory']);
+Route::get('/ajaxblogs', [Blogfront::class, 'loadMoreBlogs'])->name('ajaxblogs');
+Route::get('/ajaxnews', [Newsfront::class, 'loadMoreNews'])->name('ajaxnews');
+Route::view('/contact','frontend.Dashboard.Contact_us')->name('contact');
+
 });
 // Test Routes
 Route::get('/Test', [\App\Http\Controllers\Backend\TestController::class, 'index'])->name('Test');

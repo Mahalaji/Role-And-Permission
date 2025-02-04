@@ -279,7 +279,14 @@ class Module extends Controller
             \$columns = ['$columnsString'];
             \$text = DB::table('$tablename')->where('id', \$id)->first();
             $select2DataCode
-            return view('Backend.$module_name.edit', compact('text', 'columns', '{$select2CompactVars}'));
+            // Check if $select2CompactVars is not empty
+    if (!empty("$select2DataCode")) {
+       return view('Backend.$module_name.edit', compact('text', 'columns', '{$select2CompactVars}'));
+    } else {
+        // If $select2CompactVars is empty, pass no variables to the view
+       return view('Backend.$module_name.edit', compact('text', 'columns'));
+    }
+            
         }
         
         // Store method

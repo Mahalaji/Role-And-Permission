@@ -353,7 +353,6 @@
         }
     }
 </style>
-
 <div class="module-selection">
     <div class="container">
         <div class="module-header">
@@ -363,7 +362,6 @@
 
         <form action="/createmvc" method="POST">
             @csrf
-
             <div class="columns-grid">
                 @foreach ($columns as $column)
                     @if (in_array($column, ['id']))
