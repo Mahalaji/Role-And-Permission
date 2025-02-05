@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\str;
 use App\Models\Blog;
 use App\Models\Blogcategory;
+use App\Models\news;
 
 
 class Blogfront extends Controller
@@ -15,14 +16,17 @@ class Blogfront extends Controller
     {
         $Blogs = Blog::where('status_id', 1)->latest()->with('categories')->get();
         $categories = Blogcategory::withCount('blogs')->get();
-        return view('frontend.Blog.blogs', compact('Blogs', 'categories'));
+        $newss = news::where('status_id', 1)->latest()->get();
+        $blog = Blog::where('status_id', 1)->latest()->get();
+        return view('frontend.Blog.blog', compact('Blogs', 'categories','blog','newss'));
     }
     public function blogsbyslug($slug){
         $blog= Blog::with('categories')->whereLike('slug', $slug)->first();
         $related_blogs = Blog::where('status_id', 1)->where('category_id', $blog->categories->id)->get();
         $categories = Blogcategory::withCount('blogs')->get();
         $blogs = Blog::where('status_id', 1)->latest()->get();
-        return view('Frontend.Dashboard.single',['blog' => $blog,'related_blogs'=>$related_blogs,'categories'=>$categories,'blogs'=>$blogs]);
+        $news = News::where('status_id', 1)->latest()->get();
+        return view('Frontend.Dashboard.single',['blog' => $blog,'related_blogs'=>$related_blogs,'categories'=>$categories,'blogs'=>$blogs,'news'=>$news]);
     }
 //     public function blogsbytitle($blogcat)
 //     {

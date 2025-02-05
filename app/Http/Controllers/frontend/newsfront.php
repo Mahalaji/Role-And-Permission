@@ -6,13 +6,16 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\news;
 use App\Models\newscategory;
+use App\Models\Blog;
 class Newsfront extends Controller
 {
     public function shownews()
     {
         $newsview = news::where('status_id', 1)->latest()->with('categories')->get();
         $categories = newscategory::get();
-        return view('frontend.News.news', compact('newsview', 'categories'));
+        $newss = news::where('status_id', 1)->latest()->get();
+        $blog = Blog::where('status_id', 1)->latest()->get();
+        return view('frontend.News.news', compact('newsview', 'categories','newss','blog'));
     }
     public function newsbyslug($slug)
     {
@@ -20,7 +23,8 @@ class Newsfront extends Controller
         $related_news = news::where('status_id', 1)->where('category_id', $news->categories->id)->get();
         $newss = news::where('status_id', 1)->latest()->get();
         $categories = newscategory::get();
-        return view('Frontend.News.singlenews', ['news' => $news, 'related_news' => $related_news,'categories'=>$categories,'newss'=>$newss]);
+        $blog = Blog::where('status_id', 1)->latest()->get();
+        return view('Frontend.News.singlenews', ['news' => $news, 'related_news' => $related_news,'categories'=>$categories,'newss'=>$newss,'blog'=>$blog]);
     }
     // public function newsbytitle($newscat)
     // {
@@ -50,16 +54,10 @@ class Newsfront extends Controller
         if ($news->isEmpty()) {
             return response()->json(['status' => 'success', 'data' => []]);
         }
-
-        $data = $news->map(function ($item) {
-            return [
-                'title' => $item->title,
-                'slug' => $item->slug,
-                'image' => asset($item->news_image),
-            ];
-        });
-
-        return response()->json(['status' => 'success', 'data' => $data]);
+        return response()->json([
+            'status' => 'success',
+            'data' => $news
+        ]);
     }
     public function loadMoreNews(Request $request)
     {

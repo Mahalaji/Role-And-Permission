@@ -81,9 +81,9 @@
                 <div class="col-12 col-md-6 py-4 Reserved"> © Copyright 2025, All rights reserved. Design by Mahala ji</div>
                 <div class="col-12 col-md-6 spdp_right py-4">
                     <a href="/dashboard" class="footer_last_part_menu">Home</a>
-                    <a href="/contact" class="footer_last_part_menu">About</a>
+                    <a href="/blogs" class="footer_last_part_menu">Latest Blogs</a>
                     <a href="/contact" class="footer_last_part_menu">Contact</a>
-                    <a href="blog.html" class="footer_last_part_menu">Latest News</a>
+                    <a href="/news" class="footer_last_part_menu">Latest News</a>
                 </div>
             </div>
         </div>

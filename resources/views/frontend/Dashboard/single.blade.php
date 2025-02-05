@@ -11,7 +11,6 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>24 News — Free Website Template, Free HTML5 Template by FreeHTML5.co</title>
     <link href="/css/frontend/media_query.css" rel="stylesheet" type="text/css" />
     <link href="/css/frontend/bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
@@ -27,13 +26,13 @@
 </head>
 
 <body class="single">
-   @include('frontend.layouts.header')
+    @include('frontend.layouts.header', ['users' => $blogs, 'news' => $news])
     <div id="fh5co-title-box"
         style="background-image: url('{{ asset(htmlspecialchars($blog->image)) }}'); background-position: 50% 90.5px;"
         data-stellar-background-ratio="0.5">
         <div class="overlay"></div>
         <div class="page-title">
-            <span>{{$blog->created_at}}</span>
+            <h6>{{$blog->created_at}}</h6>
             <h2>{{$blog->title}}</h2>
         </div>
     </div>
@@ -46,18 +45,6 @@
                     </p>
                 </div>
                 <div class="col-md-3 animate-box" data-animate-effect="fadeInRight">
-                    <div>
-                        <div class="fh5co_heading fh5co_heading_border_bottom py-2 mb-4">Category</div>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="fh5co_tags_all">
-                    @foreach ($categories as $row)
-                            <div class="fh5co_tagg category-link text-decoration-none text-dark">
-                                {{ $row->title }}
-                            </div>
-                        @endforeach
-                    </div>
-
                     <div>
                         <div class="fh5co_heading fh5co_heading_border_bottom pt-3 py-2 mb-4">Related Blogs</div>
                     </div>
@@ -91,8 +78,8 @@
                         <div class="fh5co_hover_news_img">
                             <div class="fh5co_news_img"><img src="{{ asset($row->image) }}" alt="" style="object-fit: cover;" /></div>
                             <div>
-                                <a href="{{ url('/Blogs/' . $row->slug) }}" class="d-block fh5co_small_post_heading"><span
-                                        class="">{{$row->title}}</span></a>
+                                <a href="{{ url('/Blogs/' . $row->slug) }}" class="d-block fh5co_small_post_heading"><h6
+                                        class="">{{$row->title}}</h6></a>
                                 <div class="c_g"><i class="fa fa-clock-o"></i>{{$row->created_at}}</div>
                             </div>
                         </div>

@@ -218,7 +218,8 @@ Route::get('/ajaxblogs/category', [Blogfront::class, 'getBlogsByCategory']);
 Route::get('/ajaxnews/category', [Newsfront::class, 'fetchByCategory']);
 Route::get('/ajaxblogs', [Blogfront::class, 'loadMoreBlogs'])->name('ajaxblogs');
 Route::get('/ajaxnews', [Newsfront::class, 'loadMoreNews'])->name('ajaxnews');
-Route::view('/contact','frontend.Dashboard.Contact_us')->name('contact');
+Route::get('/contact', [Dashboard::class, 'contact'])->name('contact');
+
 
 });
 // Test Routes

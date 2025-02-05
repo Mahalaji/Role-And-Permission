@@ -32,21 +32,21 @@
             <div class="row mx-0">
                 <div class="col-md-8 animate-box" data-animate-effect="fadeInLeft">
                     <div>
-                        <div class="fh5co_heading fh5co_heading_border_bottom py-2 mb-4">News</div>
+                        <div class="fh5co_heading fh5co_heading_border_bottom py-2 mb-4">Blogs</div>
                     </div>
-                    @foreach ($newss as $row)
+                    @foreach ($blog as $row)
                         <div class="row pb-4">
                             <div class="col-md-5">
                                 <div class="fh5co_hover_news_img">
-                                    <div class="fh5co_news_img"><img src="{{ asset($row->news_image) }}" alt="" style="object-fit: cover;"/>
+                                    <div class="fh5co_news_img"><img src="{{ asset($row->image) }}" alt=""style="object-fit: cover;" />
                                     </div>
                                     <div></div>
                                 </div>
                             </div>
                             <div class="col-md-7 animate-box">
-                                <a href="{{ url('/News/' . $row->slug) }}"
+                                <a href="{{ url('/Blogs/' . $row->slug) }}"
                                     class="fh5co_magna py-2">{{ $row->title }}<br></a> <a
-                                    href="{{ url('/News/' . $row->slug) }}"
+                                    href="{{ url('/Blogs/' . $row->slug) }}"
                                     class="fh5co_mini_time py-3">{{ $row->name }} -
                                     {{ $row->created_at }}</a>
                                 <div class="fh5co_consectetur">{{ $row->description }}
@@ -69,13 +69,13 @@
                     <div>
                         <div class="fh5co_heading fh5co_heading_border_bottom pt-3 py-2 mb-4">Most Popular</div>
                     </div>
-                    @foreach ($newss->take(3) as $row)
+                    @foreach ($blog->take(3) as $row)
                         <div class="row pb-3">
-                            <a href="{{ url('/News/' . $row->slug) }}" class="col-5 align-self-center">
-                                <img src="{{ asset($row->news_image) }}" alt="img" class="fh5co_most_trading" style="object-fit: cover;" />
+                            <a href="{{ url('/Blogs/' . $row->slug) }}" class="col-5 align-self-center">
+                                <img src="{{ asset($row->image) }}" alt="img" class="fh5co_most_trading" style="object-fit: cover;" />
                             </a>
                             <div class="col-7 paddding">
-                                <a href="{{ url('/News/' . $row->slug) }}"
+                                <a href="{{ url('/Blogs/' . $row->slug) }}"
                                     class="most_fh5co_treding_font">{{ $row->title }}
                                 </a>
                                 <div class="most_fh5co_treding_font_123">{{ $row->created_at }}</div>
@@ -92,12 +92,12 @@
                 <div class="fh5co_heading fh5co_heading_border_bottom py-2 mb-4">Trending</div>
             </div>
             <div class="owl-carousel owl-theme" id="slider2">
-                @foreach ($newss->take(4) as $row)
+                @foreach ($blog->take(4) as $row)
                     <div class="item px-2">
                         <div class="fh5co_hover_news_img">
-                            <div class="fh5co_news_img"><img src="{{ asset($row->news_image) }}" alt="" style="object-fit: cover;"/></div>
+                            <div class="fh5co_news_img"><img src="{{ asset($row->image) }}" alt="" style="object-fit: cover;"/></div>
                             <div>
-                                <a href="{{ url('/News/' . $row->slug) }}" class="d-block fh5co_small_post_heading">
+                                <a href="{{ url('/Blogs/' . $row->slug) }}" class="d-block fh5co_small_post_heading">
                                     <h6 class="">{{ $row->title }}</h6>
                                 </a>
                                 <div class="c_g"><i class="fa fa-clock-o"></i>{{ $row->created_at }}</div>
@@ -125,77 +125,79 @@
     <!-- Main -->
     <script src="/js/frontend/main.js"></script>
     <script>
-    $(".category-link").on("click", function(e) {
-    e.preventDefault();
-    const categoryId = $(this).data("category");
+        $(".category-link").on("click", function(e) {
+            e.preventDefault();
+            const categoryId = $(this).data("category");
 
-    // Find the news container
-    const newsContainer = $(".col-md-8.animate-box");
+            // Find the blog container
+            const blogContainer = $(".col-md-8.animate-box");
 
-    // Show loading state
-    newsContainer.html('<div class="text-center"><i class="fa fa-spinner fa-spin fa-3x"></i></div>');
+            // Show loading state
+            blogContainer.html('<div class="text-center"><i class="fa fa-spinner fa-spin fa-3x"></i></div>');
 
-    // Make AJAX request
-    $.ajax({
-        url: '/ajaxnews/category',
-        type: 'GET',
-        data: { category_id: categoryId },
-        dataType: 'json',
-        success: function(response) {
-            if (response.status === 'success') {
-                const news = response.data;
-                let newsHtml = `
+            // Make AJAX request
+            $.ajax({
+                url: '/ajaxblogs/category',
+                type: 'GET',
+                data: {
+                    category_id: categoryId
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === 'success') {
+                        const blogs = response.data;
+                        let blogsHtml = `
                     <div>
-                        <div class="fh5co_heading fh5co_heading_border_bottom py-2 mb-4">News</div>
+                        <div class="fh5co_heading fh5co_heading_border_bottom py-2 mb-4">Blogs</div>
                     </div>
                 `;
 
-                if (news.length > 0) {
-                    news.forEach(function(item) {
-                        // Format the date
-                        const date = new Date(item.created_at);
-                        const formattedDate = date.toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
-                        });
+                        if (blogs.length > 0) {
+                            blogs.forEach(function(blog) {
+                                // Format the date
+                                const date = new Date(blog.created_at);
+                                const formattedDate = date.toLocaleDateString('en-US', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric'
+                                });
 
-                        newsHtml += `
+                                blogsHtml += `
                             <div class="row pb-4">
                                 <div class="col-md-5">
                                     <div class="fh5co_hover_news_img">
                                         <div class="fh5co_news_img">
-                                            <img src="${item.news_image}" alt="${item.title}" style="object-fit: cover;"/>
+                                            <img src="${blog.image}" alt="${blog.title}" />
                                         </div>
                                         <div></div>
                                     </div>
                                 </div>
-                                <div class="col-md-7 animate-box">
-                                    <a href="/News/${item.slug}" class="fh5co_magna py-2">${item.title}<br></a>
-                                    <a href="/News/${item.slug}" class="fh5co_mini_time py-3">
-                                        ${item.name} - ${formattedDate}
+                                <div class="col-md-7">
+                                    <a href="/Blogs/${blog.slug}" class="fh5co_magna py-2">${blog.title}</a>
+                                    <a href="/Blogs/${blog.slug}" class="fh5co_mini_time py-3 d-block">
+                                        ${blog.name} - ${formattedDate}
                                     </a>
                                     <div class="fh5co_consectetur">
-                                        ${item.description}
+                                        ${blog.description.substring(0, 150)}${blog.description.length > 150 ? '...' : ''}
                                     </div>
                                 </div>
                             </div>
                         `;
-                    });
-                } else {
-                    newsHtml += `
+                            });
+                        } else {
+                            blogsHtml += `
                         <div class="row pb-4">
                             <div class="col-12 text-center">
-                                <p class="fh5co_consectetur">No news found for this category.</p>
+                                <p class="fh5co_consectetur">No blogs found for this category.</p>
                             </div>
                         </div>
                     `;
-                }
+                        }
 
-                // Update the news container
-                newsContainer.html(newsHtml);
+                        // Update the blog container
+                        blogContainer.html(blogsHtml);
 
-               // Re-apply animations
+                        // Re-apply animations
                         $('.col-md-7').each(function(index) {
                             $(this)
                                 .addClass('animate-box')
@@ -219,33 +221,37 @@
                                 });
                         });
 
-                // Re-initialize hover effects
-                $('.fh5co_hover_news_img').hover(
-                    function() {
-                        $(this).find('.fh5co_news_img').addClass('fh5co_hover_news_img_bus_hover');
-                    },
-                    function() {
-                        $(this).find('.fh5co_news_img').removeClass('fh5co_hover_news_img_bus_hover');
-                    }
-                );
-            } else {
-                newsContainer.html(`
+                        // Reinitialize image hover effects
+                        $('.fh5co_hover_news_img').hover(
+                            function() {
+                                $(this).css('background', '#fff');
+                                $(this).find('.fh5co_news_img').addClass(
+                                    'fh5co_hover_news_img_bus_hover');
+                            },
+                            function() {
+                                $(this).css('background', 'transparent');
+                                $(this).find('.fh5co_news_img').removeClass(
+                                    'fh5co_hover_news_img_bus_hover');
+                            }
+                        );
+                    } else {
+                        blogContainer.html(`
                     <div class="alert alert-danger">
-                        Failed to load news for the selected category.
+                        Failed to load blogs for the selected category.
                     </div>
                 `);
-            }
-        },
-        error: function() {
-            newsContainer.html(`
+                    }
+                },
+                error: function() {
+                    blogContainer.html(`
                 <div class="alert alert-danger">
-                    An error occurred while fetching news.
+                    An error occurred while fetching blogs.
                 </div>
             `);
-        }
-    });
-});
-</script>
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

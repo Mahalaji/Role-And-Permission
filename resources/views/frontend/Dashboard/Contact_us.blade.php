@@ -10,7 +10,6 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>24 News — Free Website Template, Free HTML5 Template by FreeHTML5.co</title>
     <link href="/css/frontend/media_query.css" rel="stylesheet" type="text/css"/>
     <link href="/css/frontend/bootstrap.css" rel="stylesheet" type="text/css"/>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
@@ -25,7 +24,7 @@
     <script src="/js/frontend/modernizr-3.5.0.min.js"></script>
 </head>
 <body>
-@include('frontend.layouts.header')
+ @include('frontend.layouts.header', ['users' => $users, 'news' => $news])
 <div class="container-fluid contact_us_bg_img"style="padding: 100px 0px !important;background-color: #b5b2b2;">
     <div class="container">
         <div class="row">

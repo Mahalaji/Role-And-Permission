@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <!--
-	24 News by FreeHTML5.co
-	Twitter: https://twitter.com/fh5co
-	Facebook: https://fb.com/fh5co
-	URL: https://freehtml5.co
+ 24 News by FreeHTML5.co
+ Twitter: https://twitter.com/fh5co
+ Facebook: https://fb.com/fh5co
+ URL: https://freehtml5.co
 -->
 <html lang="en" class="no-js">
 
@@ -11,7 +11,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Dashboard</title>
+    <title>Blogs And News</title>
     <link href="css/frontend/media_query.css" rel="stylesheet" type="text/css" />
     <link href="css/frontend/bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
@@ -27,25 +27,26 @@
 </head>
 
 <body>
-@include('frontend.layouts.header')
+   @include('frontend.layouts.header', ['users' => $users, 'news' => $news])
     <div class="container-fluid paddding mb-5">
         <div class="row mx-0">
-            @foreach($news->take(1) as $newss)
+            @foreach ($news->take(1) as $newss)
                 <div class="col-md-6 col-12 paddding animate-box" data-animate-effect="fadeIn">
-                    <div class="fh5co_suceefh5co_height"><img src="{{ asset($newss->news_image) }}" alt="img" style="object-fit: cover;" />
+                    <div class="fh5co_suceefh5co_height"><img src="{{ asset($newss->news_image) }}" alt="img"
+                            style="object-fit: cover;" />
                         <div class="fh5co_suceefh5co_height_position_absolute"></div>
                         <div class="fh5co_suceefh5co_height_position_absolute_font">
                             <div class=""><a href="#" class="color_fff">&nbsp;&nbsp;News
                                 </a></div>
                             <div class=""><a href="{{ url('/News/' . $newss->slug) }}"
-                                    class="fh5co_good_font">{{$newss->title}}</a></div>
+                                    class="fh5co_good_font">{{ $newss->title }}</a></div>
                         </div>
                     </div>
                 </div>
             @endforeach
             <div class="col-md-6">
                 <div class="row">
-                    @foreach($users->take(4) as $row)
+                    @foreach ($users->take(4) as $row)
                         <div class="col-md-6 col-6 paddding animate-box" data-animate-effect="fadeIn">
                             <div class="fh5co_suceefh5co_height_2"><img src="{{ asset($row->image) }}" alt="img"
                                     style="object-fit: cover;" />
@@ -53,7 +54,7 @@
                                 <div class="fh5co_suceefh5co_height_position_absolute_font_2">
                                     <div class=""><a href="#" class="color_fff">&nbsp;&nbsp;Blogs</a></div>
                                     <div class=""><a href="{{ url('/Blogs/' . $row->slug) }}"
-                                            class="fh5co_good_font_2">{{$row->title}}</a></div>
+                                            class="fh5co_good_font_2">{{ $row->title }}</a></div>
                                 </div>
                             </div>
                         </div>
@@ -68,15 +69,16 @@
                 <div class="fh5co_heading fh5co_heading_border_bottom py-2 mb-4">Blogs</div>
             </div>
             <div class="owl-carousel owl-theme js" id="slider1">
-                @foreach($users as $row)
+                @foreach ($users as $row)
                     <div class="item px-2">
                         <div class="fh5co_latest_trading_img_position_relative">
                             <div class="fh5co_latest_trading_img"><img src="{{ asset($row->image) }}" alt=""
                                     class="fh5co_img_special_relative" style="object-fit: cover;" /></div>
                             <div class="fh5co_latest_trading_img_position_absolute"></div>
                             <div class="fh5co_latest_trading_img_position_absolute_1">
-                                <a href="{{ url('/Blogs/' . $row->slug) }}" class="text-white">{{$row->title}}</a>
-                                <div class="fh5co_latest_trading_date_and_name_color">{{$row->name}} - {{$row->created_at}}
+                                <a href="{{ url('/Blogs/' . $row->slug) }}" class="text-white">{{ $row->title }}</a>
+                                <div class="fh5co_latest_trading_date_and_name_color">{{ $row->name }} -
+                                    {{ $row->created_at }}
                                 </div>
                             </div>
                         </div>
@@ -88,10 +90,10 @@
     <div class="container-fluid pb-4 pt-5">
         <div class="container animate-box">
             <div>
-                <div class="fh5co_heading fh5co_heading_border_bottom py-2 mb-4">News</div>
+                <div class="fh5co_heading fh5co_heading_border_bottom py-2 mb-4" style="margin-top: 5%;">News</div>
             </div>
             <div class="owl-carousel owl-theme" id="slider2">
-                @foreach($news as $newss)
+                @foreach ($news as $newss)
                     <div class="item px-2">
                         <div class="fh5co_hover_news_img">
                             <div class="fh5co_news_img">
@@ -99,8 +101,8 @@
                             </div>
                             <div>
                                 <a href="{{ url('/News/' . $newss->slug) }}" class="d-block fh5co_small_post_heading">
-                                    <span>{{$newss->title}}</span>
-                                    <div class="c_g"><i class="fa fa-clock-o"></i>{{$newss->created_at}}</div>
+                                    <h6>{{ $newss->title }}</h6>
+                                    <div class="c_g"><i class="fa fa-clock-o"></i>{{ $newss->created_at }}</div>
                                 </a>
                             </div>
                         </div>
@@ -130,7 +132,8 @@
                                     <div class="fh5co_hover_news_img_video_tag_position_absolute_1 fh5co_hide"
                                         id="play-video">
                                         <div class="fh5co_hover_news_img_video_tag_position_absolute_1_play_button_1">
-                                            <div class="fh5co_hover_news_img_video_tag_position_absolute_1_play_button">
+                                            <div
+                                                class="fh5co_hover_news_img_video_tag_position_absolute_1_play_button">
                                                 <span><i class="fa fa-play"></i></span>
                                             </div>
                                         </div>
@@ -153,7 +156,8 @@
                                     <div class="fh5co_hover_news_img_video_tag_position_absolute_1 fh5co_hide_2"
                                         id="play-video_2">
                                         <div class="fh5co_hover_news_img_video_tag_position_absolute_1_play_button_1">
-                                            <div class="fh5co_hover_news_img_video_tag_position_absolute_1_play_button">
+                                            <div
+                                                class="fh5co_hover_news_img_video_tag_position_absolute_1_play_button">
                                                 <span><i class="fa fa-play"></i></span>
                                             </div>
                                         </div>
@@ -177,7 +181,8 @@
                                     <div class="fh5co_hover_news_img_video_tag_position_absolute_1 fh5co_hide_3"
                                         id="play-video_3">
                                         <div class="fh5co_hover_news_img_video_tag_position_absolute_1_play_button_1">
-                                            <div class="fh5co_hover_news_img_video_tag_position_absolute_1_play_button">
+                                            <div
+                                                class="fh5co_hover_news_img_video_tag_position_absolute_1_play_button">
                                                 <span><i class="fa fa-play"></i></span>
                                             </div>
                                         </div>
@@ -200,7 +205,8 @@
                                     <div class="fh5co_hover_news_img_video_tag_position_absolute_1 fh5co_hide_4"
                                         id="play-video_4">
                                         <div class="fh5co_hover_news_img_video_tag_position_absolute_1_play_button_1">
-                                            <div class="fh5co_hover_news_img_video_tag_position_absolute_1_play_button">
+                                            <div
+                                                class="fh5co_hover_news_img_video_tag_position_absolute_1_play_button">
                                                 <span><i class="fa fa-play"></i></span>
                                             </div>
                                         </div>
@@ -217,13 +223,15 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="js/frontend/owl.carousel.min.js"></script>
-        <!--<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>-->
+        <!--<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+            integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous">
+        </script>-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
-            integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
-            crossorigin="anonymous"></script>
+            integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous">
+        </script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
-            integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
-            crossorigin="anonymous"></script>
+            integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous">
+        </script>
         <!-- Waypoints -->
         <script src="js/frontend/jquery.waypoints.min.js"></script>
         <!-- Main -->

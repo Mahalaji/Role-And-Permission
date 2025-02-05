@@ -10,13 +10,18 @@ use App\Models\news;
 
 class Dashboard extends Controller
 {
-    public function dashboard(Request $request){
+    public function dashboard(Request $request) {
         $users = Blog::where('status_id', 1)->latest()->get();
-        $news = news::where('status_id', 1)->latest()->get();; 
-        return view('frontend.Dashboard.dashboard', [
-            'users' => $users,
-            'news' => $news,
-        ]);
-        }
+        $news = News::where('status_id', 1)->latest()->get();
+    
+        return view('frontend.Dashboard.dashboard', compact('users', 'news'));
+    }
+    public function contact(Request $request){
+        $users = Blog::where('status_id', 1)->latest()->get();
+        $news = News::where('status_id', 1)->latest()->get();
+    
+        return view('frontend.Dashboard.Contact_us', compact('users', 'news'));
+    }
+    
 }
 
