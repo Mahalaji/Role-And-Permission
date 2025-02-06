@@ -25,7 +25,9 @@
                         </a></div>
                 </div>
             </div>
-            <div class="col-12 col-md-5 col-lg-3 position_footer_relative"style="margin-left: 11%;">
+            <div class="col-12 col-md-3 col-lg-2">
+            </div>
+            <div class="col-12 col-md-5 col-lg-3 position_footer_relative">
                 <div class="footer_main_title py-3"> Most Viewed News</div>
                 @foreach ($news->take(3) as $row)
                     <div class="footer_makes_sub_font"> {{ $row->created_at }}</div>
@@ -42,7 +44,7 @@
                 <div class="footer_position"><img src="\css\frontend\Group 556.png" alt="img"
                         class="width_footer_sub_img" style="margin-top: -90%;margin-left: -20px;height: 170px;top: 110px;" /></div>
             </div>
-            <div class="col-12 col-md-12 col-lg-4 " style="margin-left: 5%;">
+            <div class="col-12 col-md-12 col-lg-4 ">
                 <div class="footer_main_title py-3"> Last Modified Blogs</div>
                 @foreach ($blogmodify->take(6) as $row)
                     <a href="{{ url('/Blogs/' . $row->slug) }}" class="footer_img_post_6"><img src="{{ asset($row->image) }}"

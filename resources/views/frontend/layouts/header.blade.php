@@ -47,36 +47,41 @@
 <div class="container-fluid fh5co_header_bg">
     <div class="container">
         <div class="row">
-            <div class="col-12 fh5co_mediya_center"><a href="#" class="color_fff fh5co_mediya_setting"><i
-                        @php
-use Carbon\Carbon; @endphp
-                        class="fa fa-clock-o"></i>&nbsp;&nbsp;&nbsp;{{ Carbon::now()->format('l, j F Y') }}</a>
-                <div class="d-inline-block fh5co_trading_posotion_relative"><a href="#"
-                        class="treding_btn">Trending</a>
-                    <div class="fh5co_treding_position_absolute">
-                    </div>
-                </div>
-                @if (isset($news) && isset($users))
-                    <div class="marquee-container">
-                        <div class="marquee">
-                            @foreach ($news->take(1) as $row)
-                                <a href="{{ url('/News/' . $row->slug) }}" class="color_fff fh5co_mediya_setting">
-                                    <strong>News : </strong> <span>{{ $row->title }}</span> <img src="{{ asset('css\frontend\new-unscreen.gif') }}" style="height: 30px;"/>
-                                </a>
-                            @endforeach
-
-                            @foreach ($users->take(1) as $row)
-                                <a href="{{ url('/Blogs/' . $row->slug) }}" class="color_fff fh5co_mediya_setting">
-                                    <strong>Blog : </strong><span>{{ $row->title }}</span> <img src="{{ asset('css\frontend\new-unscreen.gif') }}" style="height: 30px;"/>
-                                </a>
-                            @endforeach
+            <div style="color: #222;z-index: 1;">
+                <div class="col-12 fh5co_mediya_center"><a href="#" class="color_fff fh5co_mediya_setting"><i
+                            @php
+                            use Carbon\Carbon; @endphp
+                            class="fa fa-clock-o"></i>&nbsp;&nbsp;&nbsp;{{ Carbon::now()->format('l, j F Y') }}</a>
+                    <div class="d-inline-block fh5co_trading_posotion_relative"><a href="#"
+                            class="treding_btn">Trending</a>
+                        <div class="fh5co_treding_position_absolute">
                         </div>
                     </div>
-                @endif
-
+                </div>
             </div>
+            @if (isset($news) && isset($users))
+                <div class="marquee-container">
+                    <div class="marquee">
+                        @foreach ($news->take(1) as $row)
+                            <a href="{{ url('/News/' . $row->slug) }}" class="color_fff fh5co_mediya_setting">
+                                <strong>News : </strong> <span>{{ $row->title }}</span> <img
+                                    src="{{ asset('css\frontend\new-unscreen.gif') }}" style="height: 30px;" />
+                            </a>
+                        @endforeach
+
+                        @foreach ($users->take(1) as $row)
+                            <a href="{{ url('/Blogs/' . $row->slug) }}" class="color_fff fh5co_mediya_setting">
+                                <strong>Blog : </strong><span>{{ $row->title }}</span> <img
+                                    src="{{ asset('css\frontend\new-unscreen.gif') }}" style="height: 30px;" />
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
         </div>
     </div>
+</div>
 </div>
 <div class="container-fluid">
     <div class="container">
