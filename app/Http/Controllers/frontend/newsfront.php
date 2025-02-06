@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\news;
 use App\Models\newscategory;
 use App\Models\Blog;
+use App\Models\Blogcategory;
 class Newsfront extends Controller
 {
     public function shownews()
@@ -15,7 +16,10 @@ class Newsfront extends Controller
         $categories = newscategory::get();
         $newss = news::where('status_id', 1)->latest()->get();
         $blog = Blog::where('status_id', 1)->latest()->get();
-        return view('frontend.News.news', compact('newsview', 'categories','newss','blog'));
+        $blogmodify = Blog::where('status_id', 1)->latest('updated_at')->get();
+        $newsmodify = news::where('status_id', 1)->latest('updated_at')->get();
+        $blogcategory = Blogcategory::withCount('blogs')->latest()->get();
+        return view('frontend.News.news', compact('newsview', 'categories','newss','blog','blogcategory','newsmodify','blogmodify'));
     }
     public function newsbyslug($slug)
     {
@@ -24,7 +28,10 @@ class Newsfront extends Controller
         $newss = news::where('status_id', 1)->latest()->get();
         $categories = newscategory::get();
         $blog = Blog::where('status_id', 1)->latest()->get();
-        return view('Frontend.News.singlenews', ['news' => $news, 'related_news' => $related_news,'categories'=>$categories,'newss'=>$newss,'blog'=>$blog]);
+        $blogmodify = Blog::where('status_id', 1)->latest('updated_at')->get();
+        $newsmodify = news::where('status_id', 1)->latest('updated_at')->get();
+        $blogcategory = Blogcategory::withCount('blogs')->latest()->get();
+        return view('Frontend.News.singlenews', ['news' => $news, 'related_news' => $related_news,'categories'=>$categories,'newss'=>$newss,'blog'=>$blog,'blogmodify'=>$blogmodify,'newsmodify'=>$newsmodify,'blogcategory'=>$blogcategory]);
     }
     // public function newsbytitle($newscat)
     // {

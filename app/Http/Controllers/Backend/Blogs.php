@@ -39,7 +39,7 @@ class Blogs extends Controller
             'title' => 'required',
             'name' => 'required',
             'category_id' => 'required',
-            'image' => 'required',
+            'blog_image' => 'required',
             'description' => 'required',
             'seo_title' => 'required',
             'meta_keyword' => 'required',
@@ -64,8 +64,7 @@ class Blogs extends Controller
         $Blogadd->language_id = $request->language;
         $Blogadd->domain_id = $request->domain;
         $Blogadd->country_id = $request->countryname;
-        $Blogadd->image = $request->image;
-
+        $Blogadd->image = $request->blog_image;
 
 
         $slug = Str::slug($request->title);
@@ -216,7 +215,6 @@ class Blogs extends Controller
             'title' => 'required',
             'name' => 'required',
             'category_id' => 'required',
-            'image' => 'required',
             'description' => 'required',
             'seo_title' => 'required',
             'meta_keyword' => 'required',
@@ -225,6 +223,7 @@ class Blogs extends Controller
             'language' => 'required',
             'domain' => 'required',
             'countryname' => 'required',
+            'blog_image' => 'required',
 
         ]);
 
@@ -250,8 +249,8 @@ class Blogs extends Controller
         $Blogedit->updated_at = now();
         $Blogedit->status_id = 5;
         $Blogedit->country_id = $request->countryname;
-        $Blogedit->image = $request->image;
-
+        $Blogedit->image = $request->blog_image;
+// dd($request->blog_image);
 
 
 

@@ -18,7 +18,10 @@ class Blogfront extends Controller
         $categories = Blogcategory::withCount('blogs')->get();
         $newss = news::where('status_id', 1)->latest()->get();
         $blog = Blog::where('status_id', 1)->latest()->get();
-        return view('frontend.Blog.blog', compact('Blogs', 'categories','blog','newss'));
+        $blogcategory = Blogcategory::withCount('blogs')->latest()->get();
+        $blogmodify = Blog::where('status_id', 1)->latest('updated_at')->get();
+        $newsmodify = news::where('status_id', 1)->latest('updated_at')->get();
+        return view('frontend.Blog.blog', compact('Blogs', 'categories','blog','newss','blogcategory','blogmodify','newsmodify'));
     }
     public function blogsbyslug($slug){
         $blog= Blog::with('categories')->whereLike('slug', $slug)->first();
@@ -26,7 +29,10 @@ class Blogfront extends Controller
         $categories = Blogcategory::withCount('blogs')->get();
         $blogs = Blog::where('status_id', 1)->latest()->get();
         $news = News::where('status_id', 1)->latest()->get();
-        return view('Frontend.Dashboard.single',['blog' => $blog,'related_blogs'=>$related_blogs,'categories'=>$categories,'blogs'=>$blogs,'news'=>$news]);
+        $blogcategory = Blogcategory::withCount('blogs')->latest()->get();
+        $blogmodify = Blog::where('status_id', 1)->latest('updated_at')->get();
+        $newsmodify = news::where('status_id', 1)->latest('updated_at')->get();
+        return view('Frontend.Dashboard.single',['blogcategory'=>$blogcategory,'newsmodify'=>$newsmodify,'blogmodify'=>$blogmodify,'blog' => $blog,'related_blogs'=>$related_blogs,'categories'=>$categories,'blogs'=>$blogs,'news'=>$news]);
     }
 //     public function blogsbytitle($blogcat)
 //     {

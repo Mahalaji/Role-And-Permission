@@ -31,8 +31,7 @@
 <body class="single">
  @include('frontend.layouts.header', ['users' => $blog, 'news' => $newss])
     <div id="fh5co-title-box"
-        style="background-image: url('{{ asset(htmlspecialchars($news->news_image)) }}'); background-position: 50% 90.5px;"
-        data-stellar-background-ratio="0.5">
+        style="background-image: url('{{ asset(htmlspecialchars($news->news_image)) }}');">
         <div class="overlay"></div>
         <div class="page-title">
             <h6>{{$news->created_at}}</h6>
@@ -91,7 +90,7 @@
             </div>
         </div>
     </div>
-    @include('frontend.layouts.footer')
+   @include('frontend.layouts.footer', ['categories'=>$categories,'blogcategory'=>$blogcategory,'blogmodify' => $blogmodify, 'news' => $newss,'newsmodify'=>$newsmodify,'users' => $blog])
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="/js/frontend/owl.carousel.min.js"></script>

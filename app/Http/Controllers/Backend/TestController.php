@@ -21,12 +21,20 @@ class TestController extends Controller
  public function create()
    {
 
+                $select2_name = DB::table('blogs')
+                    ->select('title')
+                    ->distinct()
+                    ->get();
 
-// Check if  is not empty
-if (!empty("")) {
-    return view('Backend.Test.create', compact(""));
+// Check if select2_name is not empty
+if (!empty("
+                $select2_name = DB::table('blogs')
+                    ->select('title')
+                    ->distinct()
+                    ->get();")) {
+    return view('Backend.Test.create', compact("select2_name"));
 } else {
-    // If  is empty, pass no variables to the view
+    // If select2_name is empty, pass no variables to the view
     return view('Backend.Test.create');
 }
  }
@@ -37,11 +45,19 @@ if (!empty("")) {
         $columns = ['id', 'name', 'title', 'updated_at'];
         $text = DB::table('test')->where('id', $id)->first();
         
-        // Check if  is not empty
-if (!empty("")) {
-   return view('Backend.Test.edit', compact('text', 'columns', ''));
+                $select2_name = DB::table('blogs')
+                    ->select('title')
+                    ->distinct()
+                    ->get();
+        // Check if select2_name is not empty
+if (!empty("
+                $select2_name = DB::table('blogs')
+                    ->select('title')
+                    ->distinct()
+                    ->get();")) {
+   return view('Backend.Test.edit', compact('text', 'columns', 'select2_name'));
 } else {
-    // If  is empty, pass no variables to the view
+    // If select2_name is empty, pass no variables to the view
    return view('Backend.Test.edit', compact('text', 'columns'));
 }
         

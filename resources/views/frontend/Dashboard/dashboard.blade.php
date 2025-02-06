@@ -219,8 +219,7 @@
                 </div>
             </div>
         </div>
-        @include('frontend.layouts.footer')
-
+        @include('frontend.layouts.footer', ['categories'=>$categories,'blogcategory'=>$blogcategory,'blogmodify' => $blogmodify, 'news' => $news,'newsmodify'=>$newsmodify,'users' => $users])
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="js/frontend/owl.carousel.min.js"></script>
         <!--<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
@@ -236,7 +235,6 @@
         <script src="js/frontend/jquery.waypoints.min.js"></script>
         <!-- Main -->
         <script src="js/frontend/main.js"></script>
-
 </body>
 
 </html>

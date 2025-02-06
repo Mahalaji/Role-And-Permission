@@ -106,7 +106,7 @@
         </div>
     </div>
 </div>
-@include('frontend.layouts.footer')
+@include('frontend.layouts.footer', ['categories'=>$categories,'blogcategory'=>$blogcategory,'blogmodify' => $blogmodify, 'news' => $news,'newsmodify'=>$newsmodify,'users' => $users])
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="/js/frontend/owl.carousel.min.js"></script>

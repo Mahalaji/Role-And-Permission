@@ -11,5 +11,7 @@ a,a:hover{color:#f5bc04}.fh5co_header_bg{background:#222;color:#fff}.color_fff{c
     color: black !important; /* Ensure text remains black */
     border-radius: 5px; /* Smooth edges */
 }
-
+.footer_post{
+    color: #fff !important;
+}
 /*# sourceMappingURL=style_1.css.map */

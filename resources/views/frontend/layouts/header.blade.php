@@ -4,7 +4,7 @@
         overflow: hidden;
         box-sizing: border-box;
         margin-left: 35%;
-        margin-top: -47px;
+        margin-top: -50px;
 
     }
 

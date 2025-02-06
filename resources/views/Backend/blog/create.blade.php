@@ -98,7 +98,7 @@
                 <label class="form-label fw-bold">Upload Image:</label><br>
                 <div class="d-flex flex-column align-items-center">
                     <div class="input-group">
-                        <input type="text" id="image_label" class="form-control" name="image"
+                        <input type="text" id="image_label" class="form-control" name="blog_image"
                             placeholder="Select an image..." aria-label="Image">
                         <button class="btn btn-outline-secondary" type="button" id="button-image">Select</button>
                     </div>
